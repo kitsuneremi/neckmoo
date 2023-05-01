@@ -1,0 +1,48 @@
+$notiWidth : 420px;
+
+.header {
+    width: $notiWidth;
+    height: 20px;
+    justify-content: space-between;
+}
+
+.headerText {
+    margin-right: 85%;
+}
+
+.mainItem {
+    vertical-align: top;
+    width: $notiWidth;
+    padding: 0;
+    justify-content: space-between;
+}
+
+.theThird {
+    display: table-row;
+    width: 300px;
+    max-width: available;
+}
+
+.mainItemImg {
+    width: 50px;
+    max-width: inherit;
+    max-height: 100px;
+    margin-right: 5px;
+}
+
+.mainItemTitle {
+    font-size: 1.1em;
+}
+
+.mainItemText {
+    font-size: 0.8em;
+}
+
+.channelIcon {
+    width: 25px;
+}
+
+.listItemIcon {
+    width: fit-content;
+    margin-right: 9px;
+}

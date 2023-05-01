@@ -1,0 +1,24 @@
+.box{
+    width: 100%;
+    height: fit-content;
+    margin: 4px 0;
+    display: flex;
+    min-height: 40px;
+}
+
+.avatar{
+    width: fit-content;
+    margin: 15px 15px 0 0;
+}
+
+.input-textfield-box{
+    width: 100%;
+    .input-textfield{
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        width: inherit;
+        margin-bottom: 10px;
+    }
+}

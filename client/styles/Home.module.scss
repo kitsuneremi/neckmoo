@@ -1,0 +1,22 @@
+.sidebar{
+  position: fixed;
+  z-index: 1;
+  top: 58px;
+  width: fit-content;
+  background: transparent;
+  height: 900px;
+  overflow: hidden
+}
+.main-content{
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  right: 2%;
+  height: fit-content;
+}
+
+.navbar-row{
+  justify-content: space-between;
+  width: 2000px;
+  max-width: inherit;
+}

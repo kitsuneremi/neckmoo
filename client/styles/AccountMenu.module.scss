@@ -1,0 +1,43 @@
+$lighttext: black;
+$lightbackground: white;
+$darktext: white;  
+$darkbackground: black;
+
+.light{
+    .text {
+        color: $lighttext;
+        margin: 0;
+    }
+    .tooltip{
+        background: $lightbackground;
+        color: var(--lighttext);
+    }
+    .container{
+        background: $lightbackground;
+    }
+    .body-text{
+        font-size: 15px;
+        color: $lighttext;
+        margin: 0;
+    }
+}
+
+
+.dark{
+    .text {
+        color: $darktext;
+        margin: 0;
+    }
+    .tooltip{
+        background: $darkbackground;
+        color: $darktext;
+    }
+    .container{
+        background: $darkbackground;
+    }
+    .body-text{
+        font-size: 15px;
+        color: $darktext;
+        margin: 0;
+    }
+}

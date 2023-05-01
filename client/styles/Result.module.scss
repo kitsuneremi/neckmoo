@@ -1,0 +1,19 @@
+*{box-sizing: border-box;margin: 0;padding: 0}
+:root{
+  /* chỗ này để viết biến css */
+}
+.sidebar{
+  position: fixed;
+  z-index: 1;
+  top: 58px;
+  width: fit-content;
+  background: transparent;
+  height: 900px;
+  overflow: scroll !important;
+}
+.mainContent{
+  position: absolute;
+  top: 80px;
+  right: 0;
+  height: 900px;
+}

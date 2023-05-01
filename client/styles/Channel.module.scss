@@ -1,0 +1,74 @@
+.main-content {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+    right: 2%;
+    height: fit-content;
+
+    .inside-content {
+        width: 100%;
+
+        .banner {}
+
+        .below-content {
+            padding: 0 15%;
+            background-color: aqua;
+            width: 100%;
+
+            .top-side {
+                justify-content: space-between;
+                display: flex;
+                padding-top: 20px;
+                .left-housing {
+                    display: flex;
+
+                    .avatar {
+                        width: 90px;
+                        height: 90px;
+                        border-radius: 50%;
+                        border: 1px solid black;
+                        margin-right: 10px;
+                    }
+
+                    .data {
+                        div {
+                            .name {
+                                font-size: 1.4rem;
+                            }
+
+                            .infomation {
+                                color: rgb(85, 84, 83);
+                            }
+
+                            .description {
+                                color: rgb(85, 84, 83);
+                            }
+                        }
+                    }
+                }
+
+                .right-housing {
+                    .submit-button {
+                        border-radius: 2rem;
+                        padding: 5px 16px;
+                        margin-left: 10px;
+                        background-color: rgb(223, 12, 12);
+                        color: aliceblue;
+                        font-size: 1.1rem;
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.sidebar {
+    position: fixed;
+    z-index: 1;
+    top: 58px;
+    width: fit-content;
+    background: transparent;
+    height: 900px;
+    overflow: scroll !important;
+}

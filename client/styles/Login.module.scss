@@ -1,0 +1,33 @@
+.input{
+    border: 1px solid black;
+    width: 280px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    font-size: 1.6em;
+}
+
+.login-button{
+    border: 1px solid black;
+    padding: 5px 10px;
+    width: 280px;
+    margin-top: 25px;
+    height: 40px;
+    line-height: 20px;
+    font-size: 1.4em;
+    font-weight: 750;
+    color: aliceblue;
+    background-image: linear-gradient(to right, rgba(75, 191, 226, 0.486), rgb(10, 95, 206));;
+}
+
+.register-button{
+    border: 1px solid black;
+    padding: 5px 10px;
+    width: 280px;
+    margin-top: 25px;
+    height: 40px;
+    font-size: 1.4em;
+    font-weight: 750;
+    color: aliceblue;
+    background-image: linear-gradient(to right, rgba(224, 31, 89, 0.486), rgb(240, 54, 54));;
+}
