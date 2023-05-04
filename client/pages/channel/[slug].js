@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef, useContext, memo } from "react"
 import { Space, Row, Col, Drawer } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
-import { useParams } from "react-router-dom";
-import Context from '../../../../GlobalVariableStorage/Context'
-import Item from '../../partials/sidebar/SideBarItem';
-import style from '../../../styles/Channel.module.scss'
-import Navx from "../../partials/navbar/Nav";
+import { useRouter } from "next/router";
+import Context from '../../GlobalVariableStorage/Context'
+import Item from '../../sp/partials/sidebar/SideBarItem';
+import style from '../../styles/Channel.module.scss'
+import Navx from "../../sp/partials/navbar/Nav";
 import axios from "axios";
 import classNames from "classnames/bind";
+import clsx from "clsx";
+import Feature from "@/sp/inside/Feature";
+import Videos from "@/sp/inside/Videos";
 
 function Channel() {
-  const { slug } = useParams;
+  const router = useRouter()
   const cx = classNames.bind(style)
   //useContext
   const context = useContext(Context)
@@ -21,10 +24,9 @@ function Channel() {
   //useState
   const [needDrawer, setNeedDrawer] = useState(false)
   const [SidebarWidth, setSidebarWidth] = useState(2)
-  // test axios
-  const [listVideo, setListVideo] = useState([])
-
-
+  const [selectedTab, setSelectedTab] = useState(0)
+  const [listVideo, setListVideo] = useState()
+  const [channelData, setChannelData] = useState({})
 
   //useEffect
   useEffect(() => {
@@ -32,23 +34,8 @@ function Channel() {
   }, [context.sidebarstatus])
 
   useEffect(() => {
-    const handleCollapse = () => {
-      let windowWidth = window.innerWidth
-      if (windowWidth < 1300) {
-        setSidebarWidth(2)
-        setNeedDrawer(true)
-      } else if (windowWidth >= 1300) {
-        setSidebarWidth(3)
-        setNeedDrawer(false)
-      }
-    }
-    window.addEventListener('resize', handleCollapse)
-    return () => {
-      window.removeEventListener('resize', handleCollapse)
-    }
-  }, [])
 
-
+  },[selectedTab])
 
   useEffect(() => {
     if (context.drawerstatus && needDrawer) {
@@ -56,11 +43,16 @@ function Channel() {
     }
   }, [context.drawerstatus])
 
-  //call api lấy dữ liệu video ra trang chủ
   useEffect(() => {
     axios.get('http://localhost:5000/api/video')
       .then(res => { setListVideo(res.data) })
   }, [])
+
+  useEffect(() => {
+    if(!router.query.slug) return 
+    axios.get(`http://localhost:5000/api/channel/basicdata/${router.query.slug}`)
+    .then(res => { setChannelData(res.data)})
+  },[router.query.slug])
 
   useEffect(() => {
     let windowWidth = window.innerWidth
@@ -110,10 +102,58 @@ function Channel() {
     }
   }
 
+  const tabSelector = () =>{
+    const tabs = [
+      {
+        'index': 0,
+        'title': 'TRANG CHỦ'
+      },
+      {
+        'index': 1,
+        'title': 'VIDEO'
+      },
+      {
+        'index': 2,
+        'title': 'DANH SÁCH PHÁT'
+      },
+      {
+        'index': 3,
+        'title': 'CỘNG ĐỒNG'
+      },
+      {
+        'index': 4,
+        'title': 'KÊNH'
+      },
+      {
+        'index': 5,
+        'title': 'GIỚI THIỆU'
+      }
+    ]
+    return (
+      <div className={cx('tab-selector')}>
+        {tabs.map((tab, index) => {
+          return <button key={index} className={clsx({[cx('selected-tab')]: selectedTab === index}, {[cx('tab')]: selectedTab !== index})} onClick={() => {setSelectedTab(index)}}>{tab.title}</button>
+        })}
+      </div>
+    )
+  }
+
+  const contentRender = () => {
+    if(selectedTab === 0){
+      return(
+        <Feature></Feature>
+      )
+    }else{
+      return (
+        <Videos></Videos>
+      )
+    }
+
+  }
 
   return (
     <div className="App" style={{ overflow: 'hidden' }}>
-      <Navx />
+      {/* <Navx /> */}
 
       <Row style={{ width: "fit-content" }}>
         <Col span={SidebarWidth} className={cx('sidebar')} ref={sidebarRef}>
@@ -121,19 +161,19 @@ function Channel() {
         </Col>
         <Col span={24 - SidebarWidth} className={cx('main-content')}>
           <div className={cx('inside-content')}>
-            <img className={cx('banner')} src="https://i.ytimg.com/vi/hk0GZ9Whb4Y/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLAvZbWBiWiwjIYEAqr7N_hZBrOA6Q"/>
+            <img className={cx('banner')} src="https://yt3.googleusercontent.com/Kkc1bslkkgUcoPj6wK9A-zMynoL91g5vk2nU1V79LVZEV_6pEa_0iuwMtIVJSR7RQPN8sjFIzw=w2560-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"/>
             <div className={cx('below-content')}>
               <div className={cx('top-side')}>
                 <div className={cx('left-housing')}>
                   <img src="https://yt3.googleusercontent.com/wj40B2uwyIAvPiiOqnCZ59VH6loSOmrRYA2jBrRYQM4bKjV523W9vlVZAe1MNnMu2-UIWQ7Sug=s176-c-k-c0x00ffffff-no-rj" className={cx('avatar')} />
                   <div className={cx('data')}>
-                    <div><p className={cx('name')}>channel's name</p></div>
+                    <div><p className={cx('name')}>{channelData.name}</p></div>
                     <div style={{display: "flex"}}>
-                      <p className={cx('infomation')}>@tagName</p>
+                      <p className={cx('infomation')}>{channelData.tagName}</p>
                       <p className={cx('infomation')}>Sub count</p>
                       <p className={cx('infomation')}>Video count</p>
                     </div>
-                    <div><p className={cx('description')}>channel's des</p></div>
+                    <div><p className={cx('description')}>{channelData.des}</p></div>
                   </div>
                 </div>
                 <div className={cx('right-housing')}>
@@ -143,11 +183,10 @@ function Channel() {
               </div>
 
               <div className={cx('tab-selector')}>
-                tab selector
+                {tabSelector()}
               </div>
-
               <div>
-                below content
+                {contentRender()}
               </div>
             </div>
           </div>

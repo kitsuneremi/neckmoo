@@ -18,6 +18,17 @@ class ChannelController {
         })
         res.json(channel[0])
     }
+
+    async getChannelBasicData(req,res,next){
+        const channel = await Channel.findOne(
+            {
+                where: {
+                    id: req.params.slug
+                }
+            }
+        )
+        res.json(channel)
+    }
 }
 
 module.exports = new ChannelController();

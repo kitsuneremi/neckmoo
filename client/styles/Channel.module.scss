@@ -7,12 +7,12 @@
 
     .inside-content {
         width: 100%;
-
-        .banner {}
+        .banner {
+            width: 100%;
+        }
 
         .below-content {
             padding: 0 15%;
-            background-color: aqua;
             width: 100%;
 
             .top-side {
@@ -71,4 +71,36 @@
     background: transparent;
     height: 900px;
     overflow: scroll !important;
+}
+
+
+.tab-selector{
+    display: flex;
+    .tab{
+        background-color: transparent;
+        border: 0;
+        padding: 5px 10px;
+        color: #969696;
+        cursor: pointer;
+    }
+
+    .selected-tab{
+        background-color: transparent;
+        border: 0;
+        padding: 5px 10px;
+        color: #0f0f0f;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .selected-tab::after{
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #606060;
+
+    }
 }

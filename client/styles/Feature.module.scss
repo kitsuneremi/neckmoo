@@ -1,0 +1,36 @@
+.video-box{
+    max-width: fit-content;
+    margin-right: 15px;
+    .title-box{
+        justify-content: space-between;
+        display: flex;
+        .video-title{
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+    }
+}
+
+
+
+.video-thumbnail{
+    width: 200px;
+    height: 120px;
+}
+
+.play-all-box{
+    display: flex;
+    padding: 10px 5px;
+
+    .list-title{
+        font-size: 1.2rem;
+        font-weight: 550;
+    }
+
+    .play-button{
+        background-color: transparent;
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 0;
+    }
+}

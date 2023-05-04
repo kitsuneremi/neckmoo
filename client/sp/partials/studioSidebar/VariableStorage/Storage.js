@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useEffect } from "react";
 import Context from './Context'
 
 function VariableProvider({ children }) {
@@ -41,6 +41,10 @@ function VariableProvider({ children }) {
         setImgType,
         setVideoType
     }
+    useEffect(() => {
+        videoFile ? setStep1(true) : setStep1(false)
+    },[videoFile])
+
     return (
         <Context.Provider value={value}>
             {children}

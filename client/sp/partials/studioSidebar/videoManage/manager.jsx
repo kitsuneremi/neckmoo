@@ -69,7 +69,7 @@ const Manager = () => {
 
     const TabRender = () => {
         if (selectedTab === 0) {
-            return <table>
+            return <table className={cx('table')}>
                 <thead>
                     <tr>
                         <td><input type="checkbox" onChange={e => { }} /></td>

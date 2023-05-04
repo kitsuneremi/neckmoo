@@ -1,10 +1,11 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { Layout, Menu } from "antd";
 import { ContainerOutlined, PieChartOutlined, DesktopOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
+import { useRouter } from "next/router";
 import Upload from './upload/Upload'
 import Manager from './videoManage/manager'
-import Context from "../../../../GlobalVariableStorage/Context";
+import Context from "../../../GlobalVariableStorage/Context";
+import VariableProvider from "./VariableStorage/Storage";
 
 const { Sider, Content } = Layout;
 function getItem(label, key, icon, children, type) {
@@ -23,9 +24,14 @@ const items = [
 ];
 
 function StudioSide() {
-  const { slug } = useParams();
+  const router = useRouter()
+  const slug = router.query.slug                                                          
   const context = useContext(Context)
-  const [thisLayout, setThisLayout] = useState( slug ? slug : 1);
+  const [thisLayout, setThisLayout] = useState(slug ? slug : 1);
+
+  useEffect(() => {
+    console.log(slug)
+  },[])
 
   const content = () => {
     if (thisLayout == 1) {
@@ -44,30 +50,32 @@ function StudioSide() {
   const testRef = useRef()
 
   return (
-    <Layout style={{ background: 'none' }}>
-      <Sider trigger={null} collapsible collapsed={context.sidebarstatus} style={{ background: 'none' }}>
-        <Menu
-          defaultSelectedKeys={[thisLayout]}
-          defaultOpenKeys={['sub1']}
-          mode="inline"
-          items={items}
-          ref={testRef}
-          onClick={({ key, keyPath, domEvent }) => {handleChange({ key, keyPath, domEvent })}}
-        />
-      </Sider>
-      <Layout className="site-layout" style={{ background: 'none' }}>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: window.innerHeight,
-            background: 'transparent',
-          }}
-        >
-          {content()}
-        </Content>
+    <VariableProvider>
+      <Layout style={{ background: 'none' }}>
+        <Sider trigger={null} collapsible collapsed={context.sidebarstatus} style={{ background: 'none' }}>
+          <Menu
+            defaultSelectedKeys={[thisLayout]}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+            items={items}
+            ref={testRef}
+            onClick={({ key, keyPath, domEvent }) => { handleChange({ key, keyPath, domEvent }) }}
+          />
+        </Sider>
+        <Layout className="site-layout" style={{ background: 'none' }}>
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              minHeight: '1000px',
+              background: 'transparent',
+            }}
+          >
+            {content()}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </VariableProvider>
   );
 }
 

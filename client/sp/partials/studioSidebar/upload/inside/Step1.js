@@ -1,23 +1,15 @@
 import { useEffect, useState, useContext } from "react";
+import { InboxOutlined } from '@ant-design/icons';
+import { Upload, Progress } from 'antd';
 import axios from "axios";
 import style from '../../../../../styles/StudioSidebarUploadStep1.module.scss'
 import classNames from 'classnames/bind'
-import { InboxOutlined } from '@ant-design/icons';
-import { Upload, Progress } from 'antd';
 import Context from '../../VariableStorage/Context'
 const {Dragger} = Upload
 const Step1 = () => {
     const context = useContext(Context)
     const cx = classNames.bind(style)
     const [progress, setProgress] = useState(0)
-
-    useEffect(() => {
-        if(context.videoFile){
-            context.setStep1(true)
-        }else{
-            context.setStep1(false)
-        }
-    },[context.videoFile])
 
     const getFileExt = (fileName) => {
         return fileName.name.substring(fileName.name.lastIndexOf('.') + 1);

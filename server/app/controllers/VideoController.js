@@ -19,6 +19,24 @@ class VideoController {
         res.json(model)
     }
 
+    async getPopularVideo(req, res, next) {
+        const model = await Video.findAll({
+            where: {
+                status: 0
+            }
+        })
+        res.json(model)
+    }
+
+    async getNewestVideo(req, res, next) {
+        const model = await Video.findAll({
+            where: {
+                status: 0
+            }
+        })
+        res.json(model)
+    }
+
     async getStudioListVideo(req, res, next) {
         await Account.findOne({
             where: {
@@ -41,6 +59,23 @@ class VideoController {
                     })
             })
 
+    }
+
+    getLimitVideo(req, res, next) {
+        const offset = parseInt(req.query.offset) || 0;
+        const channelId = req.query.channelId;
+        const limit = parseInt(req.query.limit) || 0;
+        Video.findAll({
+            offset: offset,
+            limit: limit,
+            where: {
+                channelId: channelId
+            }
+        })
+            .then(list => {
+                res.json(list)
+            })
+            .catch(next)
     }
 }
 

@@ -1,7 +1,6 @@
-import { Fragment, memo } from 'react'
-import Navbar from '../../partials/studioNavbar/Nav';
-import Sidebar from '../../partials/studioSidebar/StudioSide';
-import { Col, Row } from 'antd';
+import { memo } from 'react'
+import Navbar from '../../sp/partials/studioNavbar/Nav';
+import Sidebar from '../../sp/partials/studioSidebar/StudioSide';
 const Up = () => {
     return (
         <>

@@ -1,14 +1,14 @@
 import { memo, useEffect, useState } from 'react'
 import { Row, Col } from 'antd'
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from "next/router";
 import axios from 'axios'
-import style from '../../../styles/Login.module.scss'
+import style from '../../styles/Login.module.scss'
 import classNames from 'classnames/bind'
 import clsx from 'clsx'
 
 const Login = () => {
     const cx = classNames.bind(style)
-    const navigate = useNavigate()
+    const router = useRouter()
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,7 +18,7 @@ const Login = () => {
 
     useEffect(() => {
         if (localStorage.getItem('username')) {
-            navigate('/')
+            router.push('/')
         }
     }, [])
 
@@ -48,7 +48,7 @@ const Login = () => {
                         localStorage.setItem('refreshToken', res.data.refreshToken);
                         localStorage.setItem('username', res.data.username)
                     })
-                    .then(() => { navigate('/') })
+                    .then(() => { router.push('/') })
                     .catch(() => {
                         console.log('create failed')
                     })
@@ -65,7 +65,7 @@ const Login = () => {
                         localStorage.setItem('refreshToken', res.data.refreshToken);
                         localStorage.setItem('username', res.data.username)
                     })
-                    .then(() => { navigate('/') })
+                    .then(() => { router.push('/') })
                     .catch(() => {
                         console.log('login failed')
                     })

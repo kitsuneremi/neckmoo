@@ -8,7 +8,6 @@ function WatchVideoComment() {
     return (
         <Row className={cx('comment-row')}>
             <Col span={1}>
-                <Avatar className={cx('avatar')} />
             </Col>
             <Col span={23}>
                 <Row>

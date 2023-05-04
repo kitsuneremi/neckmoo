@@ -3,6 +3,10 @@ import { Avatar } from "@mui/material";
 import { useState, useEffect, useRef, useContext, memo } from "react"
 import { Space, Row, Col, Drawer } from "antd";
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { faTwitter, faFontAwesome } from '@fortawesome/free-brands-svg-icons'
 import { CloseOutlined, LikeOutlined, DislikeFilled, ScissorOutlined, ArrowRightOutlined, SaveOutlined, LikeFilled, DislikeOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import Context from '../../GlobalVariableStorage/Context'
 import Item from "../../sp/partials/sidebar/SideBarItem"
@@ -20,6 +24,7 @@ import classNames from 'classnames/bind'
 
 export async function getServerSideProps({ params }) {
     const slug = params.slug;
+    library.add(fas, faTwitter, faFontAwesome)
     try {
         const [channelRes] = await Promise.all([
             axios.get(`http://localhost:5000/api/channel/test/${slug}`)
@@ -39,7 +44,7 @@ export async function getServerSideProps({ params }) {
     }
 }
 
-function Watch({ video, channelData }) {
+function Watch({ channelData }) {
     const cx = classNames.bind(style)
     const router = useRouter()
     const slug = router.query.slug
@@ -53,10 +58,11 @@ function Watch({ video, channelData }) {
     const [dislike, setDislike] = useState(false)
     const [sub, SetSub] = useState(false);
     const [play, setPlay] = useState(true);
-    const [fs, setFullscreen] = useState(false);
+    const [fs, setFullscreen] = useState(true);
     const [selectedTab, setSelectedTab] = useState(0)
     const [selectedBelowTab, setSelectedBelowTab] = useState(0)
     const [volume, setVolume] = useState(1)
+    const [cc, setCC] = useState(false)
     //useRef
     const playerRef = useRef(null);
     const videoRef = useRef(null);
@@ -70,10 +76,6 @@ function Watch({ video, channelData }) {
             setMaxVideoWidth(17)
         }
     }, [])
-
-    useEffect(() => {
-        URL.revokeObjectURL(video)
-    }, [video]);
 
     useEffect(() => {
         const handleSpacebar = (e) => {
@@ -156,22 +158,15 @@ function Watch({ video, channelData }) {
     const volumex = () => {
         if (volume > 0.5) {
             return (
-                <span className="material-icons" style={controlStyle}>
-                    volume_up
-                </span>
-
+                <FontAwesomeIcon icon="fa-solid fa-volume-high" size="2xl" />
             )
         } else if (volume > 0) {
             return (
-                <span className="material-icons" style={controlStyle}>
-                    volume_down
-                </span>
+                <FontAwesomeIcon icon="fa-solid fa-volume-low" size="2xl" />
             )
         } else {
             return (
-                <span className="material-icons" style={controlStyle}>
-                    volume_mute
-                </span>
+                <FontAwesomeIcon icon="fa-solid fa-volume-xmark" size="2xl" />
             )
         }
     }
@@ -318,17 +313,11 @@ function Watch({ video, channelData }) {
                         <div className={cx('control')}>
                             <div className={cx('left-control')}>
                                 {
-                                    !play ? <span className="material-icons" style={controlStyle} onClick={() => { playerRef.current.play(); setPlay(true) }}>
-                                        play_arrow
-                                    </span> : <span className="material-icons" style={controlStyle} onClick={() => { playerRef.current.pause(); setPlay(false) }}>
-                                        pause
-                                    </span>
+                                    !play ? <FontAwesomeIcon icon="fa-solid fa-play" size="2xl" onClick={() => { playerRef.current.play(); setPlay(true) }} /> : <FontAwesomeIcon icon="fa-solid fa-pause" size="2xl" onClick={() => { playerRef.current.pause(); setPlay(false) }} />
                                 }
-                                <span className="material-icons" style={controlStyle}>
-                                    skip_next
-                                </span>
+                                <FontAwesomeIcon icon="fa-solid fa-forward-step" size="2xl" />
                                 <>
-                                    {playerRef.current == null ? <span className="material-icons" style={controlStyle}>volume_up</span> : volumex()}
+                                    {volumex()}
                                     <input
                                         type="range"
                                         min="0"
@@ -341,12 +330,8 @@ function Watch({ video, channelData }) {
                                 </>
                             </div>
                             <div className={cx('right-control')}>
-                                <span className="material-icons" style={controlStyle}>
-                                    subtitles
-                                </span>
-                                <span className="material-icons" style={controlStyle}>
-                                    settings
-                                </span>
+                                {cc ? <FontAwesomeIcon icon="fa-solid fa-closed-captioning" size="2xl" onClick={() => {setCC(false)}}/> : <FontAwesomeIcon icon="fa-regular fa-closed-captioning"  size="2xl" onClick={() => {setCC(true)}}/>}
+                                <FontAwesomeIcon icon="fa-solid fa-gear" size="2xl" />
                                 {
                                     !fs
                                         ?
@@ -359,7 +344,7 @@ function Watch({ video, channelData }) {
                     </div>
                     <div>
                         <Row>
-                            {channelData ? <h5>{channelData.title}</h5> : <></>}
+                            {<h5>{channelData.title}</h5>}
                         </Row>
                         <Row style={{ justifyContent: 'space-between' }}>
                             <Col span={10}>
@@ -390,7 +375,7 @@ function Watch({ video, channelData }) {
                             </Col>
                         </Row>
                     </div>
-                    {channelData ? <VideoDescription value={channelData.des}></VideoDescription> : <></>}
+                    <VideoDescription value={channelData.des}></VideoDescription>
                     {
                         maxVideoWidth === 17 ?
                             <div>

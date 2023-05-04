@@ -6,6 +6,7 @@ const fileRouter = require('./file.js');
 const channelRouter = require('./channel.js');
 const accountRouter = require('./account.js');
 const studioRouter = require('./studio.js');
+const detailChannelRouter = require('./detailChannel.js');
 // const verifyToken = require('../middleware/auth')
 
 function route(app) {
@@ -17,6 +18,7 @@ function route(app) {
     app.use('/api/channel', channelRouter);
     app.use('/api/account', accountRouter);
     app.use('/api/studio', studioRouter);
+    app.use('/api/detailchannel', detailChannelRouter);
 }
 
 module.exports = route;

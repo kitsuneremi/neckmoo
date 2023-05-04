@@ -1,0 +1,46 @@
+.box{
+    .top-housing{
+        margin-bottom: 15px;
+        .tab-button{
+            background-color: transparent;
+            border: 0;
+            padding: 5px 10px;
+            font-size: 1.1rem;
+            font-weight: 450;
+            border-radius: 2%;
+        }
+        .selected-tab-button{
+            background-color: #030303;
+            color: aliceblue;
+            border: 0;
+            padding: 8px 14px;
+            font-size: 1rem;
+            font-weight: 450;
+            border-radius: 10px;
+        }
+    }
+    .bottom-housing{
+        display: flex;
+        width: fit-content;
+        .video-box{
+            padding: 7px 10px;
+            .thumbnail-box{
+                .video-thumbnail{
+                    width: 180px;
+                    height: 90px;
+                }
+            }
+        }
+        .title-box{
+            display: flex;
+            justify-content: space-between;
+            .title{
+                font-size: 1.2rem;
+                font-weight: 500;
+                max-width: 160px;
+                max-height: 50px;
+                word-wrap: break-word;
+            }
+        }
+    }
+}

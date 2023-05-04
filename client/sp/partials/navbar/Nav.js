@@ -17,11 +17,10 @@ function Nav() {
     const cx = classNames.bind(styles)
     const context = useContext(Context)
     //useRef
-    const searchRef = useRef(undefined)
+    const searchRef = useRef()
     //useState
     const [showCollapsedSearchBox, setShowCollapsedSearchBox] = useState(false)
     const [showSearchDropdown, setShowSearchDropdown] = useState(null)
-    const [searchValue, setSearchValue] = useState(context.searchvalue)
     const [searchResultObject, setSearchResultObject] = useState([])
     const [showLoading, setShowLoading] = useState(false)
     const [showClear, setShowClear] = useState(false)
@@ -48,15 +47,14 @@ function Nav() {
     }, [context.searchvalue])
 
     useEffect(() => {
-        searchValue === '' ? setShowClear(false) : setShowClear(true)
+        context.searchvalue === '' ? setShowClear(false) : setShowClear(true)
         handleShowSearchAdvanced()
-    }, [searchValue])
+    }, [context.searchvalue])
 
     //để sau này thực hiện thao tác tìm kiếm
     const handleSearch = () => {
         if (showCollapsedSearchBox) {
             if (context.searchvalue !== '') {
-                console.log('ok')
                 Router.push(`/result/${context.searchvalue}`)
             }
         } else {
@@ -80,7 +78,7 @@ function Nav() {
     }
 
     const handleShowSearchAdvanced = () => {
-        if (searchValue !== '') {
+        if (context.searchvalue !== '') {
             setShowSearchDropdown(true)
         } else {
             setShowSearchDropdown(false)
@@ -92,19 +90,21 @@ function Nav() {
     }
 
     const actionRender = () => {
-        let accessToken = null;
+        let accessToken;
         if (!process.env.IS_SERVER) {
             accessToken = window.localStorage.getItem('accessToken');
+            return (
+                <div className={cx('actions')}>
+                    <Link href={'/up'}><CloudUploadOutlined /></Link>
+                    <NotificationMenu />
+                    <AccountMenu />
+                </div>
+            )
         }
         return (
-            accessToken != null ? <div className={cx('actions')}>
-                <Link href={'/up'}><CloudUploadOutlined /></Link>
-                <NotificationMenu />
-                <AccountMenu />
-            </div> :
-                <Link href={'/login'}>
-                    <button className={cx('login-button')}>đăng nhập</button>
-                </Link>
+            <Link href={'/login'}>
+                <button className={cx('login-button')}>đăng nhập</button>
+            </Link>
         )
     }
 
@@ -160,9 +160,13 @@ function Nav() {
 
                     }>
                     <div className={cx('search')} ref={searchRef}>
-                        <input placeholder='search here' value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onFocus={() => { handleShowSearchAdvanced() }} onBlur={() => { setShowSearchDropdown(false) }} />
+                        <input placeholder='search here'
+                            value={context.searchvalue}
+                            onChange={(e) => { context.handleSearchValue(e.target.value) }}
+                            onFocus={() => { handleShowSearchAdvanced() }}
+                            onBlur={() => { setShowSearchDropdown(false) }} />
 
-                        {showClear && <button className={cx('clear')} onClick={() => { context.handleSearchValue(''); setSearchValue('') }}>
+                        {showClear && <button className={cx('clear')} onClick={() => { context.handleSearchValue('') }}>
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </button>}
                         {showLoading && <FontAwesomeIcon className={cx('spinner')} icon={faSpinner} />}
@@ -174,9 +178,7 @@ function Nav() {
                 </Tippy>
 
                 {/* action */}
-                {
-                    actionRender()
-                }
+                {actionRender()}
             </div>
         </header>
     );
