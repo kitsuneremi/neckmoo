@@ -75,7 +75,8 @@ const Videos = () => {
                             <MoreOutlined />
                         </div>
                         <div className={cx('info-box')}>
-                            view....
+                            <p className={cx('views')}>{video.view == 0 ? 'chưa có lượt xem' : `${video.view} lượt xem`}</p>
+                            <p className={cx('time-stamp')}>time stamp</p>
                         </div>
                     </div>
                 ))}

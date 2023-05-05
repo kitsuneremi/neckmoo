@@ -48,12 +48,23 @@
                 }
 
                 .right-housing {
-                    .submit-button {
+                    .subcribe-button {
                         border-radius: 2rem;
-                        padding: 5px 16px;
+                        padding: 6px 16px;
                         margin-left: 10px;
-                        background-color: rgb(223, 12, 12);
+                        border: 0;
+                        background-color: #272727;
                         color: aliceblue;
+                        font-size: 1.1rem;
+                        font-weight: 400;
+                    }
+
+                    .unsubcribe-button{
+                        border-radius: 2rem;
+                        padding: 6px 16px;
+                        margin-left: 10px;
+                        border: 0;
+                        background-color: #e5e5e5;
                         font-size: 1.1rem;
                         font-weight: 400;
                     }
@@ -103,4 +114,8 @@
         background-color: #606060;
 
     }
+}
+
+.infomation{
+    margin-right: 5px;
 }

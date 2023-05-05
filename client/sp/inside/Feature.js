@@ -1,9 +1,9 @@
-import classNames from "classnames/bind"
-import styles from '../../styles/Feature.module.scss'
+import { useRouter } from "next/router"
 import { MoreOutlined } from "@ant-design/icons"
 import { useEffect, useState } from "react"
+import classNames from "classnames/bind"
+import styles from '../../styles/Feature.module.scss'
 import Link from 'next/link'
-import { useRouter } from "next/router"
 import axios from "axios"
 
 
@@ -33,7 +33,7 @@ const Feature = () => {
     const router = useRouter()
     const [listVideo, setListVideo] = useState([])
     useEffect(() => {
-        if(!router.query.slug) return
+        if (!router.query.slug) return
         axios.get(`http://localhost:5000/api/detailchannel/featured/video?channelId=${router.query.slug}&offset=${0}&limit=${6}`)
             .then(res => { setListVideo(res.data) })
     }, [router.query.slug])
@@ -57,7 +57,10 @@ const Feature = () => {
                                         <p className={cx('video-title')}>{video.title}</p>
                                         <MoreOutlined style={{ cursor: 'pointer' }} />
                                     </div>
-                                    <div><p className={cx('video-info')}>info</p></div>
+                                    <div className={cx('info-box')}>
+                                        <p className={cx('views')}>{video.view}</p>
+                                        <p className={cx('time-stamp')}>time stamp</p>
+                                    </div>
                                 </div>
                             </Link>
                         )

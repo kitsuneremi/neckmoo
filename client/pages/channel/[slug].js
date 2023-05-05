@@ -2,17 +2,38 @@ import { useState, useEffect, useRef, useContext, memo } from "react"
 import { Space, Row, Col, Drawer } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
 import { useRouter } from "next/router";
-import Context from '../../GlobalVariableStorage/Context'
-import Item from '../../sp/partials/sidebar/SideBarItem';
-import style from '../../styles/Channel.module.scss'
-import Navx from "../../sp/partials/navbar/Nav";
 import axios from "axios";
 import classNames from "classnames/bind";
 import clsx from "clsx";
+import Context from '@/GlobalVariableStorage/Context'
+import Item from '@/sp/partials/sidebar/SideBarItem';
+import style from '@/styles/Channel.module.scss'
+import Navx from "@/sp/partials/navbar/Nav";
 import Feature from "@/sp/inside/Feature";
 import Videos from "@/sp/inside/Videos";
 
-function Channel() {
+export async function getServerSideProps({params}){
+  const slug = params.slug
+  try {
+    const [channelRes] = await Promise.all([
+        axios.get(`http://localhost:5000/api/channel/basicdata/${slug}`)
+    ]);
+
+    return {
+        props: {
+            channelData: channelRes.data,
+        }
+    };
+} catch (error) {
+    return {
+        props: {
+            error: error.message
+        }
+    };
+}
+}
+
+function Channel({channelData}) {
   const router = useRouter()
   const cx = classNames.bind(style)
   //useContext
@@ -25,8 +46,9 @@ function Channel() {
   const [needDrawer, setNeedDrawer] = useState(false)
   const [SidebarWidth, setSidebarWidth] = useState(2)
   const [selectedTab, setSelectedTab] = useState(0)
-  const [listVideo, setListVideo] = useState()
-  const [channelData, setChannelData] = useState({})
+  const [listVideo, setListVideo] = useState([])
+  // const [channelData, setChannelData] = useState({})
+  const [subcribed, setSubcribed] = useState(false)
 
   //useEffect
   useEffect(() => {
@@ -48,11 +70,11 @@ function Channel() {
       .then(res => { setListVideo(res.data) })
   }, [])
 
-  useEffect(() => {
-    if(!router.query.slug) return 
-    axios.get(`http://localhost:5000/api/channel/basicdata/${router.query.slug}`)
-    .then(res => { setChannelData(res.data)})
-  },[router.query.slug])
+  // useEffect(() => {
+  //   if(!router.query.slug) return 
+  //   axios.get(`http://localhost:5000/api/channel/basicdata/${router.query.slug}`)
+  //   .then(res => { setChannelData(res.data)})
+  // },[router.query.slug])
 
   useEffect(() => {
     let windowWidth = window.innerWidth
@@ -171,14 +193,13 @@ function Channel() {
                     <div style={{display: "flex"}}>
                       <p className={cx('infomation')}>{channelData.tagName}</p>
                       <p className={cx('infomation')}>Sub count</p>
-                      <p className={cx('infomation')}>Video count</p>
+                      <p className={cx('infomation')}>{listVideo ? `${listVideo.length} Video` : 0}</p>
                     </div>
                     <div><p className={cx('description')}>{channelData.des}</p></div>
                   </div>
                 </div>
                 <div className={cx('right-housing')}>
-                  <button className={cx('submit-button')}>button 1</button>
-                  <button className={cx('submit-button')}>button 2</button>
+                  <button className={clsx({[cx('subcribe-button')]: !subcribed}, {[cx('unsubcribe-button')]: subcribed})} onClick={() => {setSubcribed(!subcribed)}}>{subcribed ? 'đã đăng ký' : 'đăng ký'}</button>
                 </div>
               </div>
 

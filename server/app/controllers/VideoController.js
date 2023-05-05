@@ -11,12 +11,15 @@ class VideoController {
     }
 
     async getListVideo(req, res, next) {
-        const model = await Video.findAll({
+        const list = await Video.findAll({
             where: {
                 status: 0
             }
         })
-        res.json(model)
+        // list.map((video, index) => {
+        //     Video.
+        // })
+        res.json(list)
     }
 
     async getPopularVideo(req, res, next) {

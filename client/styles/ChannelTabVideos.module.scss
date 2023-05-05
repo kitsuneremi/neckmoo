@@ -42,5 +42,11 @@
                 word-wrap: break-word;
             }
         }
+        .info-box{
+            display: flex;
+            .views{
+                margin-right: 10px;
+            }
+        }
     }
 }
