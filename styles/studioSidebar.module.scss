@@ -1,0 +1,53 @@
+.over-box {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px);
+
+    .top-housing {
+        position: absolute;
+        top: 0;
+
+        .infomation-box {}
+
+        .navigation-box {
+            .item-box {
+                padding: 5px 14px;
+                font-size: 1.3rem;
+                display: flex;
+
+                .icon-box {
+                    width: 25px;
+                    height: 25px;
+                }
+
+                .title-box {
+                    width: auto;
+                    min-width: max-content;
+                }
+            }
+        }
+    }
+
+    .action-box {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+
+        .item-box {
+            padding: 5px 14px;
+            font-size: 1.3rem;
+            display: flex;
+
+            .icon-box {
+                width: 25px;
+                height: 25px;
+            }
+
+            .title-box {
+                width: auto;
+                min-width: max-content;
+            }
+        }
+    }
+
+}

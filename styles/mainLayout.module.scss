@@ -1,0 +1,26 @@
+$navbar-height: 50px;
+$sidebar-width: 160px;
+.body{
+    width: 100vw;
+    position: relative;
+    .navbar{
+        width: 100%;
+        position: fixed;
+        top: 0;
+        height: $navbar-height;
+    }
+
+    .body-box{
+        top:$navbar-height;
+        display: flex;
+        position: absolute;
+        width: 100vw;
+        height: fit-content;
+        max-height: calc(100vh - $navbar-height);
+    }
+}
+
+.body::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+}

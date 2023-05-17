@@ -1,0 +1,134 @@
+$image-preview-width: 120px;
+$image-preview-height: 60px;
+
+
+.box{
+    display: flex;
+    font-size: 1.2rem;
+    width: 95vw;
+    gap: 3vw;
+    .left-housing{
+        width: 30vw;
+        .input{
+            width: 90%;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid black;
+            font-size: 1.3rem;
+        }
+        .input:focus{
+            outline: 0;
+        }
+
+        .input-error{
+            width: 90%;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid rgb(255, 0, 0);
+            font-size: 1.3rem;
+        }
+        .input-error:focus{
+            outline: 0;
+        }
+
+        .description{
+            width: 100%;
+            height: 200px;
+            border: 1px solid black;
+            resize: none;
+            font-size: 1.2rem;
+        }
+        .description-error{
+            width: 100%;
+            height: 200px;
+            border: 1px solid rgb(255, 0, 0);
+            resize: none;
+            font-size: 1.2rem;
+        }
+
+        .upload-box{
+            display: flex;
+            gap: 30px;
+            .uploader-box {
+                position: relative;
+                width: $image-preview-width;
+                height: $image-preview-height;
+                border: 1px solid rgba(0, 255, 255, 0.788);
+                cursor: pointer;
+                .file-upload {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    outline: none;
+                    content: '';
+                    opacity: 0;
+                    z-index: -1;
+                    cursor: pointer;
+                    background-color: #444;
+            
+                }
+            
+                .inside-uploader {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
+    .right-housing{
+        width: 58vw;
+        .preview-box{
+            width: 100%;
+            height: 600px;
+            border: 1px solid black;
+            .background-image{
+                width: 100%;
+                height: 160px;
+                border-bottom: 1px solid black;
+            }
+
+            div{
+                margin-left: 30%;
+                display: flex;
+                gap: 30px;
+                .avatar{
+                    width: 80px;
+                    height: 80px;
+                    border: 1px solid black;
+                    border-radius: 3rem;
+                }
+                div{
+                    text-align: start;
+                    margin: 0;
+                    display: block;
+                    .channel-name{
+                        font-size: 1.4rem;
+                        font-weight: 540;
+                        margin: 0;
+                        height: 30px;
+                        min-width: 50px;
+                    }
+
+                    .tagname{
+                        margin: 0;
+                        height: 30px;
+                        min-width: 50px;
+                    }
+
+                    .des{
+                        margin: 0;
+                        height: 30px;
+                        min-width: 50px;
+                        max-width: 200px;
+                        font-size: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

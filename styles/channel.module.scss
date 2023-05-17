@@ -1,0 +1,105 @@
+.inside-content {
+    width: 100%;
+
+    .banner {
+        width: 100%;
+    }
+
+    .below-content {
+        padding: 0 15%;
+        width: 100%;
+
+        .top-side {
+            justify-content: space-between;
+            display: flex;
+            padding-top: 20px;
+
+            .left-housing {
+                display: flex;
+
+                .avatar {
+                    width: 90px;
+                    height: 90px;
+                    border-radius: 50%;
+                    border: 1px solid black;
+                    margin-right: 10px;
+                }
+
+                .data {
+                    div {
+                        .name {
+                            font-size: 1.4rem;
+                        }
+
+                        .infomation {
+                            color: rgb(85, 84, 83);
+                        }
+
+                        .description {
+                            color: rgb(85, 84, 83);
+                        }
+                    }
+                }
+            }
+
+            .right-housing {
+                .subcribe-button {
+                    border-radius: 2rem;
+                    padding: 6px 16px;
+                    margin-left: 10px;
+                    border: 0;
+                    background-color: #272727;
+                    color: aliceblue;
+                    font-size: 1.1rem;
+                    font-weight: 400;
+                }
+
+                .unsubcribe-button {
+                    border-radius: 2rem;
+                    padding: 6px 16px;
+                    margin-left: 10px;
+                    border: 0;
+                    background-color: #e5e5e5;
+                    font-size: 1.1rem;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}
+
+.tab-selector {
+    display: flex;
+
+    .tab {
+        background-color: transparent;
+        border: 0;
+        padding: 5px 10px;
+        color: #969696;
+        cursor: pointer;
+    }
+
+    .selected-tab {
+        background-color: transparent;
+        border: 0;
+        padding: 5px 10px;
+        color: #0f0f0f;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .selected-tab::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #606060;
+
+    }
+}
+
+.infomation {
+    margin-right: 5px;
+}

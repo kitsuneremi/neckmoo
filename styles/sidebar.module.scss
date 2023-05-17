@@ -1,0 +1,51 @@
+$width: 160px;
+$height: 40px;
+
+.parent-box{
+    display: flex;
+    width: auto;
+    min-width: max-content;
+    max-width: $width;
+    height: $height;
+    padding: 0 10px;
+    line-height: $height;
+    user-select: none;
+    vertical-align: middle;
+    .icon{
+        padding-top: 7%; 
+        margin: 0 10px;
+    }
+}
+
+.selected-parent-box{
+    display: flex;
+    width: fit-content;
+    max-width: $width;
+    height: $height;
+    padding: 0 10px;
+    line-height: $height;
+    background-color: rgba(90, 241, 241, 0.226);
+    user-select: none;
+    .icon{
+        padding-top: 7%;
+        margin: 0 10px;
+    }
+}
+
+.parent-box:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+.title{
+
+}
+
+.item-child {
+    width: $width;
+    height: $height;
+    line-height: $height;
+    padding-left: 70px;
+    user-select: none;
+    color: black;
+    text-decoration: none;
+}
