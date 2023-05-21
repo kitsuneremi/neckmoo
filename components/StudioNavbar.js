@@ -6,10 +6,12 @@ import { Router } from "next/router"
 import { useState, useEffect, useRef, useContext } from "react"
 import { IeOutlined, LeftOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import Context from "@/GlobalVariableProvider/Context"
+import { useSession, signIn, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 const cx = classNames.bind(styles)
 
 
-const AccountMenu = () => {
+const AccountMenu = ({session}) => {
     const [show, setShow] = useState(false)
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
@@ -19,7 +21,7 @@ const AccountMenu = () => {
         const menu = menuRef.current;
         if (button && menu) {
             const buttonRect = button.getBoundingClientRect();
-            menu.style.left = `-185px`;
+            menu.style.left = `-220px`;
             menu.style.top = `${buttonRect.bottom}px`;
         }
     }, [show]);
@@ -27,21 +29,20 @@ const AccountMenu = () => {
     return (
         <>
             <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
-                account
+                <img src="" className={cx('avatar')} />
             </button>
             {show ? <div className={cx('dropdown')} ref={menuRef}>
                 <div className={cx('infomation-box')}>
                     <img src="" className={cx('avatar')} />
                     <div className={cx('infomation')}>
-                        <p>lily</p>
-                        <p>@lily2811</p>
-                        <p>lilypeachew@gmal.com</p>
+                        <p>@{session ? session.user.name : ''}</p>
+                        <p>{session ? session.user.email : ''}</p>
                     </div>
                 </div>
                 <div className={cx('menu-box')}><p className={cx('title')}>Kênh của bạn</p></div>
                 <div className={cx('menu-box')}><p className={cx('title')}>cài đặt</p></div>
                 <div className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></div>
-                <div className={cx('menu-box')}><p className={cx('title')}>đăng xuất</p></div>
+                <div className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></div>
             </div> : <></>}
         </>
     )
@@ -75,6 +76,7 @@ const NotificationMenu = () => {
     )
 }
 
+
 function Navbar() {
     const context = useContext(Context)
     const [showClear, setShowClear] = useState(false)
@@ -85,6 +87,8 @@ function Navbar() {
 
     const searchDropdownRef = useRef(null)
     const searchInputRef = useRef(null)
+    const { data: session } = useSession()
+    const router = useRouter()
 
     useEffect(() => {
         if (searchValue.trim() === '') {
@@ -99,7 +103,7 @@ function Navbar() {
     const handleSearch = () => {
         setShowSearchResult(false)
         if (searchValue !== '') {
-            Router.push(`/result/${encodeURIComponent(searchValue)}`)
+            router.push(`/result/${encodeURIComponent(searchValue)}`)
         }
     }
 
@@ -123,17 +127,6 @@ function Navbar() {
                         asdas
                     </div>}
                 </div>
-                {/* {!localStorage.getItem('id') ? <div className={cx('action-box')}>
-                    <Link href={'/studio/upload'}></Link>
-                    <div className={cx('notification-box')}>
-                        <NotificationMenu />
-                    </div>
-
-                    <div className={cx('account-menu-box')}>
-                        <AccountMenu />
-                    </div>
-
-                </div> : <button className={cx('login-button')}>đăng nhập</button>} */}
                 <div className={cx('action-box')}>
                     <Link href={'/studio/upload'}><UploadOutlined /></Link>
                     <div className={cx('notification-box')}>
@@ -141,7 +134,7 @@ function Navbar() {
                     </div>
 
                     <div className={cx('account-menu-box')}>
-                        <AccountMenu />
+                        <AccountMenu session={session} />
                     </div>
                 </div>
             </div>

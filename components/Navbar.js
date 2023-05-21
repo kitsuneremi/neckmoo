@@ -2,15 +2,16 @@
 import classNames from "classnames/bind"
 import styles from '@/styles/navbar.module.scss'
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 import { Router } from "next/router"
 import { useState, useEffect, useRef, useContext } from "react"
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { IeOutlined, LeftOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
-import { signIn, signOut, useSession } from 'next-auth/client';
 import Context from "@/GlobalVariableProvider/Context"
 const cx = classNames.bind(styles)
 
 
-const AccountMenu = () => {
+const AccountMenu = ({session}) => {
     const [show, setShow] = useState(false)
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
@@ -34,15 +35,14 @@ const AccountMenu = () => {
                 <div className={cx('infomation-box')}>
                     <img src="" className={cx('avatar')} />
                     <div className={cx('infomation')}>
-                        <p>lily</p>
-                        <p>@lily2811</p>
-                        <p>lilypeachew@gmal.com</p>
+                        <p>@{session ? session.user.name : ''}</p>
+                        <p>{session ? session.user.email : ''}</p>
                     </div>
                 </div>
                 <div className={cx('menu-box')}><p className={cx('title')}>Kênh của bạn</p></div>
                 <div className={cx('menu-box')}><p className={cx('title')}>cài đặt</p></div>
                 <div className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></div>
-                <div className={cx('menu-box')}><p className={cx('title')}>đăng xuất</p></div>
+                <div className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></div>
             </div> : <></>}
         </>
     )
@@ -77,31 +77,23 @@ const NotificationMenu = () => {
 }
 
 const ActionIsLogged = () => {
-    const [session, loading] = useSession();
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!session) {
-        return (
-            <button className={cx('login-button')}>đăng nhập</button>
-        );
-    }
-
-    return (
-        <div className={cx('action-box')}>
+    const { data: session } = useSession();
+    const router = useRouter();
+    if (session && session.user) {
+        return <div className={cx('action-box')}>
             <Link href={'/studio/upload'}><UploadOutlined /></Link>
             <div className={cx('notification-box')}>
                 <NotificationMenu />
             </div>
 
             <div className={cx('account-menu-box')}>
-                <AccountMenu />
+                <AccountMenu session={session}/>
             </div>
 
         </div>
-    );
+    } else {
+        return <button className={cx('login-button')} onClick={() => { signIn() }}>đăng nhập</button>
+    }
 }
 
 
@@ -116,7 +108,7 @@ function Navbar() {
 
     const searchDropdownRef = useRef(null)
     const searchInputRef = useRef(null)
-
+    const router = useRouter()
     useEffect(() => {
         if (searchValue.trim() === '') {
             setShowSearchResult(false)
@@ -130,15 +122,9 @@ function Navbar() {
     const handleSearch = () => {
         setShowSearchResult(false)
         if (searchValue !== '') {
-            Router.push(`/result/${encodeURIComponent(searchValue)}`)
+            router.push(`/result/${encodeURIComponent(searchValue)}`)
         }
     }
-
-    // useEffect(() => {
-    //     if (localStorage.getItem('id') && localStorage.getItem('id') !== 'undefined') {
-
-    //     }
-    // }, [])
 
     return (
         <nav className={'navbar'}>
@@ -160,18 +146,7 @@ function Navbar() {
                         asdas
                     </div>}
                 </div>
-                {/* {localStorage && !localStorage.getItem('id') ? <div className={cx('action-box')}>
-                    <Link href={'/studio/upload'}><UploadOutlined /></Link>
-                    <div className={cx('notification-box')}>
-                        <NotificationMenu />
-                    </div>
-
-                    <div className={cx('account-menu-box')}>
-                        <AccountMenu />
-                    </div>
-
-                </div> : <button className={cx('login-button')}>đăng nhập</button>} */}
-                {ActionIsLogged}
+                {ActionIsLogged()}
             </div>
         </nav>
     )
