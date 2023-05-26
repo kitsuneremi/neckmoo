@@ -6,6 +6,7 @@ interface RequestBody {
     email: string;
     password: string;
     username: string;
+    isAdmin: Boolean;
 }
 
 export async function POST(request: Request) {
@@ -15,7 +16,8 @@ export async function POST(request: Request) {
             name: body.name,
             email: body.email,
             username: body.username,
-            password: await bcrypt.hash(body.password, 10)
+            password: await bcrypt.hash(body.password, 10),
+            isAdmin: false
         }
     });
 

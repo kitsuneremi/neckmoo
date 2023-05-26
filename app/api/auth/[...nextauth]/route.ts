@@ -1,7 +1,5 @@
-import axios from "axios";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import type { NextApiRequest, NextApiResponse } from "next"
 
 const handler = NextAuth({
 
@@ -25,10 +23,10 @@ const handler = NextAuth({
         })
 
         const user = await res.json();
-        if(user){
-          const {password, ...userWithoutPass} = user;
+        if (user) {
+          const { password, ...userWithoutPass } = user;
           return userWithoutPass
-        }else{
+        } else {
           return null
         }
       }
@@ -38,8 +36,17 @@ const handler = NextAuth({
     signIn: "/register",
     signOut: ""
   },
-  session: {
-    
+  callbacks: {
+    async jwt({ token, user }) {
+      return {
+        ...user,
+        ...token
+      }
+    },
+    async session({ session, token }) {
+      session.user = token as any;
+      return session;
+    }
   }
 
 });

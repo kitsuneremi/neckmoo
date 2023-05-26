@@ -1,21 +1,26 @@
 .window {
-    padding: 0 1% 0 7%;
+    padding: 0 1% 0 8%;
     display: flex;
-    gap: 5%;
+    gap: 2%;
+    width: 100vw;
 
     .left-housing {
         height: fit-content;
+        width: 75%;
 
         .video-box {
             justify-content: center;
-
+            max-width: 100%;
+            min-width: 60vw;
             .frame-box {
                 position: relative;
-                max-width: 1300px;
+                width: fit-content;
+                height: fit-content;
                 justify-content: center;
+                max-width: 100%;
 
                 .video-player {
-                    max-width: 1300px;
+                    max-width: 100%;
                 }
 
                 .control {
@@ -51,6 +56,7 @@
                     .left-housing {
                         display: flex;
                         gap: 20px;
+                        justify-content: flex-start;
 
                         .avatar {
                             width: 35px;
@@ -227,7 +233,7 @@
     }
 
     .right-housing {
-        width: 300px;
+        width: 20%;
 
         .box {
             border: 1px solid rgb(180, 181, 182);
@@ -275,44 +281,29 @@
                 max-height: 650px;
                 overflow-y: scroll;
                 overflow-x: hidden;
+                .items{
+                    padding: 12px 0;
+                    width: 90%;
+                    margin-left: 5%;
+                    display: flex;
+                    .thumbnail{
+                        max-width: 60%;
+                        max-height: 120px;
+                        margin-right: 20px;
+                    }
+                }
 
+            }
+            .bot-housing::-webkit-scrollbar{
+                width: 0;
+            }
+
+            .none{
+                display: none;
             }
         }
 
-        .items {
-            display: flex;
-            padding: 5%;
-
-            .thumbnail {
-                width: 180px;
-                max-width: 60%;
-                max-height: 100%;
-            }
-
-            div {
-                display: block;
-                position: relative;
-                margin-left: 5%;
-                width: 400px;
-                max-width: 40%;
-
-                .video-title {
-                    position: absolute;
-                    top: 0;
-                    font-size: 1.2em;
-                    font-weight: 650;
-                    width: 200px;
-                    max-width: 100%;
-                    max-height: 65px;
-                    overflow-y: scroll;
-                }
-
-                .video-owner {
-                    position: absolute;
-                    bottom: 0;
-                    font-size: 0.9em;
-                }
-            }
-        }
+        
     }
 }
+

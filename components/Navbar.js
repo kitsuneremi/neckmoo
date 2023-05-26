@@ -3,18 +3,19 @@ import classNames from "classnames/bind"
 import styles from '@/styles/navbar.module.scss'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-import { Router } from "next/router"
 import { useState, useEffect, useRef, useContext } from "react"
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import { IeOutlined, LeftOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import Context from "@/GlobalVariableProvider/Context"
+import axios from "axios"
 const cx = classNames.bind(styles)
 
-
-const AccountMenu = ({session}) => {
+const AccountMenu = ({ session }) => {
     const [show, setShow] = useState(false)
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
+    const router = useRouter();
+    const [channelData, setChannelData] = useState(null);
 
     useEffect(() => {
         const button = buttonRef.current;
@@ -26,24 +27,38 @@ const AccountMenu = ({session}) => {
         }
     }, [show]);
 
+    useEffect(() => {
+        if (session && session.user) {
+            axios.get(`/api/channel/getdatabyaccountid/${session.user.id}`).then(res => { setChannelData(res.data) })
+        }
+    }, [session])
+
+    const handlePush = () => {
+        if (channelData != null) {
+            router.push(`/channel/${channelData.tagName}`)
+        } else {
+            router.push('/registerchannel')
+        }
+    }
+
     return (
         <>
             <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
                 <img src="" className={cx('avatar')} />
             </button>
-            {show ? <div className={cx('dropdown')} ref={menuRef}>
-                <div className={cx('infomation-box')}>
+            {show ? <ul className={cx('dropdown')} ref={menuRef}>
+                <li className={cx('infomation-box')}>
                     <img src="" className={cx('avatar')} />
                     <div className={cx('infomation')}>
                         <p>@{session ? session.user.name : ''}</p>
                         <p>{session ? session.user.email : ''}</p>
                     </div>
-                </div>
-                <div className={cx('menu-box')}><p className={cx('title')}>Kênh của bạn</p></div>
-                <div className={cx('menu-box')}><p className={cx('title')}>cài đặt</p></div>
-                <div className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></div>
-                <div className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></div>
-            </div> : <></>}
+                </li>
+                <li className={cx('menu-box')} onClick={() => { handlePush() }}><p className={cx('title')}>Kênh của bạn</p></li>
+                <li className={cx('menu-box')}><p className={cx('title')}>cài đặt</p></li>
+                <li className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></li>
+                <li className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></li>
+            </ul> : <></>}
         </>
     )
 }
@@ -76,8 +91,7 @@ const NotificationMenu = () => {
     )
 }
 
-const ActionIsLogged = () => {
-    const { data: session } = useSession();
+const ActionIsLogged = (session) => {
     const router = useRouter();
     if (session && session.user) {
         return <div className={cx('action-box')}>
@@ -87,12 +101,12 @@ const ActionIsLogged = () => {
             </div>
 
             <div className={cx('account-menu-box')}>
-                <AccountMenu session={session}/>
+                <AccountMenu session={session} />
             </div>
 
         </div>
     } else {
-        return <button className={cx('login-button')} onClick={() => { signIn() }}>đăng nhập</button>
+        return <button className={cx('login-button')} onClick={() => { router.push('/register') }}>đăng nhập</button>
     }
 }
 
@@ -104,8 +118,7 @@ function Navbar() {
     const [showSearchResult, setShowSearchResult] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const [searchData, setSearchData] = useState([])
-
-
+    const { data: session } = useSession();
     const searchDropdownRef = useRef(null)
     const searchInputRef = useRef(null)
     const router = useRouter()
@@ -146,7 +159,7 @@ function Navbar() {
                         asdas
                     </div>}
                 </div>
-                {ActionIsLogged()}
+                {ActionIsLogged(session)}
             </div>
         </nav>
     )

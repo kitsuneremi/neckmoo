@@ -124,6 +124,7 @@ $search-width: 380px;
     .infomation-box {
         display: flex;
         gap: 5px;
+        list-style: none;
 
         .avatar {
             width: 35px;
@@ -134,6 +135,8 @@ $search-width: 380px;
     }
 
     .menu-box {
+        list-style: none;
+        padding: 5px 0;
         .p {
             color: #338ac9;
         }

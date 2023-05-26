@@ -11,11 +11,132 @@ datasource db {
 }
 
 model Accounts {
-  id Int @id @default(autoincrement())
-  email String @unique
-  name String
-  password String
-  username String
-  refreshToken String?
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  name          String
+  password      String
+  username      String
+  refreshToken  String?
+  isAdmin       Boolean         @default(false)
+  channel       Channels?
+  comment       Comments[]
+  Likes         Likes[]
+  Notifications Notifications[]
+  Subcribes     Subcribes[]
+  subComments   subComments[]
 }
 
+model Channels {
+  id            Int             @id @default(autoincrement())
+  name          String
+  tagName       String          @unique
+  des           String          @default("")
+  account       Accounts        @relation(fields: [accountId], references: [id])
+  accountId     Int             @unique
+  ListVideos    ListVideos[]
+  Notifications Notifications[]
+  Subcribes     Subcribes[]
+  Posts         Posts[]
+  Videos        Videos[]
+}
+
+model Videos {
+  id              Int               @id @default(autoincrement())
+  title           String
+  des             String            @default("")
+  view            Int?              @default(0)
+  status          Int
+  link            String
+  channel         Channels          @relation(fields: [channelId], references: [id])
+  channelId       Int               @default(3)
+  comment         Comments[]
+  DetailListVideo DetailListVideo[]
+  DetailTags      DetailTags[]
+  Likes           Likes[]
+}
+
+model Categories {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Comments {
+  id          Int           @id @default(autoincrement())
+  video       Videos        @relation(fields: [videoId], references: [id])
+  videoId     Int           @unique
+  account     Accounts      @relation(fields: [accountId], references: [id])
+  accountId   Int           @unique
+  content     String
+  status      Int
+  subComments subComments[]
+}
+
+model subComments {
+  id        Int      @id @default(autoincrement())
+  comment   Comments @relation(fields: [commentId], references: [id])
+  commentId Int      @unique
+  account   Accounts @relation(fields: [accountId], references: [id])
+  accountId Int      @unique
+}
+
+model ListVideos {
+  id              Int               @id @default(autoincrement())
+  channel         Channels          @relation(fields: [channelId], references: [id])
+  channelId       Int               @unique
+  name            String
+  DetailListVideo DetailListVideo[]
+}
+
+model DetailListVideo {
+  id      Int        @id @default(autoincrement())
+  video   Videos     @relation(fields: [videoId], references: [id])
+  videoId Int        @unique
+  list    ListVideos @relation(fields: [listId], references: [id])
+  listId  Int        @unique
+}
+
+model Tags {
+  id         Int          @id @unique @default(autoincrement())
+  name       String
+  DetailTags DetailTags[]
+}
+
+model DetailTags {
+  id      Int    @id @unique @default(autoincrement())
+  video   Videos @relation(fields: [videoId], references: [id])
+  videoId Int    @unique
+  tag     Tags   @relation(fields: [tagId], references: [id])
+  tagId   Int    @unique
+}
+
+model Likes {
+  id        Int      @id @unique @default(autoincrement())
+  video     Videos   @relation(fields: [videoId], references: [id])
+  videoId   Int      @unique
+  account   Accounts @relation(fields: [accountId], references: [id])
+  accountId Int      @unique
+}
+
+model Notifications {
+  id        Int      @id @unique @default(autoincrement())
+  account   Accounts @relation(fields: [accountId], references: [id])
+  accountId Int      @unique
+  channel   Channels @relation(fields: [channelId], references: [id])
+  channelId Int      @unique
+}
+
+model Subcribes {
+  id        Int      @id @unique @default(autoincrement())
+  account   Accounts @relation(fields: [accountId], references: [id])
+  accountId Int      @unique
+  channel   Channels @relation(fields: [channelId], references: [id])
+  channelId Int      @unique
+}
+
+model Posts {
+  id          Int      @id @unique @default(autoincrement())
+  channel     Channels @relation(fields: [channelId], references: [id])
+  channelId   Int      @unique
+  title       String
+  description String
+}

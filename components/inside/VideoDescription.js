@@ -2,7 +2,7 @@ import style from '../../styles/Watch.module.scss';
 import classNames from 'classnames/bind'
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-export default function (props) {
+export default function VideoDescription (props) {
     const cx = classNames.bind(style)
     const [collapse, setCollapse] = useState(true)
     const [height, setHeight] = useState(80)

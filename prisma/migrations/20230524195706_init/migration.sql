@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `videos` MODIFY `des` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `view` INTEGER NULL DEFAULT 0;

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `channels` ADD COLUMN `des` VARCHAR(191) NOT NULL DEFAULT '';
