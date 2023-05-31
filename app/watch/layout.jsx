@@ -1,5 +1,5 @@
 "use client";
-import WatchSidebar from "@/components/WatchSidebar";
+import Sidebar from "@/components/DefaultSidebar";
 import styles from "@/styles/defaultLayout.module.scss";
 import classNames from "classnames/bind";
 import { useContext, useEffect } from "react";
@@ -21,7 +21,7 @@ export default function WatchLayout({ children }) {
             { [cx("sidebar-expand")]: !context.collapseSidebar }
           )}
         >
-          <WatchSidebar />
+          <Sidebar />
         </aside>
         <aside className={cx("main-content-full")}>{children}</aside>
       </div>

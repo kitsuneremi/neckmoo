@@ -5,6 +5,11 @@ import styles from "@/styles/registerChannel.module.scss";
 import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+
+
+const getFileExt = (fileName) => {
+  return fileName.name.substring(fileName.name.lastIndexOf(".") + 1);
+};
 export default function RegisterChannel() {
   const cx = classNames.bind(styles);
   const [channelName, setChannelName] = useState("");
@@ -39,13 +44,26 @@ export default function RegisterChannel() {
           },
         }
       );
-
-      axios.post('localhost:5000/api/filein/channelavatar', {
-        image: originalAvatar
-      })
-      axios.post('localhost:5000/api/filein/channelbanner', {
-        image: originalThumbnail
-      })
+      const avaFormData = new FormData();
+      avaFormData.append("image", originalAvatar, tagName + "." + getFileExt(originalAvatar));
+      const thumbnailFormData = new FormData();
+      thumbnailFormData.append("image", originalThumbnail, tagName + "." + getFileExt(originalThumbnail));
+      axios
+        .post("http://localhost:5000/api/filein/channelavatar", avaFormData)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      axios
+        .post("http://localhost:5000/api/filein/channelbanner", thumbnailFormData)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 

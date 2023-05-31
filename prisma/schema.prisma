@@ -110,27 +110,31 @@ model DetailTags {
 }
 
 model Likes {
-  id        Int      @id @unique @default(autoincrement())
   video     Videos   @relation(fields: [videoId], references: [id])
   videoId   Int      @unique
   account   Accounts @relation(fields: [accountId], references: [id])
   accountId Int      @unique
+  type      Int
+
+  @@id([videoId, accountId])
 }
 
 model Notifications {
-  id        Int      @id @unique @default(autoincrement())
   account   Accounts @relation(fields: [accountId], references: [id])
-  accountId Int      @unique
+  accountId Int
   channel   Channels @relation(fields: [channelId], references: [id])
-  channelId Int      @unique
+  channelId Int
+
+  @@id([accountId, channelId])
 }
 
 model Subcribes {
-  id        Int      @id @unique @default(autoincrement())
   account   Accounts @relation(fields: [accountId], references: [id])
-  accountId Int      @unique
+  accountId Int
   channel   Channels @relation(fields: [channelId], references: [id])
-  channelId Int      @unique
+  channelId Int
+
+  @@id([accountId, channelId])
 }
 
 model Posts {

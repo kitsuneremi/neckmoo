@@ -4,7 +4,7 @@
     top: 60px;
 
     .sidebar-expand {
-        width: 160px;     
+        width: 160px;
         position: fixed;
         min-height: calc(100vh - 60px);
 
@@ -53,6 +53,7 @@
         width: 250px;
         height: fit-content;
         display: block;
+        z-index: 150;
 
         .thumbnail {
             width: 100%;
@@ -80,6 +81,14 @@
 
                     .video-details {
                         font-size: 0.8rem;
+                    }
+                }
+
+                .channel-name-box {
+                    z-index: 200;
+                    .channel-name {
+
+                        font-size: 1.2rem;
                     }
                 }
 

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import style from '../../styles/WatchComment.module.scss'
+import style from '@/styles/WatchComment.module.scss'
 import classNames from 'classnames/bind'
 function WatchVideoComment() {
     const cx = classNames.bind(style)

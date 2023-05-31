@@ -7,7 +7,7 @@
         width: 160px;
         position: fixed;
         min-height: calc(100vh - 60px);
-
+        z-index: 2000;
     }
 
     .sidebar-collapse {

@@ -1,10 +1,11 @@
 "use client";
 import styles from "@/styles/upload.module.scss";
 import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Context from "@/GlobalVariableProvider/Context";
 function makeid() {
   let length = 8;
   let result = "";
@@ -24,20 +25,9 @@ const getFileExt = (fileName) => {
 };
 
 export default function UploadPage() {
-  const { data: session } = useSession();
+  const context = useContext(Context)
   const cx = classNames.bind(styles);
   const router = useRouter();
-  // useEffect(() => {
-  //   if (session === undefined) {
-  //   } else {
-  //     console.log(session);
-  //     if (session != null) {
-  //       if (!session.user) {
-  //         router.push("/register");
-  //       }
-  //     }
-  //   }
-  // }, [session]);
   const [videoFile, setVideoFile] = useState(null);
   const [videoPreviewFile, setVideoPreviewFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -45,6 +35,7 @@ export default function UploadPage() {
   const [title, setTitle] = useState("");
   const [mode, setMode] = useState(0);
   const [des, setDes] = useState("");
+  const [channelData, setChannelData] = useState({});
 
   const handleUploadVideo = (file) => {
     setVideoFile(file);
@@ -55,53 +46,62 @@ export default function UploadPage() {
     setImageFile(file);
     setImagePreviewFile(URL.createObjectURL(file));
   };
-  const getChannelDataByAccountId = async (id) => {
-    const channel = await axios.get(
-      `/api/channel/getdatabyaccountid/${id}`,
-    );
-    return channel.data.id;
-  };
+
+  useLayoutEffect(() => {
+    if (context.ses != null && context.ses != undefined) {
+      axios.get(
+        `/api/channel/getdatabyaccountid`, {
+        params: {
+          accountId: context.ses.user.id
+        }
+      }
+      ).then(res => { setChannelData(res.data)})
+    }
+
+  }, [context.ses])
 
   const handleFinal = async () => {
     if (videoFile == null || imageFile == null || title.trim().length == 0) {
     } else {
-      const videoFormData = new FormData();
-      const imageFormData = new FormData();
-      let t = makeid();
-      videoFormData.append("video", videoFile, t + "." + getFileExt(videoFile));
-      imageFormData.append("image", imageFile, t + "." + getFileExt(imageFile));
+      if (channelData != null) {
+        const videoFormData = new FormData();
+        const imageFormData = new FormData();
+        let t = makeid();
+        videoFormData.append("video", videoFile, t + "." + getFileExt(videoFile));
+        imageFormData.append("image", imageFile, t + "." + getFileExt(imageFile));
 
-      await axios
-        .post("http://localhost:5000/api/filein/video", videoFormData)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        await axios
+          .post("http://localhost:5000/api/filein/video", videoFormData)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
 
-      await axios
-        .post("http://localhost:5000/api/filein/videoimg", imageFormData)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      await axios
-        .post("/api/video/create", {
-          title: title,
-          des: des,
-          mode: mode,
-          link: t,
-          channelId: await getChannelDataByAccountId(session.user.id),
-        })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        await axios
+          .post("http://localhost:5000/api/filein/videoimg", imageFormData)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        await axios
+          .post("/api/video/create", {
+            title: title,
+            des: des,
+            mode: mode,
+            link: t,
+            channelId: channelData.id,
+          })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     }
   };
 

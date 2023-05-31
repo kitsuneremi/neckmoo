@@ -5,7 +5,7 @@ import MainLayout from "@/layout/mainLayout";
 import MainSidebarLayout from "@/layout/mainSidebarLayout";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 const cx = classNames.bind(styles);
 
 export async function getServerSideProps() {
@@ -26,7 +26,6 @@ export default function Home() {
   const render = () => {
     if (video.length != 0)
       return video.map((vid, index) => {
-        console.log(vid);
         return (
           <HomeVideoItem
             key={index}
@@ -34,6 +33,8 @@ export default function Home() {
             status={vid.status}
             view={vid.view}
             title={vid.title}
+            tagName={vid.tagName}
+            channelName={vid.name}
           ></HomeVideoItem>
         );
       });
@@ -54,8 +55,9 @@ const HomeVideoItem = (val) => {
   const [name, setName] = useState(val.title);
   const [view, setView] = useState(val.view);
   const [link, setLink] = useState(val.link);
-  useEffect(() => {
-    val.link &&
+  const [channelAvatar, setChannelAvatar] = useState(null);
+  useLayoutEffect(() => {
+    if (val.link) {
       axios
         .get(`http://localhost:5000/api/fileout/videoimage/${val.link}`, {
           responseType: "blob",
@@ -69,29 +71,42 @@ const HomeVideoItem = (val) => {
             )
           );
         });
+      axios
+        .get(`http://localhost:5000/api/fileout/channelavatar/${val.tagName}`, {
+          responseType: "blob",
+        })
+        .then((res) => {
+          var binaryData = [];
+          binaryData.push(res.data);
+          setChannelAvatar(
+            window.URL.createObjectURL(
+              new Blob(binaryData, { type: "image/jpeg" })
+            )
+          );
+        });
+    }
   }, []);
 
   return (
     <div
       className={cx("box")}
-      onClick={() => {
-        router.push(`/watch/${link}`);
-      }}
+
     >
-      <img className={cx("thumbnail")} src={img}></img>
+      <img className={cx("thumbnail")} src={img} onClick={() => {
+        router.push(`/watch/${link}`);
+      }}></img>
       <div>
-        <img className={cx("icon")} src={``}></img>
+        <img className={cx("icon")} src={channelAvatar} onClick={() => {
+            router.push(`/channel/${val.tagName}`);
+          }}></img>
         <div>
           <div>
-            <p className={cx("title")}>{name}</p>
+            <p className={cx("title")}>{name}</p> 
           </div>
-          <div>
-            <p
-              className={cx("video-details")}
-              onClick={() => {
-                router.push("/");
-              }}
-            >
+          <div className={cx('channel-name-box')} onClick={() => {
+            router.push(`/channel/${val.tagName}`);
+          }}>
+            <p className={cx("channel-name")}>
               {val.channelName}
             </p>
           </div>

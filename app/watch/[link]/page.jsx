@@ -32,6 +32,8 @@ import clsx from "clsx";
 import axios from "axios";
 import classNames from "classnames/bind";
 import { useRouter } from "next/navigation";
+import VideoComment from '@/components/inside/VideoComment';
+import VideoCommentInput from '@/components/inside/VideoCommentInput';
 
 const cx = classNames.bind(style);
 
@@ -125,7 +127,7 @@ const ListSidebarBox = () => {
 function Watch({ params }) {
     const context = useContext(Context);
     const router = useRouter();
-    useEffect(() => {
+    useLayoutEffect(() => {
         context.setCollapseSidebar(false);
     }, []);
 
@@ -145,7 +147,11 @@ function Watch({ params }) {
     const [channelAva, setChannelAva] = useState(null);
 
     useLayoutEffect(() => {
-        axios.get(`/api/channel/find/${slug}`).then((res) => {
+        axios.get(`/api/channel/find`, {
+            params: {
+                link: slug
+            }
+        }).then((res) => {
             setChannelData(res.data);
             axios.get(
                 `http://localhost:5000/api/fileout/channelavatar/${res.data.tagName}`, {
@@ -167,22 +173,94 @@ function Watch({ params }) {
         });
     }, []);
 
+    useEffect(() => {
+        if (context.ses) {
+            if (context.ses.user) {
+                if (channelData.id) {
+                    axios.get('/api/subcribe/issubcribed', {
+                        params: {
+                            accountId: context.ses.user.id,
+                            targetChannel: channelData.id
+                        }
+                    }).then(res => {
+                        if (res.data != null) {
+                            setSubcribe(true);
+                        } else {
+                            setSubcribe(false);
+                        }
+                    })
+                }
+            }
+        }
+    }, [channelData])
+
+    useLayoutEffect(() => {
+        if(context.ses){
+            if(videoInfo.id){
+                const x = async () => {
+                    const val = await axios.get('/api/like/find',{
+                        params: {
+                            accountId: context.ses.user.id,
+                            targetId: videoInfo.id
+                        }
+                    })
+                    if(val.data == null){
+                        setLike(false)
+                        setDislike(false)
+                    }else{
+                        if(val.data.type == 0){
+                            setLike(true)
+                            setDislike(false)
+                        }else{
+                            setLike(false)
+                            setDislike(true)
+                        }
+                    }
+                }
+                x();
+            }
+        }
+    },[context.ses]) 
+
     const handleLike = () => {
-        if (like) {
-            setLike(false);
-            setDislike(false);
-        } else {
-            setLike(true);
-            setDislike(false);
+        if (context.ses) {
+            if (like) {
+                setLike(false);
+                setDislike(false);
+                axios.post('/api/like/delete', {
+                    accountId: context.ses.user.id,
+                    targetId: videoInfo.id,
+                })
+            } else {
+                setLike(true);
+                setDislike(false);
+                axios.post('/api/like/add', {
+                    accountId: context.ses.user.id,
+                    targetId: videoInfo.id,
+                    type: 0
+                })
+            }
         }
     };
     const handleDislike = () => {
-        if (dislike) {
-            setLike(false);
-            setDislike(false);
-        } else {
-            setLike(false);
-            setDislike(true);
+        if (context.ses) {
+            if (dislike) {
+                setLike(false);
+                setDislike(false);
+
+                axios.post('/api/like/delete', {
+                    accountId: context.ses.user.id,
+                    targetId: videoInfo.id,
+                })
+            } else {
+                setLike(false);
+                setDislike(true);
+                axios.post('/api/like/add', {
+                    accountId: context.ses.user.id,
+                    targetId: videoInfo.id,
+                    type: 1
+                })
+            }
         }
     };
 
@@ -239,12 +317,35 @@ function Watch({ params }) {
         }
     };
 
+    const handleSubcribe = () => {
+        if (context.ses) {
+            if (context.ses.user) {
+                if (subcribe) {
+                    setSubcribe(false);
+                    axios.post('/api/subcribe/delete', {
+                        accountId: context.ses.user.id,
+                        targetChannel: channelData.id
+                    }, {
+                        headers: {
+                            'accessToken': context.ses.accessToken
+                        }
+                    })
+                } else {
+                    setSubcribe(true);
+                    axios.post('/api/subcribe/add', {
+                        accountId: context.ses.user.id,
+                        targetChannel: channelData.id
+                    }, {
+                        headers: {
+                            'accessToken': context.ses.accessToken
+                        }
+                    })
+                }
+            }
+        }
 
-    // const getChannelImage = async () => {
-    //     return channelData != null
-    //         ? 
-    //         : null
-    // }
+    }
+
     return (
         <main className={cx("window")}>
             <div className={cx("left-housing")}>
@@ -292,7 +393,7 @@ function Watch({ params }) {
                                 <img
                                     className={cx("avatar")}
                                     src={channelAva}
-                                    onClick={() => {router.push(`/channel/${channelData.tagName}`)}}
+                                    onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
                                 ></img>
                                 <div>
                                     <div>
@@ -305,18 +406,14 @@ function Watch({ params }) {
                                 {!subcribe ? (
                                     <button
                                         className={cx("subcribe-button")}
-                                        onClick={() => {
-                                            setSubcribe(true);
-                                        }}
+                                        onClick={() => { handleSubcribe(); }}
                                     >
                                         đăng ký
                                     </button>
                                 ) : (
                                     <button
                                         className={cx("unsubcribe-button")}
-                                        onClick={() => {
-                                            setSubcribe(false);
-                                        }}
+                                        onClick={() => { handleSubcribe(); }}
                                     >
                                         đã đăng ký
                                     </button>
@@ -401,7 +498,8 @@ function Watch({ params }) {
                             </div>
                         </div>
                         <div className={cx("bottom-housing")}>
-                            gen ra mớ comment- hạng mục sẽ được thi công sau
+                            <VideoComment />
+                            <VideoCommentInput />
                         </div>
                     </div>
                 </div>

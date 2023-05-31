@@ -12,6 +12,7 @@ export const metadata = {
   description: 'what the f*ck man?',
 }
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="vi">

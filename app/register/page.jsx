@@ -1,14 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, getSession, signIn } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import axios from "axios";
 import style from "../../styles/register.module.scss";
 import classNames from "classnames/bind";
 import clsx from "clsx";
 import MainLayout from "../../layout/mainLayout";
+import Context from "@/GlobalVariableProvider/Context";
 
-export default function Register(){
+export default function Register() {
   const cx = classNames.bind(style);
   const router = useRouter();
   const [userName, setUserName] = useState("");
@@ -17,8 +18,9 @@ export default function Register(){
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [showRegister, setShowRegister] = useState(false);
-
   const { data: session } = useSession();
+
+  const context = useContext(Context);
 
   useEffect(() => {
     if (session && session.user) {
@@ -43,21 +45,6 @@ export default function Register(){
       ) {
         console.log("email not valid");
       } else {
-        // let f = new FormData();
-        // f.append('username', userName);
-        // f.append('password', password);
-        // f.append('email', email);
-        // f.append('name', displayName);
-        // axios.post('/api/sign/register', f)
-        //     .then(res => {
-        //         localStorage.setItem('accessToken', res.data.accessToken);
-        //         localStorage.setItem('refreshToken', res.data.refreshToken);
-        //         localStorage.setItem('id', res.data.id)
-        //     })
-        //     .then(() => { router.push('/') })
-        //     .catch(() => {
-        //         console.log('create failed')
-        //     })
         const register = await axios.post("/api/user/create", {
           username: userName,
           password: password,
@@ -70,7 +57,7 @@ export default function Register(){
           password: password,
           redirect: true,
           callbackUrl: "/",
-        });
+        }).then(() => { context.setSes(session) })
       }
     } else {
       if (userName.trim() !== "" && password.trim() !== "") {
@@ -79,7 +66,7 @@ export default function Register(){
           password: password,
           redirect: true,
           callbackUrl: "/",
-        });
+        }).then(() => { context.setSes(session) })
       }
     }
   };
