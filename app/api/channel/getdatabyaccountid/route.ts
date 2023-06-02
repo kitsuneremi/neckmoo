@@ -6,7 +6,6 @@ export async function GET(req: Request) {
     const params = {
         accountId: parseInt(url.searchParams.get("accountId") || "")
     }
-    console.log(params.accountId)
     const channel = await prisma.channels.findFirst({
         where: { accountId: params.accountId }
     })

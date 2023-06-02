@@ -57,6 +57,4 @@ router.post('/channelavatar', ChannelAvatarUpload.single("image"), (req, res, ne
 router.post('/channelbanner', ChannelBannerUpload.single("image"), (req, res, next) => {
     res.send({ name: ImageStorage._handleFile.name })
 });
-
-router.post('/testx', upload.none(), UpController.up)
 module.exports = router;

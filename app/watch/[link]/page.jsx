@@ -7,23 +7,7 @@ import {
     useLayoutEffect,
 } from "react";
 import {
-    CaretRightOutlined,
-    PauseOutlined,
-    StepForwardOutlined,
-    CloseOutlined,
-    LikeFilled,
-    DislikeFilled,
-    ShareAltOutlined,
-    EllipsisOutlined,
-    DislikeOutlined,
-    LikeOutlined,
-    FilterOutlined,
-    QuestionOutlined,
-    MehOutlined,
-    LockOutlined,
-    IeOutlined,
-    MessageOutlined,
-    SettingOutlined,
+    CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined,
 } from "@ant-design/icons";
 import { Link } from "next/link";
 import Context from "@/GlobalVariableProvider/Context";
@@ -36,6 +20,95 @@ import VideoComment from '@/components/inside/VideoComment';
 import VideoCommentInput from '@/components/inside/VideoCommentInput';
 
 const cx = classNames.bind(style);
+
+
+
+const CommentZone = () => {
+    const [commentFocused, setCommentFocused] = useState(false);
+    return (
+        <div className={cx("comment-zone")}>
+            <div className={cx("top-housing")}>
+                <p>n bình luận</p>
+                <div>
+                    <FilterOutlined />
+                    sắp xếp theo
+                </div>
+            </div>
+            <div className={cx("middle-housing")}>
+                <img src="" className={cx("avatar")}></img>
+                <div>
+                    <input
+                        onFocus={() => {
+                            setCommentFocused(true);
+                        }}
+                        onBlur={() => {
+                            setCommentFocused(false);
+                        }}
+                        placeholder="viết bình luận"
+                    ></input>
+                    {commentFocused ? (
+                        <div className={cx("input-plugin-box")}>
+                            <QuestionOutlined />
+                            <div>
+                                <button>hủy</button>
+                                <button>bình luận</button>
+                            </div>
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            </div>
+            <div className={cx("bottom-housing")}>
+                <VideoComment />
+                {/* <VideoCommentInput /> */}
+            </div>
+        </div>
+    )
+}
+
+
+const Tab = () => {
+    const [selectedTab, setSelectedTab] = useState(0);
+
+    const ViewTab = () => {
+        if (selectedTab == 0) {
+            return <CommentZone />
+        } else if (selectedTab == 1) {
+            return <ListSidebarBox />
+        } else {
+            return <></>
+        }
+    }
+    const btn = [
+        {
+            'title': 'bình luận',
+        },
+        {
+            'title': 'danh sách phát',
+        },
+        {
+            'title': 'video khác',
+        }
+    ]
+
+    return (
+        <>
+            <div className={cx('selection')}>
+                {btn.map((b, index) => {
+                    return (
+                        <button key={index} className={
+                            clsx({ [cx('tab-button')]: (selectedTab !== index) }, { [cx('selected-tab-button')]: (selectedTab === index) })
+                        } onClick={() => { setSelectedTab(index) }}>{b.title}</button>
+                    )
+                })}
+            </div>
+            <div className={cx('selection-render')}>
+                {ViewTab()}
+            </div>
+        </>
+    )
+}
 
 const SidebarVideoItem = (props) => {
     const [img, setImg] = useState(null);
@@ -140,7 +213,6 @@ function Watch({ params }) {
     const [collapseDescription, setCollapseDescription] = useState(false);
     const [like, setLike] = useState(false);
     const [dislike, setDislike] = useState(false);
-    const [commentFocused, setCommentFocused] = useState(false);
 
     const [videoInfo, setVideoInfo] = useState({});
     const [channelData, setChannelData] = useState({});
@@ -195,23 +267,23 @@ function Watch({ params }) {
     }, [channelData])
 
     useLayoutEffect(() => {
-        if(context.ses){
-            if(videoInfo.id){
+        if (context.ses) {
+            if (videoInfo.id) {
                 const x = async () => {
-                    const val = await axios.get('/api/like/find',{
+                    const val = await axios.get('/api/like/find', {
                         params: {
                             accountId: context.ses.user.id,
                             targetId: videoInfo.id
                         }
                     })
-                    if(val.data == null){
+                    if (val.data == null) {
                         setLike(false)
                         setDislike(false)
-                    }else{
-                        if(val.data.type == 0){
+                    } else {
+                        if (val.data.type == 0) {
                             setLike(true)
                             setDislike(false)
-                        }else{
+                        } else {
                             setLike(false)
                             setDislike(true)
                         }
@@ -220,7 +292,7 @@ function Watch({ params }) {
                 x();
             }
         }
-    },[context.ses]) 
+    }, [context.ses])
 
     const handleLike = () => {
         if (context.ses) {
@@ -346,167 +418,251 @@ function Watch({ params }) {
 
     }
 
-    return (
-        <main className={cx("window")}>
-            <div className={cx("left-housing")}>
-                <div className={cx("video-box")}>
-                    <div className={cx("frame-box")}>
-                        <video
-                            className={cx("video-player")}
-                            src={`http://localhost:5000/api/fileout/video/${slug}`}
-                            allowFullScreen
-                            autoPlay
-                            ref={playerRef}
-                        ></video>
-                        <div className={cx("timeline")}></div>
-                        <div className={cx("control")}>
-                            <div className={cx("left-control")}>
-                                {playPauseController()}
-                                <StepForwardOutlined />
-                                <>
-                                    {volumex()}
-                                    <input
-                                        type="range"
-                                        min="0"
-                                        max="1"
-                                        step="0.01"
-                                        className={cx("volume-controller")}
-                                        onChange={(e) => {
-                                            setVolume(e.target.value);
-                                        }}
-                                        defaultValue="1"
-                                    />
-                                </>
+    const Main = () => {
+        const [deviceType, setDeviceType] = useState(0);
+
+        useEffect(() => {
+            if (window) {
+                if (window.innerWidth > 1100) {
+                    setDeviceType(0)
+                } else {
+                    setDeviceType(1)
+                }
+            }
+        }, [])
+
+        const handleShowSubcribeButton = () => {
+            if (window != undefined) {
+                if (window.innerWidth < 500) {
+                    return !subcribe ? (
+                        <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}></button>
+                    ) : (
+                        <button className={cx("unsubcribe-button")} onClick={() => { handleSubcribe(); }}></button>
+                    )
+                } else {
+                    return
+                }
+            }
+        }
+
+        const VideoOptionRender = () => {
+            if (window != undefined) {
+                if (window.innerWidth < 500) {
+                    return <></>
+                } else {
+                    return (
+                        <>
+                            <button>
+                                <ShareAltOutlined />
+                                <p>Share</p>
+                            </button>
+                            <div>
+                                <div className={cx("like-box")} onClick={() => { handleLike() }}>
+                                    {like ? <LikeFilled /> : <LikeOutlined />}
+                                    <p className={cx("like-count")}>100N</p>
+                                </div>
+                                <div className={cx("dislike-box")} onClick={() => { handleDislike() }}>
+                                    {dislike ? <DislikeFilled /> : <DislikeOutlined />}
+                                </div>
                             </div>
-                            <div className={cx("right-control")}>
-                                {cc ? <IeOutlined /> : <IeOutlined />}
-                                <SettingOutlined />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={cx("below-box")}>
-                    <div className={cx("infomation-box")}>
-                        <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
-                        <div>
-                            <div className={cx("left-housing")}>
-                                <img
-                                    className={cx("avatar")}
-                                    src={channelAva}
-                                    onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
-                                ></img>
-                                <div>
-                                    <div>
-                                        <p className={cx("channel-name")}>{channelData.name}</p>
+                        </>
+                    )
+                }
+            }
+        }
+
+        return (
+            <>
+                {deviceType == 0 ? <>
+                    <div className={cx("left-housing")}>
+                        <div className={cx("video-box")}>
+                            <div className={cx("frame-box")}>
+                                <video
+                                    className={cx("video-player")}
+                                    src={`http://localhost:5000/api/fileout/video/${slug}`}
+                                    allowFullScreen
+                                    autoPlay
+                                    ref={playerRef}
+                                ></video>
+                                <div className={cx("timeline")}></div>
+                                <div className={cx("control")}>
+                                    <div className={cx("left-control")}>
+                                        {playPauseController()}
+                                        <StepForwardOutlined />
+                                        <>
+                                            {volumex()}
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max="1"
+                                                step="0.01"
+                                                className={cx("volume-controller")}
+                                                onChange={(e) => {
+                                                    setVolume(e.target.value);
+                                                }}
+                                                defaultValue="1"
+                                            />
+                                        </>
                                     </div>
-                                    <div>
-                                        <p className={cx("channel-info")}>1Tr lượt đăng ký</p>
+                                    <div className={cx("right-control")}>
+                                        {cc ? <IeOutlined /> : <IeOutlined />}
+                                        <SettingOutlined />
                                     </div>
                                 </div>
-                                {!subcribe ? (
-                                    <button
-                                        className={cx("subcribe-button")}
-                                        onClick={() => { handleSubcribe(); }}
-                                    >
-                                        đăng ký
-                                    </button>
-                                ) : (
-                                    <button
-                                        className={cx("unsubcribe-button")}
-                                        onClick={() => { handleSubcribe(); }}
-                                    >
-                                        đã đăng ký
-                                    </button>
-                                )}
                             </div>
-                            <div className={cx("right-housing")}>
+                        </div>
+                        <div className={cx("below-box")}>
+                            <div className={cx("infomation-box")}>
+                                <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
                                 <div>
-                                    <div
-                                        className={cx("like-box")}
-                                        onClick={() => {
-                                            handleLike();
-                                        }}
-                                    >
-                                        {like ? <LikeFilled /> : <LikeOutlined />}
-                                        <p className={cx("like-count")}>100N</p>
-                                    </div>
-                                    <div
-                                        className={cx("dislike-box")}
-                                        onClick={() => {
-                                            handleDislike();
-                                        }}
-                                    >
-                                        {dislike ? <DislikeFilled /> : <DislikeOutlined />}
-                                    </div>
-                                </div>
-                                <button>
-                                    <ShareAltOutlined />
-                                    Share
-                                </button>
-                                <button>
-                                    <EllipsisOutlined />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        className={clsx(
-                            { [cx("description-box-collapse")]: collapseDescription },
-                            { [cx("description-box-expand")]: !collapseDescription }
-                        )}
-                    >
-                        <p
-                            className={cx("handle-collapse-expand-button")}
-                            onClick={() => {
-                                setCollapseDescription(!collapseDescription);
-                            }}
-                        >
-                            {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
-                        </p>
-                    </div>
-                    <div className={cx("comment-zone")}>
-                        <div className={cx("top-housing")}>
-                            <p>???</p>
-                            <div>
-                                <FilterOutlined />
-                                sắp xếp theo
-                            </div>
-                        </div>
-                        <div className={cx("middle-housing")}>
-                            <img src="" className={cx("avatar")}></img>
-                            <div>
-                                <input
-                                    onFocus={() => {
-                                        setCommentFocused(true);
-                                    }}
-                                    onBlur={() => {
-                                        setCommentFocused(false);
-                                    }}
-                                    placeholder="viết bình luận"
-                                ></input>
-                                {commentFocused ? (
-                                    <div className={cx("input-plugin-box")}>
-                                        <QuestionOutlined />
+                                    <div className={cx("left-housing")}>
+                                        <img
+                                            className={cx("avatar")}
+                                            src={channelAva}
+                                            onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
+                                        ></img>
                                         <div>
-                                            <button>hủy</button>
-                                            <button>bình luận</button>
+                                            <div>
+                                                <p className={cx("channel-name")}>{channelData.name}</p>
+                                            </div>
+                                            <div>
+                                                <p className={cx("channel-info")}>1Tr lượt đăng ký</p>
+                                            </div>
+                                        </div>
+                                        {!subcribe ? (
+                                            <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}>
+                                                đăng ký
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className={cx("unsubcribe-button")}
+                                                onClick={() => { handleSubcribe(); }}
+                                            >
+                                                đã đăng ký
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <div className={cx("right-housing")}>
+                                        {VideoOptionRender()}
+                                        <button>
+                                            <EllipsisOutlined />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
+                                <p
+                                    className={cx("handle-collapse-expand-button")}
+                                    onClick={() => {
+                                        setCollapseDescription(!collapseDescription);
+                                    }}
+                                >
+                                    {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
+                                </p>
+                            </div>
+                            <CommentZone />
+                        </div>
+                    </div>
+                    <div className={cx("right-housing")}>
+                        <ListSidebarBox />
+                    </div>
+                </> : <>
+                    <div className={cx('video-box')}>
+                        <div className={cx("frame-box")}>
+                            <video
+                                className={cx("video-player")}
+                                src={`http://localhost:5000/api/fileout/video/${slug}`}
+                                allowFullScreen
+                                autoPlay
+                                ref={playerRef}
+                            ></video>
+                            <div className={cx("timeline")}></div>
+                            <div className={cx("control")}>
+                                <div className={cx("left-control")}>
+                                    {playPauseController()}
+                                    <StepForwardOutlined />
+                                    <>
+                                        {volumex()}
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="1"
+                                            step="0.01"
+                                            className={cx("volume-controller")}
+                                            onChange={(e) => {
+                                                setVolume(e.target.value);
+                                            }}
+                                            defaultValue="1"
+                                        />
+                                    </>
+                                </div>
+                                <div className={cx("right-control")}>
+                                    {cc ? <IeOutlined /> : <IeOutlined />}
+                                    <SettingOutlined />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={cx('below-side')}>
+                        <div className={cx("infomation-box")}>
+                            <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
+                            <div>
+                                <div className={cx("left-housing")}>
+                                    <img
+                                        className={cx("avatar")}
+                                        src={channelAva}
+                                        onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
+                                    ></img>
+                                    <div>
+                                        <div>
+                                            <p className={cx("channel-name")}>{channelData.name}</p>
+                                        </div>
+                                        <div>
+                                            <p className={cx("channel-info")}>1Tr lượt đăng ký</p>
                                         </div>
                                     </div>
-                                ) : (
-                                    <></>
-                                )}
+                                    {!subcribe ? (
+                                        <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}>
+                                            đăng ký
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className={cx("unsubcribe-button")}
+                                            onClick={() => { handleSubcribe(); }}
+                                        >
+                                            đã đăng ký
+                                        </button>
+                                    )}
+                                </div>
+                                <div className={cx("right-housing")}>
+                                    {VideoOptionRender()}
+                                    <button>
+                                        <EllipsisOutlined />
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div className={cx("bottom-housing")}>
-                            <VideoComment />
-                            <VideoCommentInput />
+                        <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
+                            <p
+                                className={cx("handle-collapse-expand-button")}
+                                onClick={() => {
+                                    setCollapseDescription(!collapseDescription);
+                                }}
+                            >
+                                {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
+                            </p>
                         </div>
+                        <Tab />
                     </div>
-                </div>
-            </div>
-            <div className={cx("right-housing")}>
-                <ListSidebarBox />
-            </div>
+                </>}
+            </>
+        )
+    }
+
+    return (
+        <main className={cx("window")}>
+            {Main()}
         </main>
     );
 }

@@ -1,0 +1,113 @@
+.video-manage-box {
+    width: 100%;
+
+    .infomation-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .row-0 {
+            padding: 5px;
+            width: 30px;
+        }
+
+        .row-1 {
+            width: 30%;
+
+            img {
+                max-width: 144px;
+                max-height: 90px;
+            }
+        }
+
+        .row-2 {
+            width: 30%;
+        }
+
+        .row-3 {
+            width: 20%;
+        }
+
+        .row-4 {
+            width: 10%;
+        }
+
+        .row-5 {
+            width: 10%;
+            button{
+                background-color: rgb(178, 31, 236);
+                width: 80px;
+                height: 30px;
+                color: aliceblue;
+            }
+        }
+    }
+}
+
+
+.title-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: antiquewhite;
+    padding: 10px 0;
+    .row-0 {
+        width: 20px;
+    }
+
+    .row-1 {
+        width: 30%;
+    }
+
+    .row-2 {
+        width: 30%;
+    }
+
+    .row-3 {
+        width: 20%;
+    }
+
+    .row-4 {
+        width: 10%;
+    }
+
+    .row-5 {
+        width: 10%;
+    }
+
+    div {
+        p {}
+    }
+}
+
+.edit-box{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    div{
+        gap: 25px;
+        div{
+
+            input{
+                width: 220px;
+                height: 30px;
+                border: 1px solid black;
+            }
+        }
+
+        .update{
+            background-color: rgb(41, 56, 194);
+            width: 80px;
+            height: 30px;
+            margin-right: 20px;
+            color: aliceblue;
+        }
+
+        .delete{
+            background-color: rgb(236, 31, 65);
+            width: 80px;
+            height: 30px;
+            color: aliceblue;
+        }
+    }
+}

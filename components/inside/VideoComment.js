@@ -1,24 +1,33 @@
-import { memo } from "react";
+'use client'
+import { memo, useState } from "react";
 import style from '@/styles/WatchComment.module.scss'
 import classNames from 'classnames/bind'
-function WatchVideoComment() {
+function WatchVideoComment(props) {
     const cx = classNames.bind(style)
+    const [showResponseInput, setShowResponseInput] = useState(false)
+    const [responseValue, setResponseValue] = useState("")
+
+    const handleShowResponse = () => {
+        if (showResponseInput) {
+            return <input value={responseValue} onChange={e => setResponseValue(e.target.value)} className={cx('response-input')} />
+        }
+    }
     return (
         <div className={cx('comment-row')}>
-            <div span={1}>
-            </div>
-            <div span={23}>
+            <img src="" />
+            <div>
                 <div>
-                    {/* <p className={cx('comment-channel-name')}>erinasaiyukii</p> */}
-                </div>
-                <div style={{ height: 'fit-content', width: 'inherit' }}>
-                    {/* <p className={cx('comment-text')}>this is the text write by hand</p> */}
+                    <p className={cx('comment-channel-name')}>erinasaiyukii</p>
                 </div>
                 <div>
+                    <p className={cx('comment-text')}>this is the text write by hand</p>
+                </div>
+                <div className={cx('tool-box')}>
                     <button>like</button>
-                    <button style={{ marginLeft: '5px' }}>dislike</button>
-                    {/* <p style={{ marginBottom: 0, marginLeft: '5px' }}>phản hồi</p> */}
+                    <button>dislike</button>
+                    <button onClick={() => { setShowResponseInput(!showResponseInput) }}>phản hồi</button>
                 </div>
+                {handleShowResponse()}
             </div>
         </div>
     )
