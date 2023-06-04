@@ -23,7 +23,6 @@ model Accounts {
   Likes         Likes[]
   Notifications Notifications[]
   Subcribes     Subcribes[]
-  subComments   subComments[]
 }
 
 model Channels {
@@ -61,22 +60,16 @@ model Categories {
 }
 
 model Comments {
-  id          Int           @id @default(autoincrement())
-  video       Videos        @relation(fields: [videoId], references: [id])
-  videoId     Int           @unique
-  account     Accounts      @relation(fields: [accountId], references: [id])
-  accountId   Int           @unique
+  id          Int        @id @default(autoincrement())
+  video       Videos     @relation(fields: [videoId], references: [id])
+  videoId     Int        @unique
+  account     Accounts   @relation(fields: [accountId], references: [id])
+  accountId   Int        @unique
   content     String
   status      Int
-  subComments subComments[]
-}
-
-model subComments {
-  id        Int      @id @default(autoincrement())
-  comment   Comments @relation(fields: [commentId], references: [id])
-  commentId Int      @unique
-  account   Accounts @relation(fields: [accountId], references: [id])
-  accountId Int      @unique
+  comments    Comments[] @relation("ParentComment")
+  referenceId Int?       @map("referenceId")
+  reference   Comments?  @relation("ParentComment", fields: [referenceId], references: [id])
 }
 
 model ListVideos {

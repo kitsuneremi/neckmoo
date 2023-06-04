@@ -15,5 +15,11 @@ export async function POST(request: Request) {
             }
         }
     )
-    return new Response(JSON.stringify(null))
+    const count = await prisma.likes.count({
+        where: {
+            type: 0
+        }
+    })
+    const likewithcount = {...like, count: count}
+    return new Response(JSON.stringify(likewithcount))
 }

@@ -63,59 +63,12 @@
                     background-color: #e5e5e5;
                 }
 
-                .comment-zone {
-                    .top-housing {}
 
-                    .middle-housing {
-                        display: flex;
-                        width: 100%;
-
-                        .avatar {
-                            width: 35px;
-                            height: 35px;
-                            border-radius: 2rem;
-                        }
-
-                        div {
-                            width: 100%;
-
-                            input {
-                                width: 100%;
-                                outline: 0;
-                                height: 40px;
-                                line-height: 40px;
-                                background: transparent;
-                                font-size: 1.3rem;
-                            }
-
-                            .input-plugin-box {
-                                display: flex;
-                                justify-content: space-between;
-                                width: 100%;
-
-                                div {
-                                    button {
-                                        border-radius: 1rem;
-                                        background-color: #e0e0e08f;
-                                    }
-                                }
-                            }
-                        }
-
-
-                    }
-
-                    .bottom-housing {}
-                }
             }
         }
 
         .right-housing {
-            width: 25%;
-
-
-
-
+            width: 20%;
         }
     }
 }
@@ -167,50 +120,7 @@
                 background-color: #e5e5e5;
             }
 
-            .comment-zone {
-                .top-housing {}
 
-                .middle-housing {
-                    display: flex;
-                    width: 100%;
-
-                    .avatar {
-                        width: 35px;
-                        height: 35px;
-                        border-radius: 2rem;
-                    }
-
-                    div {
-                        width: 100%;
-
-                        input {
-                            width: 100%;
-                            outline: 0;
-                            height: 40px;
-                            line-height: 40px;
-                            background: transparent;
-                            font-size: 1.3rem;
-                        }
-
-                        .input-plugin-box {
-                            display: flex;
-                            justify-content: space-between;
-                            width: 100%;
-
-                            div {
-                                button {
-                                    border-radius: 1rem;
-                                    background-color: #e0e0e08f;
-                                }
-                            }
-                        }
-                    }
-
-
-                }
-
-                .bottom-housing {}
-            }
 
             .selection {
                 width: 100%;
@@ -384,6 +294,18 @@
                 border-radius: 2rem;
             }
 
+            .share-button {
+                padding: 8px 8px 0;
+                font-size: 1.2rem;
+                border: 1px solid rgba(134, 134, 134, 0.644);
+                border-radius: 2rem;
+                display: flex;
+
+                p {
+                    margin: 0;
+                }
+            }
+
             @media screen and (max-width: 1455px) {
                 button>p {
                     display: none;
@@ -451,9 +373,19 @@
             display: flex;
 
             .thumbnail {
-                max-width: 60%;
-                max-height: 120px;
+                width: 160px;
+                height: 90px;
                 margin-right: 20px;
+            }
+
+            .video-title {
+                color: rgb(12, 12, 12);
+                font-size: 1.2rem;
+            }
+
+            .video-owner {
+                color: rgb(102, 102, 102);
+                font-size: 0.8rem;
             }
         }
 
@@ -465,5 +397,41 @@
 
     .none {
         display: none;
+    }
+}
+
+
+
+.comment-zone .middle-housing {
+    width: 100%;
+    display: flex;
+
+    img {
+        width: 35px;
+        height: 35px;
+        border-radius: 1rem;
+    }
+
+    .response-box {
+        display: flex;
+        width: calc(100% - 35px);
+
+        .response-input {
+            width: calc(100% - 30px);
+            border-bottom: 2px solid rgb(121, 121, 121);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .response-input:focus {
+            width: calc(100% - 30px);
+            outline: 0;
+            border-bottom: 2x solid rgb(26, 25, 25);
+            margin-bottom: 5px;
+        }
+
+        div {
+            width: 30px;
+        }
     }
 }

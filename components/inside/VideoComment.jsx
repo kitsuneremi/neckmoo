@@ -2,6 +2,7 @@
 import { memo, useState } from "react";
 import style from '@/styles/WatchComment.module.scss'
 import classNames from 'classnames/bind'
+import { RightOutlined } from '@ant-design/icons'
 function WatchVideoComment(props) {
     const cx = classNames.bind(style)
     const [showResponseInput, setShowResponseInput] = useState(false)
@@ -9,7 +10,14 @@ function WatchVideoComment(props) {
 
     const handleShowResponse = () => {
         if (showResponseInput) {
-            return <input value={responseValue} onChange={e => setResponseValue(e.target.value)} className={cx('response-input')} />
+            return (
+                <div className={cx('response-box')}>
+                    <input value={responseValue} onChange={e => setResponseValue(e.target.value)} className={cx('response-input')} />
+                    <div>
+                        <RightOutlined />
+                    </div>
+                </div>
+            )
         }
     }
     return (

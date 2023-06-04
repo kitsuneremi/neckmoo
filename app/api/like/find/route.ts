@@ -13,9 +13,11 @@ export async function GET(request: Request) {
             videoId: params.targetId
         }
     })
-    if (like == null) {
-        return new Response(JSON.stringify(null), { status: 200 })
-    } else {
-        return new Response(JSON.stringify(like), { status: 200 })
-    }
+    const x = await prisma.likes.count({
+        where: {
+            type: 0
+        }
+    })
+    const newlike = {...like, count: x}
+    return new Response(JSON.stringify(newlike), { status: 200 })
 }

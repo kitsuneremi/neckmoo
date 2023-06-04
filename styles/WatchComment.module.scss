@@ -50,18 +50,27 @@
                 background-color: transparent;
             }
         }
+
+        .response-box{
+            display: flex;
+            .response-input{
+                width: calc(100% - 30px);
+                border-bottom: 2px solid rgb(121, 121, 121);
+                margin-bottom: 5px;
+                font-size: 1.2rem;
+            }
+            .response-input:focus{
+                width: calc(100% - 30px);
+                outline: 0;
+                border-bottom: 2x solid rgb(26, 25, 25);
+                margin-bottom: 5px;
+            }
+            div{
+                width: 30px;
+            }
+        }
+
     }
 
-    .response-input{
-        width: 100%;
-        position: relative;
-    }
 
-    .response-input::after{
-        position: absolute;
-        width: 1px;
-        content: "";
-        background-color: red;
-        height: 90%;
-    }
 }

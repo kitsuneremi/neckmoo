@@ -7,7 +7,7 @@ import {
     useLayoutEffect,
 } from "react";
 import {
-    CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined,
+    CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, RightOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined,
 } from "@ant-design/icons";
 import { Link } from "next/link";
 import Context from "@/GlobalVariableProvider/Context";
@@ -24,7 +24,7 @@ const cx = classNames.bind(style);
 
 
 const CommentZone = () => {
-    const [commentFocused, setCommentFocused] = useState(false);
+    const [value, setValue] = useState("");
     return (
         <div className={cx("comment-zone")}>
             <div className={cx("top-housing")}>
@@ -34,34 +34,17 @@ const CommentZone = () => {
                     sắp xếp theo
                 </div>
             </div>
-            <div className={cx("middle-housing")}>
-                <img src="" className={cx("avatar")}></img>
-                <div>
-                    <input
-                        onFocus={() => {
-                            setCommentFocused(true);
-                        }}
-                        onBlur={() => {
-                            setCommentFocused(false);
-                        }}
-                        placeholder="viết bình luận"
-                    ></input>
-                    {commentFocused ? (
-                        <div className={cx("input-plugin-box")}>
-                            <QuestionOutlined />
-                            <div>
-                                <button>hủy</button>
-                                <button>bình luận</button>
-                            </div>
-                        </div>
-                    ) : (
-                        <></>
-                    )}
+            <div className={cx('middle-housing')}>
+                <img src=""/>
+                <div className={cx('response-box')}>
+                    <input value={value} onChange={e => setValue(e.target.value)} className={cx('response-input')} />
+                    <div>
+                        <RightOutlined />
+                    </div>
                 </div>
             </div>
             <div className={cx("bottom-housing")}>
                 <VideoComment />
-                {/* <VideoCommentInput /> */}
             </div>
         </div>
     )
@@ -184,7 +167,7 @@ const ListSidebarBox = () => {
                                 name={video.title}
                                 title={video.title}
                                 videoId={video.videoId}
-                                channelName={video.channelName}
+                                channelName={video.name}
                                 link={video.link}
                             />
                         );
@@ -213,7 +196,7 @@ function Watch({ params }) {
     const [collapseDescription, setCollapseDescription] = useState(false);
     const [like, setLike] = useState(false);
     const [dislike, setDislike] = useState(false);
-
+    const [likeCount, setLikeCount] = useState(0);
     const [videoInfo, setVideoInfo] = useState({});
     const [channelData, setChannelData] = useState({});
     const [channelAva, setChannelAva] = useState(null);
@@ -276,7 +259,7 @@ function Watch({ params }) {
                             targetId: videoInfo.id
                         }
                     })
-                    if (val.data == null) {
+                    if (val.data.type == null) {
                         setLike(false)
                         setDislike(false)
                     } else {
@@ -287,6 +270,7 @@ function Watch({ params }) {
                             setLike(false)
                             setDislike(true)
                         }
+                        setLikeCount(val.data.count)
                     }
                 }
                 x();
@@ -302,7 +286,7 @@ function Watch({ params }) {
                 axios.post('/api/like/delete', {
                     accountId: context.ses.user.id,
                     targetId: videoInfo.id,
-                })
+                }).then(res => { setLikeCount(res.data.count) })
             } else {
                 setLike(true);
                 setDislike(false);
@@ -310,28 +294,26 @@ function Watch({ params }) {
                     accountId: context.ses.user.id,
                     targetId: videoInfo.id,
                     type: 0
-                })
+                }).then(res => { setLikeCount(res.data.count) })
             }
         }
     };
     const handleDislike = () => {
-        if (context.ses) {
-            if (dislike) {
-                setLike(false);
-                setDislike(false);
 
+        if (context.ses) {
+            setDislike(!dislike);
+            setLike(false);
+            if (dislike) {
                 axios.post('/api/like/delete', {
                     accountId: context.ses.user.id,
                     targetId: videoInfo.id,
-                })
+                }).then(res => { setLikeCount(res.data.count) })
             } else {
-                setLike(false);
-                setDislike(true);
                 axios.post('/api/like/add', {
                     accountId: context.ses.user.id,
                     targetId: videoInfo.id,
                     type: 1
-                })
+                }).then(res => { setLikeCount(res.data.count) })
             }
         }
     };
@@ -452,14 +434,14 @@ function Watch({ params }) {
                 } else {
                     return (
                         <>
-                            <button>
+                            <button className={cx('share-button')}>
                                 <ShareAltOutlined />
                                 <p>Share</p>
                             </button>
                             <div>
                                 <div className={cx("like-box")} onClick={() => { handleLike() }}>
                                     {like ? <LikeFilled /> : <LikeOutlined />}
-                                    <p className={cx("like-count")}>100N</p>
+                                    <p className={cx("like-count")}>{likeCount}</p>
                                 </div>
                                 <div className={cx("dislike-box")} onClick={() => { handleDislike() }}>
                                     {dislike ? <DislikeFilled /> : <DislikeOutlined />}
