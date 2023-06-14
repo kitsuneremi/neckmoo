@@ -3,7 +3,7 @@ import { memo, useState } from "react";
 import style from '@/styles/WatchComment.module.scss'
 import classNames from 'classnames/bind'
 import { RightOutlined } from '@ant-design/icons'
-function WatchVideoComment(props) {
+function WatchVideoComment({ props }) {
     const cx = classNames.bind(style)
     const [showResponseInput, setShowResponseInput] = useState(false)
     const [responseValue, setResponseValue] = useState("")
@@ -25,10 +25,10 @@ function WatchVideoComment(props) {
             <img src="" />
             <div>
                 <div>
-                    <p className={cx('comment-channel-name')}>erinasaiyukii</p>
+                    <p className={cx('comment-channel-name')}>{props.channelName}</p>
                 </div>
                 <div>
-                    <p className={cx('comment-text')}>this is the text write by hand</p>
+                    <p className={cx('comment-text')}>{props.content}</p>
                 </div>
                 <div className={cx('tool-box')}>
                     <button>like</button>

@@ -11,7 +11,7 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        const res = await fetch('http://localhost:3000/api/login', {
+        const res = await fetch('https://carymei-deploy-4gom-las1i7yad-kitsuneremi.vercel.app/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

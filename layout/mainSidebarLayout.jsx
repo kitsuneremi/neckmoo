@@ -16,16 +16,19 @@ export default ({ children }) => {
     <div className={cx("box")}>
       <aside
         className={clsx(
-          { [cx("sidebar-collapse")]: context.collapseSidebar },
-          { [cx("sidebar-expand")]: !context.collapseSidebar }
+          { [cx("sidebar-collapse")]: context.collapseSidebar && context.deviceType == 0 },
+          { [cx("sidebar-expand")]: !context.collapseSidebar && (context.deviceType == 0 || context.deviceType == 1) },
+          { [cx("sidebar-hide")]: context.collapseSidebar && (context.deviceType == 1 || context.deviceType == 2) },
+          { [cx("sidebar-override")]: !context.collapseSidebar && context.deviceType == 2 }
         )}
       >
         <Sidebar />
       </aside>
       <aside
         className={clsx(
-          { [cx("main-content-expand")]: context.collapseSidebar },
-          { [cx("main-content-collapse")]: !context.collapseSidebar }
+          { [cx("main-content-expand")]: context.collapseSidebar && context.deviceType == 0 },
+          { [cx("main-content-collapse")]: !context.collapseSidebar && (context.deviceType == 0 || context.deviceType == 1) },
+          { [cx("main-content-full")]: context.collapseSidebar && (context.deviceType == 1 || context.deviceType == 2) },
         )}
       >
         {children}

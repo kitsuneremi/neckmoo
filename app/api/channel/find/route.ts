@@ -17,7 +17,13 @@ export async function GET(request: Request) {
                 id: video.channelId
             }
         })
-        return new Response(JSON.stringify(channel));
+        const sub = await prisma.subcribes.count({
+            where: {
+                channelId: channel.id
+            }
+        })
+        const channelWithSubcount = {...channel, sub: sub}
+        return new Response(JSON.stringify(channelWithSubcount));
     }else{
         return new Response(JSON.stringify(null));
     }

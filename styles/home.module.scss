@@ -1,41 +1,60 @@
+$expand: 160px;
+$collapse: 60px;
+$navbar-height: 60px;
+
 .box {
     position: relative;
     display: flex;
     top: 60px;
 
-    .sidebar-expand {
-        width: 160px;
-        position: fixed;
-        min-height: calc(100vh - 60px);
+    .sidebar-hide{
+        display: none;
+    }
 
+    .sidebar-expand {
+        width: $expand;
+        position: fixed;
+        min-height: calc(100vh - $navbar-height);
+    }
+
+    .sidebar-override{
+        width: $expand;
+        position: fixed;
+        min-height: calc(100vh - $navbar-height);
+        z-index: 2000;
     }
 
     .sidebar-collapse {
-        width: 60px;
+        width: $collapse;
         position: fixed;
-        min-height: calc(100vh - 60px);
+        min-height: calc(100vh - $navbar-height);
     }
 
     .main-content-expand {
         left: 60px;
         position: absolute;
-        width: calc(100vw - 60px);
-        min-height: calc(100vh - 60px);
-        height: 2000px;
+        width: calc(100vw - $collapse);
+        min-height: calc(100vh - $navbar-height);
     }
 
     .main-content-collapse {
         left: 160px;
         position: absolute;
-        width: calc(100vw - 160px);
-        min-height: calc(100vh - 60px);
-        height: 2000px;
+        width: calc(100vw - $expand);
+        min-height: calc(100vh - $navbar-height);
     }
+
+    .main-content-full{
+        position: absolute;
+        width: 100vw;
+        min-height: calc(100vh - $navbar-height);
+    }
+
 }
 
 .navbar {
     width: 100vw;
-    height: 60px;
+    height: $navbar-height;
     position: fixed;
     z-index: 10000;
     background-color: white;

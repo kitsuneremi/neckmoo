@@ -1,0 +1,38 @@
+.box {
+    .play-all-box {
+        .list-title {}
+
+        button {}
+    }
+
+    .video-slider {
+        display: flex;
+        overflow-x: scroll;
+        width: 100%;
+
+        .video-box {
+            display: block;
+            width: 230px;
+
+            .video-thumbnail {
+                width: 100%;
+                height: 100px;
+            }
+
+            .info-box {
+                display: flex;
+            }
+
+            .title-box {
+                justify-content: space-between;
+                display: flex;
+            }
+        }
+    }
+
+    .video-slider::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+}

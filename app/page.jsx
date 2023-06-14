@@ -6,15 +6,9 @@ import MainSidebarLayout from "@/layout/mainSidebarLayout";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useLayoutEffect } from "react";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from '@/lib/firebase'
 const cx = classNames.bind(styles);
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      video: video,
-    },
-  };
-}
 
 export default function Home() {
   const [video, setVideo] = useState([]);
@@ -58,32 +52,10 @@ const HomeVideoItem = (val) => {
   const [channelAvatar, setChannelAvatar] = useState(null);
   useLayoutEffect(() => {
     if (val.link) {
-      axios
-        .get(`http://localhost:5000/api/fileout/videoimage/${val.link}`, {
-          responseType: "blob",
-        })
-        .then((res) => {
-          var binaryData = [];
-          binaryData.push(res.data);
-          setImg(
-            window.URL.createObjectURL(
-              new Blob(binaryData, { type: "image/jpeg" })
-            )
-          );
-        });
-      axios
-        .get(`http://localhost:5000/api/fileout/channelavatar/${val.tagName}`, {
-          responseType: "blob",
-        })
-        .then((res) => {
-          var binaryData = [];
-          binaryData.push(res.data);
-          setChannelAvatar(
-            window.URL.createObjectURL(
-              new Blob(binaryData, { type: "image/jpeg" })
-            )
-          );
-        });
+      const channelAvatarStorageRef = ref(storage, `/channel/avatars/${val.tagName}`)
+      getDownloadURL(channelAvatarStorageRef).then(url => setChannelAvatar(url))
+      const videoImageStorageRef = ref(storage, `/video/thumbnails/${val.link}`)
+      getDownloadURL(videoImageStorageRef).then(url => setImg(url))
     }
   }, []);
 

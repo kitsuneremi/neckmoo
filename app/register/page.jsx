@@ -52,7 +52,7 @@ export default function Register() {
           name: displayName,
         });
 
-        const logIn = await signIn("credentials", {
+        signIn("credentials", {
           username: userName,
           password: password,
           redirect: true,
@@ -61,7 +61,7 @@ export default function Register() {
       }
     } else {
       if (userName.trim() !== "" && password.trim() !== "") {
-        const result = await signIn("credentials", {
+        signIn("credentials", {
           username: userName,
           password: password,
           redirect: true,

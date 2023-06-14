@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import classNames from "classnames/bind"
 import styles from '@/styles/sidebar.module.scss'
 import { useState, useContext, useEffect, useLayoutEffect } from "react"
@@ -80,7 +80,7 @@ export default function Sidebar() {
         })
     }
     return (
-        <div>
+        <div className={cx('box')}>
             {render()}
         </div>
     )

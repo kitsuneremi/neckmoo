@@ -1,6 +1,12 @@
 $width: 160px;
 $height: 40px;
 
+.box{
+    width: fit-content;
+    background-color: rgb(255, 255, 255);
+    height: calc(100vh - 60px);
+}
+
 .parent-box{
     display: flex;
     width: auto;
@@ -10,7 +16,7 @@ $height: 40px;
     padding: 0 10px;
     line-height: $height;
     user-select: none;
-    vertical-align: middle;
+    margin-inline: auto;
     .icon{
         padding-top: 7%; 
         margin: 0 10px;
@@ -26,6 +32,7 @@ $height: 40px;
     line-height: $height;
     background-color: rgba(90, 241, 241, 0.226);
     user-select: none;
+    margin-inline: auto;
     .icon{
         padding-top: 7%;
         margin: 0 10px;

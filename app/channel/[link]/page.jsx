@@ -1,6 +1,8 @@
 "use client";
-import { useState, useEffect, useContext, useLayoutEffect } from "react";
+import { useState, useEffect, useContext, useLayoutEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { storage } from '@/lib/firebase'
+import { ref, getDownloadURL } from 'firebase/storage'
 import axios from "axios";
 import classNames from "classnames/bind";
 import clsx from "clsx";
@@ -8,6 +10,7 @@ import Context from "@/GlobalVariableProvider/Context";
 import style from "@/styles/channel.module.scss";
 import Feature from "@/components/inside/Feature";
 import Videos from "@/components/inside/Videos";
+import Image from "next/image";
 
 export default function Channel({ params }) {
   const router = useRouter();
@@ -18,37 +21,36 @@ export default function Channel({ params }) {
 
   //useState
   const [selectedTab, setSelectedTab] = useState(0);
-  const [listVideo, setListVideo] = useState([]);
   const [channelData, setChannelData] = useState({});
   const [subcribed, setSubcribed] = useState(false);
+  const [banner, setBanner] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
-  useEffect(() => {}, [selectedTab]);
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/video").then((res) => {
-      setListVideo(res.data);
-    });
-  }, []);
+  useEffect(() => { }, [selectedTab]);
 
   useEffect(() => {
     if (!slug) return;
-    axios.get(`/api/channel/basicdata/${slug}`).then((res) => {
+    axios.get(`/api/channel/basicdata`, {
+      params: {
+        tagName: slug
+      }
+    }).then((res) => {
       setChannelData(res.data);
     });
   }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:5000/api/fileout/channelavatar/${slug}`)
-  //     .then((res) => {
-  //       setAvatar(res.data);
-  //     });
-  //   axios
-  //     .get(`http://localhost:5000/api/fileout/channelbanner/${slug}`)
-  //     .then((res) => {
-  //       setBanner(res.data);
-  //     });
-  // }, []);
+  useEffect(() => {
+    if (channelData.tagName) {
+      const avaRef = ref(storage, `/channel/avatars/${channelData.tagName}`)
+      const bannerRef = ref(storage, `/channel/banners/${channelData.tagName}`)
+
+      getDownloadURL(avaRef).then(url => setAvatar(url))
+      getDownloadURL(bannerRef).then(url => setBanner(url))
+    }
+  }, [channelData])
+
+
+
 
   const tabSelector = () => {
     const tabs = [
@@ -77,25 +79,28 @@ export default function Channel({ params }) {
         title: "GIỚI THIỆU",
       },
     ];
+
     return (
-      <div className={cx("tab-selector")}>
-        {tabs.map((tab, index) => {
-          return (
-            <button
-              key={index}
-              className={clsx(
-                { [cx("selected-tab")]: selectedTab === index },
-                { [cx("tab")]: selectedTab !== index }
-              )}
-              onClick={() => {
-                setSelectedTab(index);
-              }}
-            >
-              {tab.title}
-            </button>
-          );
-        })}
-      </div>
+      <>
+        <div>
+          {tabs.map((tab, index) => {
+            return (
+              <button
+                key={index}
+                className={clsx(
+                  { [cx("selected-tab")]: selectedTab === index },
+                  { [cx("tab")]: selectedTab !== index }
+                )}
+                onClick={() => {
+                  setSelectedTab(index);
+                }}
+              >
+                {tab.title}
+              </button>
+            );
+          })}
+        </div>
+      </>
     );
   };
 
@@ -110,11 +115,11 @@ export default function Channel({ params }) {
   return (
     <main>
       <div className={cx("inside-content")}>
-        <img className={cx("banner")} src={`http://localhost:5000/api/fileout/channelbanner/${slug}`} />
+        <img className={cx("banner")} src={avatar} loading="lazy" />
         <div className={cx("below-content")}>
           <div className={cx("top-side")}>
             <div className={cx("left-housing")}>
-              <img src={`http://localhost:5000/api/fileout/channelavatar/${slug}`} className={cx("avatar")} />
+              <img src={banner} className={cx("avatar")} loading="lazy" />
               <div className={cx("data")}>
                 <div>
                   <p className={cx("name")}>
@@ -125,9 +130,9 @@ export default function Channel({ params }) {
                   <p className={cx("infomation")}>
                     {channelData ? channelData.tagName : ""}
                   </p>
-                  <p className={cx("infomation")}>Sub count</p>
+                  <p className={cx("infomation")}>{channelData != null ? `${channelData.sub}sub` : ""}</p>
                   <p className={cx("infomation")}>
-                    {listVideo ? `${listVideo.length} Video` : 0}
+                    {channelData != null ? `${channelData.video}video` : ""}
                   </p>
                 </div>
                 <div>
@@ -153,7 +158,7 @@ export default function Channel({ params }) {
           </div>
 
           <div className={cx("tab-selector")}>{tabSelector()}</div>
-          <div>{contentRender()}</div>
+          <div className={cx('content-render')}>{contentRender()}</div>
         </div>
       </div>
     </main>

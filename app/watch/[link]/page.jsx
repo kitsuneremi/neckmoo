@@ -1,15 +1,6 @@
 "use client";
-import {
-    useState,
-    useEffect,
-    useRef,
-    useContext,
-    useLayoutEffect,
-} from "react";
-import {
-    CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, RightOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined,
-} from "@ant-design/icons";
-import { Link } from "next/link";
+import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react";
+import { CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, RightOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined } from "@ant-design/icons";
 import Context from "@/GlobalVariableProvider/Context";
 import style from "@/styles/watch.module.scss";
 import clsx from "clsx";
@@ -17,46 +8,82 @@ import axios from "axios";
 import classNames from "classnames/bind";
 import { useRouter } from "next/navigation";
 import VideoComment from '@/components/inside/VideoComment';
-import VideoCommentInput from '@/components/inside/VideoCommentInput';
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from '@/lib/firebase'
 
 const cx = classNames.bind(style);
 
-
-
-const CommentZone = () => {
+const CommentZone = ({ videoInfo }) => {
     const [value, setValue] = useState("");
+    const [change, setChange] = useState(true);
+    const [listComment, setListComment] = useState([]);
+
+    const handleCreateComment = () => {
+        if (session) {
+            axios.post("/api/comment/create", {
+                accountId: session.user.id,
+                videoId: videoInfo.id,
+                referenceId: null,
+                content: value,
+                status: 0
+            }).then(res => { setChange(true) });
+        }
+    };
+
+    useEffect(() => {
+        if (change) {
+            if (videoInfo && videoInfo.id) {
+                axios.get('/api/comment/getvideocomment', {
+                    params: {
+                        videoId: videoInfo.id
+                    }
+                }).then(res => { setListComment(res.data); setChange(false); });
+            }
+        }
+    }, [change, videoInfo]);
+
+    const render = () => {
+        if (listComment != null && listComment.length > 0) {
+            return listComment.map((cmt, index) => (
+                <VideoComment props={cmt} key={index} />
+            ));
+        } else {
+            return <p>video này không có bình luận nào</p>;
+        }
+    };
+
     return (
         <div className={cx("comment-zone")}>
             <div className={cx("top-housing")}>
-                <p>n bình luận</p>
+                <p>{videoInfo ? videoInfo.comment : 0} bình luận</p>
                 <div>
                     <FilterOutlined />
                     sắp xếp theo
                 </div>
             </div>
             <div className={cx('middle-housing')}>
-                <img src=""/>
+                <img src="" alt="" />
                 <div className={cx('response-box')}>
                     <input value={value} onChange={e => setValue(e.target.value)} className={cx('response-input')} />
                     <div>
-                        <RightOutlined />
+                        <RightOutlined onClick={() => { handleCreateComment() }} />
                     </div>
                 </div>
             </div>
             <div className={cx("bottom-housing")}>
-                <VideoComment />
+                {render()}
             </div>
         </div>
-    )
-}
+    );
+};
 
 
-const Tab = () => {
+const Tab = ({ videoInfo }) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const ViewTab = () => {
         if (selectedTab == 0) {
-            return <CommentZone />
+            return <CommentZone videoInfo={videoInfo} />
         } else if (selectedTab == 1) {
             return <ListSidebarBox />
         } else {
@@ -97,19 +124,8 @@ const SidebarVideoItem = (props) => {
     const [img, setImg] = useState(null);
     const router = useRouter();
     useEffect(() => {
-        axios
-            .get(`http://localhost:5000/api/fileout/videoimage/${props.link}`, {
-                responseType: "blob",
-            })
-            .then((res) => {
-                var binaryData = [];
-                binaryData.push(res.data);
-                setImg(
-                    window.URL.createObjectURL(
-                        new Blob(binaryData, { type: "image/jpeg" })
-                    )
-                );
-            });
+        const videoThumbnailRef = ref(storage, `/video/thumbnails/${props.link}`)
+        getDownloadURL(videoThumbnailRef).then(url => setImg(url))
     }, []);
 
     return (
@@ -200,6 +216,7 @@ function Watch({ params }) {
     const [videoInfo, setVideoInfo] = useState({});
     const [channelData, setChannelData] = useState({});
     const [channelAva, setChannelAva] = useState(null);
+    const [videoFile, setVideoFile] = useState(null);
 
     useLayoutEffect(() => {
         axios.get(`/api/channel/find`, {
@@ -208,25 +225,18 @@ function Watch({ params }) {
             }
         }).then((res) => {
             setChannelData(res.data);
-            axios.get(
-                `http://localhost:5000/api/fileout/channelavatar/${res.data.tagName}`, {
-                responseType: "blob",
-            }
-            ).then(r => {
-                const filedata = r.data;
-                var binaryData = [];
-                binaryData.push(filedata);
-                setChannelAva(
-                    URL.createObjectURL(
-                        new Blob(binaryData, { type: "image/jpeg" })
-                    )
-                );
-            })
+            const videoThumbnailRef = ref(storage, `/channel/avatars/${res.data.tagName}`)
+            getDownloadURL(videoThumbnailRef).then(url => setChannelAva(url))
         });
         axios.get(`/api/video/info/${slug}`).then((res) => {
             setVideoInfo(res.data);
         });
     }, []);
+
+    useEffect(() => {
+        const videoStorageRef = ref(storage, `/video/videos/${slug}`)
+        getDownloadURL(videoStorageRef).then(url => setVideoFile(url))
+    }, [])
 
     useEffect(() => {
         if (context.ses) {
@@ -404,7 +414,7 @@ function Watch({ params }) {
         const [deviceType, setDeviceType] = useState(0);
 
         useEffect(() => {
-            if (window) {
+            if (typeof window !== 'undefined') {
                 if (window.innerWidth > 1100) {
                     setDeviceType(0)
                 } else {
@@ -414,7 +424,7 @@ function Watch({ params }) {
         }, [])
 
         const handleShowSubcribeButton = () => {
-            if (window != undefined) {
+            if (typeof window !== 'undefined') {
                 if (window.innerWidth < 500) {
                     return !subcribe ? (
                         <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}></button>
@@ -428,7 +438,7 @@ function Watch({ params }) {
         }
 
         const VideoOptionRender = () => {
-            if (window != undefined) {
+            if (typeof window !== "undefined") {
                 if (window.innerWidth < 500) {
                     return <></>
                 } else {
@@ -461,12 +471,13 @@ function Watch({ params }) {
                             <div className={cx("frame-box")}>
                                 <video
                                     className={cx("video-player")}
-                                    src={`http://localhost:5000/api/fileout/video/${slug}`}
+                                    src={videoFile}
                                     allowFullScreen
                                     autoPlay
+                                    controls
                                     ref={playerRef}
                                 ></video>
-                                <div className={cx("timeline")}></div>
+                                {/* <div className={cx("timeline")}></div>
                                 <div className={cx("control")}>
                                     <div className={cx("left-control")}>
                                         {playPauseController()}
@@ -490,7 +501,7 @@ function Watch({ params }) {
                                         {cc ? <IeOutlined /> : <IeOutlined />}
                                         <SettingOutlined />
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className={cx("below-box")}>
@@ -508,7 +519,7 @@ function Watch({ params }) {
                                                 <p className={cx("channel-name")}>{channelData.name}</p>
                                             </div>
                                             <div>
-                                                <p className={cx("channel-info")}>1Tr lượt đăng ký</p>
+                                                <p className={cx("channel-info")}>{channelData.sub} lượt đăng ký</p>
                                             </div>
                                         </div>
                                         {!subcribe ? (
@@ -543,7 +554,7 @@ function Watch({ params }) {
                                     {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
                                 </p>
                             </div>
-                            <CommentZone />
+                            <CommentZone videoInfo={videoInfo} />
                         </div>
                     </div>
                     <div className={cx("right-housing")}>
@@ -554,13 +565,14 @@ function Watch({ params }) {
                         <div className={cx("frame-box")}>
                             <video
                                 className={cx("video-player")}
-                                src={`http://localhost:5000/api/fileout/video/${slug}`}
+                                src={videoFile}
                                 allowFullScreen
+                                controls
                                 autoPlay
                                 ref={playerRef}
                             ></video>
                             <div className={cx("timeline")}></div>
-                            <div className={cx("control")}>
+                            {/* <div className={cx("control")}>
                                 <div className={cx("left-control")}>
                                     {playPauseController()}
                                     <StepForwardOutlined />
@@ -583,7 +595,7 @@ function Watch({ params }) {
                                     {cc ? <IeOutlined /> : <IeOutlined />}
                                     <SettingOutlined />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className={cx('below-side')}>
@@ -601,7 +613,7 @@ function Watch({ params }) {
                                             <p className={cx("channel-name")}>{channelData.name}</p>
                                         </div>
                                         <div>
-                                            <p className={cx("channel-info")}>1Tr lượt đăng ký</p>
+                                            <p className={cx("channel-info")}>{channelData.sub} lượt đăng ký</p>
                                         </div>
                                     </div>
                                     {!subcribe ? (
@@ -635,7 +647,7 @@ function Watch({ params }) {
                                 {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
                             </p>
                         </div>
-                        <Tab />
+                        <Tab videoInfo={videoInfo} />
                     </div>
                 </>}
             </>

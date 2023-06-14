@@ -61,7 +61,7 @@ const Videobox = (val) => {
   )
 }
 
-const page = () => {
+const Page = () => {
 
   const [listVideo, setListVideo] = useState([])
 
@@ -88,4 +88,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

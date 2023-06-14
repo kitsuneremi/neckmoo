@@ -1,11 +1,13 @@
 "use client";
 import styles from "@/styles/upload.module.scss";
 import classNames from "classnames/bind";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Context from "@/GlobalVariableProvider/Context";
+import { storage } from '@/lib/firebase'
+import { ref, uploadBytes, } from 'firebase/storage'
+import clsx from 'clsx'
 function makeid() {
   let length = 8;
   let result = "";
@@ -36,6 +38,7 @@ export default function UploadPage() {
   const [mode, setMode] = useState(0);
   const [des, setDes] = useState("");
   const [channelData, setChannelData] = useState({});
+  const [agreeTermsOfService, setAgreeTermsOfService] = useState(false)
 
   const handleUploadVideo = (file) => {
     setVideoFile(file);
@@ -55,7 +58,7 @@ export default function UploadPage() {
           accountId: context.ses.user.id
         }
       }
-      ).then(res => { setChannelData(res.data)})
+      ).then(res => { setChannelData(res.data) })
     }
 
   }, [context.ses])
@@ -64,29 +67,14 @@ export default function UploadPage() {
     if (videoFile == null || imageFile == null || title.trim().length == 0) {
     } else {
       if (channelData != null) {
-        const videoFormData = new FormData();
         const imageFormData = new FormData();
         let t = makeid();
-        videoFormData.append("video", videoFile, t + "." + getFileExt(videoFile));
-        imageFormData.append("image", imageFile, t + "." + getFileExt(imageFile));
+        imageFormData.append("file", imageFile, t + "." + getFileExt(imageFile));
+        const videoStorageRef = ref(storage, `/video/videos/${t}`)
+        const thumbnailStorageRef = ref(storage, `/video/thumbnails/${t}`)
 
-        await axios
-          .post("http://localhost:5000/api/filein/video", videoFormData)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
-        await axios
-          .post("http://localhost:5000/api/filein/videoimg", imageFormData)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        uploadBytes(videoStorageRef, videoFile).then(() => { console.log("video uploaded") })
+        uploadBytes(thumbnailStorageRef, imageFile).then(() => { console.log("thumbnail uploaded") })
         await axios
           .post("/api/video/create", {
             title: title,
@@ -106,107 +94,223 @@ export default function UploadPage() {
   };
 
   return (
-    <div className={cx("box")}>
-      <div className={cx("left-housing")}>
-        <p>tải video lên</p>
-        <div className={cx("video-upload-box")}>
-          <div className={cx("uploader-box")}>
-            <label htmlFor="file-upload" className={cx("inside-uploader")}>
-              +
-            </label>
-            <input
-              type="file"
-              id="file-upload"
-              className={cx("file-upload")}
-              onChange={(e) => {
-                handleUploadVideo(e.target.files[0]);
-              }}
-            ></input>
-          </div>
+    // <div className={cx("box")}>
+    //   <div className={cx("left-housing")}>
+    //     <p>tải video lên</p>
+    //     <div className={cx("video-upload-box")}>
+    //       <div className={cx("uploader-box")}>
+    //         <label htmlFor="file-upload" className={cx("inside-uploader")}>
+    //           +
+    //         </label>
+    //         <input
+    //           type="file"
+    //           id="file-upload"
+    //           className={cx("file-upload")}
+    //           onChange={(e) => {
+    //             handleUploadVideo(e.target.files[0]);
+    //           }}
+    //         ></input>
+    //       </div>
 
-          <div className={cx("video-infomation-box")}>
-            <p className={cx("text")}>tên file</p>
-            <p className={cx("text")}>định dạng</p>
-            <p className={cx("text")}>kích thước</p>
-            <p className={cx("text")}>độ dài</p>
+    //       <div className={cx("video-infomation-box")}>
+    //         <p className={cx("text")}>tên file</p>
+    //         <p className={cx("text")}>định dạng</p>
+    //         <p className={cx("text")}>kích thước</p>
+    //         <p className={cx("text")}>độ dài</p>
+    //       </div>
+    //     </div>
+    //     <div className={cx("video-detail-box")}>
+    //       <p className={cx("title")}>tiêu đề</p>
+    //       <input
+    //         className={cx("input")}
+    //         value={title}
+    //         onChange={(e) => setTitle(e.target.value)}
+    //       ></input>
+    //       <p className={cx("title")}>mô tả</p>
+    //       <textarea
+    //         className={cx("description")}
+    //         onChange={(e) => {
+    //           setDes(e.target.value);
+    //         }}
+    //       ></textarea>
+    //     </div>
+    //     <div className={cx("video-mode-box")}>
+    //       <input
+    //         type="radio"
+    //         name="mode"
+    //         value={0}
+    //         defaultChecked={true}
+    //         onClick={() => setMode(0)}
+    //       />
+    //       <p className={cx("p")} onClick={() => setMode(0)}>
+    //         công khai
+    //       </p>
+    //       <input
+    //         type="radio"
+    //         name="mode"
+    //         value={1}
+    //         onClick={() => setMode(1)}
+    //       />
+    //       <p className={cx("p")} onClick={() => setMode(1)}>
+    //         không công khai
+    //       </p>
+    //       <input
+    //         type="radio"
+    //         name="mode"
+    //         value={2}
+    //         onClick={() => setMode(2)}
+    //       />
+    //       <p className={cx("p")} onClick={() => setMode(2)}>
+    //         riêng tư
+    //       </p>
+    //     </div>
+    //     <button
+    //       className={cx("finish-form-button")}
+    //       onClick={() => {
+    //         handleFinal();
+    //       }}
+    //     >
+    //       hoàn thành
+    //     </button> 
+    //   </div>
+    //   <div className={cx("right-housing")}>
+    //     <video src={videoPreviewFile} className={cx("video")} autoPlay></video>
+    //     <div className={cx("video-link-box")}>
+    //       <p className={cx("name")}>đường dẫn video:</p>
+    //     </div>
+    //     <div className={cx("thumbnail-upload-box")}>
+    //       <div className={cx("uploader-box")}>
+    //         <label htmlFor="thumbnail-upload" className={cx("inside-uploader")}>
+    //           +
+    //         </label>
+    //         <input
+    //           type="file"
+    //           id="thumbnail-upload"
+    //           className={cx("file-upload")}
+    //           onChange={(e) => {
+    //             handleUploadImage(e.target.files[0]);
+    //           }}
+    //         ></input>
+    //       </div>
+    //       <img src={imagePreviewFile} className={cx("thumbnail-preview")}></img>
+    //     </div>
+    //   </div>
+    // </div>
+    <>
+      <div className={cx('box')}>
+        <div className={cx('left-housing')}>
+          <h3>Thông tin cơ bản</h3>
+          <div>
+            <label htmlFor="title">
+              tiêu đề
+            </label>
           </div>
-        </div>
-        <div className={cx("video-detail-box")}>
-          <p className={cx("title")}>tiêu đề</p>
-          <input
-            className={cx("input")}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></input>
-          <p className={cx("title")}>mô tả</p>
+          <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <div>
+            <label htmlFor="description">
+              mô tả
+            </label>
+          </div>
           <textarea
+            id="description"
             className={cx("description")}
             onChange={(e) => {
               setDes(e.target.value);
             }}
           ></textarea>
+          <h4>chế độ video</h4>
+          <div className={cx("video-mode-box")}>
+            <input
+              type="radio"
+              name="mode"
+              value={0}
+              defaultChecked={true}
+              onClick={() => setMode(0)}
+            />
+            <p onClick={() => setMode(0)}>
+              công khai
+            </p>
+            <input
+              type="radio"
+              name="mode"
+              value={1}
+              onClick={() => setMode(1)}
+            />
+            <p onClick={() => setMode(1)}>
+              không công khai
+            </p>
+            <input
+              type="radio"
+              name="mode"
+              value={2}
+              onClick={() => setMode(2)}
+            />
+            <p onClick={() => setMode(2)}>
+              riêng tư
+            </p>
+          </div>
         </div>
-        <div className={cx("video-mode-box")}>
-          <input
-            type="radio"
-            name="mode"
-            value={0}
-            defaultChecked={true}
-            onClick={() => setMode(0)}
-          />
-          <p className={cx("p")} onClick={() => setMode(0)}>
-            công khai
-          </p>
-          <input
-            type="radio"
-            name="mode"
-            value={1}
-            onClick={() => setMode(1)}
-          />
-          <p className={cx("p")} onClick={() => setMode(1)}>
-            không công khai
-          </p>
-          <input
-            type="radio"
-            name="mode"
-            value={2}
-            onClick={() => setMode(2)}
-          />
-          <p className={cx("p")} onClick={() => setMode(2)}>
-            riêng tư
-          </p>
+        <div className={cx('right-housing')}>
+          <h3>tải dữ liệu lên</h3>
+          <div className={cx('video-upload-box')}>
+            <div>
+              <h4>video</h4>
+              <div className={cx("uploader-box")}>
+                <label htmlFor="file-upload" className={cx("inside-uploader")}>
+                  tải lên
+                </label>
+                <input
+                  type="file"
+                  id="file-upload"
+                  className={cx("file-upload")}
+                  onChange={(e) => {
+                    handleUploadVideo(e.target.files[0]);
+                  }}
+                ></input>
+              </div>
+            </div>
+            <video src={videoPreviewFile} className={cx("video")} autoPlay></video>
+          </div>
+          <div className={cx('thumbnail-upload-box')}>
+            <h4>ảnh nền</h4>
+            <div>
+              <div className={cx("uploader-box")}>
+                <label htmlFor="thumbnail-upload" className={cx("inside-uploader")}>
+                  tải ảnh lên
+                </label>
+                <input
+                  type="file"
+                  id="thumbnail-upload"
+                  className={cx("file-upload")}
+                  onChange={(e) => {
+                    handleUploadImage(e.target.files[0]);
+                  }}
+                ></input>
+              </div>
+              <img src={imagePreviewFile} className={cx("thumbnail-preview")}></img>
+              <div>
+                <p className={cx('maybe-disable')}>sau này mình sẽ phát triển phần tự tạo ảnh nền cắt từ khung hình của video nên chỗ này tạm để trống</p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div >
+      <div className={cx('last-box')}>
+        <div>
+          <input type="checkbox" onClick={() => setAgreeTermsOfService(!agreeTermsOfService)} />
+          <p className={cx('term-of-user')} onClick={() => router.push("/termofuser")}>bằng cách tick vào ô này, bạn đồng ý với điều khoản đăng tải nội dung của tôi</p>
+        </div>
+
         <button
-          className={cx("finish-form-button")}
+          className={clsx({ [cx("finish-form-button")]: agreeTermsOfService }, { [cx("finish-form-button-dis")]: !agreeTermsOfService })}
           onClick={() => {
             handleFinal();
           }}
+          disabled={!agreeTermsOfService}
         >
           hoàn thành
         </button>
       </div>
-      <div className={cx("right-housing")}>
-        <video src={videoPreviewFile} className={cx("video")} autoPlay></video>
-        <div className={cx("video-link-box")}>
-          <p className={cx("name")}>đường dẫn video:</p>
-        </div>
-        <div className={cx("thumbnail-upload-box")}>
-          <div className={cx("uploader-box")}>
-            <label htmlFor="thumbnail-upload" className={cx("inside-uploader")}>
-              +
-            </label>
-            <input
-              type="file"
-              id="thumbnail-upload"
-              className={cx("file-upload")}
-              onChange={(e) => {
-                handleUploadImage(e.target.files[0]);
-              }}
-            ></input>
-          </div>
-          <img src={imagePreviewFile} className={cx("thumbnail-preview")}></img>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

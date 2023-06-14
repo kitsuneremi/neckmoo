@@ -5,7 +5,8 @@ import styles from "@/styles/registerChannel.module.scss";
 import { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-
+import { uploadBytes, ref } from 'firebase/storage'
+import { storage } from '@/lib/firebase'
 
 const getFileExt = (fileName) => {
   return fileName.name.substring(fileName.name.lastIndexOf(".") + 1);
@@ -44,26 +45,10 @@ export default function RegisterChannel() {
           },
         }
       );
-      const avaFormData = new FormData();
-      avaFormData.append("image", originalAvatar, tagName + "." + getFileExt(originalAvatar));
-      const thumbnailFormData = new FormData();
-      thumbnailFormData.append("image", originalThumbnail, tagName + "." + getFileExt(originalThumbnail));
-      axios
-        .post("http://localhost:5000/api/filein/channelavatar", avaFormData)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      axios
-        .post("http://localhost:5000/api/filein/channelbanner", thumbnailFormData)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const avatarStorageRef = ref(storage, `/channel/avatars/${tagName}`)
+      const bannerStorageRef = ref(storage, `/channel/banners/${tagName}`)
+      uploadBytes(avatarStorageRef, originalAvatar)
+      uploadBytes(bannerStorageRef, originalThumbnail)
     }
   };
 

@@ -9,98 +9,185 @@
     .below-content {
         padding: 0 15%;
         width: 100%;
+    }
 
-        .top-side {
-            justify-content: space-between;
-            display: flex;
-            padding-top: 20px;
+    @media screen and (max-width: 1200px) {
+        .below-content {
+            padding: 0 9%;
+            width: 100%;
+        }
+    }
 
-            .left-housing {
-                display: flex;
-
-                .avatar {
-                    width: 90px;
-                    height: 90px;
-                    border-radius: 50%;
-                    border: 1px solid black;
-                    margin-right: 10px;
-                }
-
-                .data {
-                    div {
-                        .name {
-                            font-size: 1.4rem;
-                        }
-
-                        .infomation {
-                            color: rgb(85, 84, 83);
-                        }
-
-                        .description {
-                            color: rgb(85, 84, 83);
-                        }
-                    }
-                }
-            }
-
-            .right-housing {
-                .subcribe-button {
-                    border-radius: 2rem;
-                    padding: 6px 16px;
-                    margin-left: 10px;
-                    border: 0;
-                    background-color: #272727;
-                    color: aliceblue;
-                    font-size: 1.1rem;
-                    font-weight: 400;
-                }
-
-                .unsubcribe-button {
-                    border-radius: 2rem;
-                    padding: 6px 16px;
-                    margin-left: 10px;
-                    border: 0;
-                    background-color: #e5e5e5;
-                    font-size: 1.1rem;
-                    font-weight: 400;
-                }
-            }
+    @media screen and (max-width: 650px) {
+        .below-content {
+            padding: 0 5%;
+            width: 100%;
+            position: relative;
         }
     }
 }
 
+
+
 .tab-selector {
     display: flex;
+    position: relative;
 
-    .tab {
-        background-color: transparent;
-        border: 0;
-        padding: 5px 10px;
-        color: #969696;
-        cursor: pointer;
+    div {
+        .tab {
+            background-color: transparent;
+            border: 0;
+            padding: 5px 10px;
+            color: #969696;
+            cursor: pointer;
+        }
+
+        .selected-tab {
+            background-color: transparent;
+            border: 0;
+            padding: 5px 10px;
+            color: #0f0f0f;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .selected-tab::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #606060;
+
+        }
     }
 
-    .selected-tab {
-        background-color: transparent;
-        border: 0;
-        padding: 5px 10px;
-        color: #0f0f0f;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .selected-tab::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #606060;
-
-    }
 }
+
+@media screen and (max-width: 650px) {
+    .tab-selector {
+        display: flex;
+        align-items: center;
+
+        div {
+            display: flex;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            .button{
+                word-break: keep-all;
+            }
+        }
+
+        div::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+    }
+
+}
+
 
 .infomation {
     margin-right: 5px;
+}
+
+@media screen and (max-width: 424px) {
+    .top-side {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 20px;
+
+        .left-housing {
+            display: flex;
+        
+            .avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 1px solid black;
+                margin-right: 10px;
+            }
+        
+            .data {
+                div {
+                    .name {
+                        font-size: 1.4rem;
+                    }
+        
+                    .infomation {
+                        color: rgb(85, 84, 83);
+                    }
+        
+                    .description {
+                        color: rgb(85, 84, 83);
+                    }
+                }
+            }
+        }
+
+    }
+    
+}
+
+@media screen and (min-width: 425px){
+    .top-side {
+        justify-content: space-between;
+        display: flex;
+        padding-top: 20px;
+        .left-housing {
+            display: flex;
+        
+            .avatar {
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+                border: 1px solid black;
+                margin-right: 10px;
+            }
+        
+            .data {
+                div {
+                    .name {
+                        font-size: 1.4rem;
+                    }
+        
+                    .infomation {
+                        color: rgb(85, 84, 83);
+                    }
+        
+                    .description {
+                        color: rgb(85, 84, 83);
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+
+
+
+.right-housing {
+    .subcribe-button {
+        border-radius: 2rem;
+        padding: 6px 16px;
+        margin-left: 10px;
+        border: 0;
+        background-color: #272727;
+        color: aliceblue;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    .unsubcribe-button {
+        border-radius: 2rem;
+        padding: 6px 16px;
+        margin-left: 10px;
+        border: 0;
+        background-color: #e5e5e5;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
 }

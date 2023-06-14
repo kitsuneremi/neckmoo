@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { where } from "sequelize";
+
 interface RequestBody {
     accountId: number;
     targetId: number;

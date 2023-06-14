@@ -1,21 +1,24 @@
-'use client'
+"use client";
+import { useRouter } from 'next/navigation'
+import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
+import { signOut } from 'next-auth/react'
+import { IeOutlined, LeftOutlined, RightOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
 import styles from '@/styles/navbar.module.scss'
 import Link from "next/link"
-import { useRouter } from 'next/navigation'
-import { useState, useEffect, useRef, useContext } from "react"
-import { useSession, signIn, signOut, getSession } from 'next-auth/react'
-import { IeOutlined, LeftOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import Context from "@/GlobalVariableProvider/Context"
 import axios from "axios"
+import NavbarSearchModule from './inside/NavbarSearchModule'
+
 const cx = classNames.bind(styles)
 
 const AccountMenu = ({ session }) => {
     const [show, setShow] = useState(false)
+    const [channelData, setChannelData] = useState(null);
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
     const router = useRouter();
-    const [channelData, setChannelData] = useState(null);
+
 
     useEffect(() => {
         const button = buttonRef.current;
@@ -29,7 +32,7 @@ const AccountMenu = ({ session }) => {
 
     useEffect(() => {
         if (session && session.user) {
-            axios.get(`/api/channel/getdatabyaccountid`,{
+            axios.get(`/api/channel/getdatabyaccountid`, {
                 params: {
                     accountId: session.user.id
                 }
@@ -46,7 +49,7 @@ const AccountMenu = ({ session }) => {
     }
 
     return (
-        <>
+        <div className={cx('account-menu-box')}>
             <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
                 <img src="" className={cx('avatar')} />
             </button>
@@ -63,7 +66,7 @@ const AccountMenu = ({ session }) => {
                 <li className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></li>
                 <li className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></li>
             </ul> : <></>}
-        </>
+        </div>
     )
 }
 
@@ -83,7 +86,7 @@ const NotificationMenu = () => {
     }, [show]);
 
     return (
-        <>
+        <div className={cx('notification-box')}>
             <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
                 <BellOutlined />
             </button>
@@ -91,82 +94,79 @@ const NotificationMenu = () => {
             {show ? <div className={cx('dropdown')} ref={menuRef}>
                 menu
             </div> : <></>}
-        </>
+        </div>
     )
 }
 
-const ActionIsLogged = (session) => {
-    const router = useRouter();
-    if (session && session.user) {
-        return <div className={cx('action-box')}>
-            <Link href={'/studio/upload'}><UploadOutlined /></Link>
-            <div className={cx('notification-box')}>
-                <NotificationMenu />
-            </div>
-
-            <div className={cx('account-menu-box')}>
-                <AccountMenu session={session} />
-            </div>
-
-        </div>
-    } else {
-        return <button className={cx('login-button')} onClick={() => { router.push('/register') }}>đăng nhập</button>
-    }
-}
-
-
 function Navbar() {
     const context = useContext(Context)
-    const [showClear, setShowClear] = useState(false)
-    const [showLoading, setShowLoading] = useState(false)
-    const [showSearchResult, setShowSearchResult] = useState(false)
-    const [searchValue, setSearchValue] = useState('')
-    const [searchData, setSearchData] = useState([])
-    const searchDropdownRef = useRef(null)
-    const searchInputRef = useRef(null)
+    const [responsiveShowing, setResponsiveShowing] = useState(false)
     const router = useRouter()
-    useEffect(() => {
-        if (searchValue.trim() === '') {
-            setShowSearchResult(false)
-            setShowClear(false)
-        } else {
-            setShowSearchResult(true)
-            setShowClear(true)
-            axios.get(`/api/video/containkey?keyword=${searchValue}`)
-                .then(res => setSearchData(res.data))
-        }
-    }, [searchValue])
 
-    const handleSearch = () => {
-        setShowSearchResult(false)
-        if (searchValue !== '') {
-            router.push(`/result/${encodeURIComponent(searchValue)}`)
+    const ActionIsLogged = () => {
+        if (context.ses && context.ses.user) {
+            return <div className={cx('action-box')}>
+                {context.deviceType != 2 ? <></> : <button onClick={() => { setResponsiveShowing(true) }} className={cx('button')}><SearchOutlined></SearchOutlined></button>}
+                <button onClick={() => { router.push('/studio/upload') }} className={cx('button')}>
+                    <UploadOutlined />
+                </button>
+                <button>
+                    <NotificationMenu />
+                </button>
+
+                <AccountMenu session={context.ses} />
+
+            </div>
+        } else {
+            return <button className={cx('login-button')} onClick={() => { router.push('/register') }}>đăng nhập</button>
+        }
+    }
+
+    const handleResponsive = () => {
+        if (context.deviceType == 2) {
+            if (responsiveShowing) {
+                //device type: mobile, trạng thái: show search input
+                return (
+                    <>
+                        <div className={cx('navigation-box')}>
+                            <button className={cx('button')}>
+                                <CloseOutlined onClick={() => setResponsiveShowing(false)} />
+                            </button>
+                        </div>
+                        <NavbarSearchModule />
+                    </>
+                )
+            } else {
+                // device type: mobile, trạng thái: ẩn search input
+                return (
+                    <>
+                        <div className={cx('navigation-box')}>
+                            {context.collapseSidebar ? <RightOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} /> : <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar); }} className={cx('sidebar-button')} />}
+                            <div><p className={'logo'} onClick={() => { router.push('/') }}>Zootube</p></div>
+                        </div>
+                        {ActionIsLogged()}
+                    </>
+                )
+            }
+        } else {
+            return (
+                // device type: desktop hoặc tablet
+                <>
+                    <div className={cx('navigation-box')}>
+                        {context.collapseSidebar ? <RightOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} /> : <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar); setResponsiveShowing(!responsiveShowing) }} className={cx('sidebar-button')} />}
+                        <div><p className={'logo'} onClick={() => { router.push('/') }}>Zootube</p></div>
+                    </div>
+                    <NavbarSearchModule />
+                    {ActionIsLogged()}
+                </>
+            )
         }
     }
 
     return (
         <nav className={'navbar'}>
             <div className={cx('wrapper')}>
-                <div className={cx('navigation-box')}>
-                    <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} />
-                    <Link href={'/'}><IeOutlined className={'logo'} /></Link>
-                </div>
-                <div className={cx('search-box')} onFocus={() => { setShowSearchResult(true) }} onBlur={() => { setShowSearchResult(false) }}>
-                    <div className={cx('search')}>
-                        <input className={cx('input')} ref={searchInputRef} value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} />
-                        {showClear && <button className={cx('clear')} onClick={() => { setSearchValue('') }}>
-                            <CloseOutlined />
-                        </button>}
-                        {showLoading && <LoadingOutlined className={cx('spinner')} />}
-                        <SearchOutlined onClick={() => { handleSearch() }} className={cx('search-button')} />
-                    </div>
-                    {showSearchResult && <ul ref={searchDropdownRef} className={cx('search-result')}>
-                        {searchData != null ? searchData.map((data, index) => {
-                            return <li key={index} className={cx('result')}>{data.title}</li>
-                        }) : <></>}
-                    </ul>}
-                </div>
-                {ActionIsLogged(context.ses)}
+                {handleResponsive()}
             </div>
         </nav>
     )
