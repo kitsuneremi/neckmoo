@@ -22,14 +22,8 @@ export async function GET() {
             });
     })
     return wait.then((res) => {
-        return new Response(JSON.stringify(res), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return new Response(JSON.stringify(res));
     }).catch((error) => {
-        return new Response(JSON.stringify(error), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return new Response(JSON.stringify(error));
     });
 }

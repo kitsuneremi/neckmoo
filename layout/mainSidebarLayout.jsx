@@ -28,7 +28,8 @@ export default ({ children }) => {
         className={clsx(
           { [cx("main-content-expand")]: context.collapseSidebar && context.deviceType == 0 },
           { [cx("main-content-collapse")]: !context.collapseSidebar && (context.deviceType == 0 || context.deviceType == 1) },
-          { [cx("main-content-full")]: context.collapseSidebar && (context.deviceType == 1 || context.deviceType == 2) },
+          { [cx("main-content-full")]: context.collapseSidebar && context.deviceType == 1 },
+          { [cx("main-content-full")]: context.deviceType == 2 },
         )}
       >
         {children}

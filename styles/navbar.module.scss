@@ -30,7 +30,16 @@ $search-width: 380px;
     }
 
     .search-box {
-        position: relative;
+        @media screen and (min-width: 400px) {
+            position: relative;
+        }
+
+        @media screen and (max-width: 430px) {
+            width: 90%;
+            display: flex;
+            justify-content: center;
+
+        }
 
         .search-result {
             position: absolute;
@@ -40,15 +49,37 @@ $search-width: 380px;
             width: $search-width;
             background-color: #ececec;
             height: 300px;
-            max-height: 300px;
-            overflow: hidden;
+            max-width: 90vw;
+
+            @media screen and (max-width: 500px) {
+                height: 220px;
+                margin-top: 30px;
+
+            }
+
+            overflow: scroll;
 
             .result {
                 list-style: none;
                 width: 100%;
                 padding: 5px 2px;
                 font-size: 1.1rem;
+                position: relative;
             }
+
+            .result::after{
+                position: absolute;
+                content: "";
+                bottom: 0;
+                width: 100%;
+                height: 1px;
+                background-color: #338ac9;
+            }
+        }
+
+        .search-result::-webkit-scrollbar {
+            width: 0;
+            height: 0;
         }
 
     }
@@ -165,6 +196,10 @@ $search-width: 380px;
     padding-left: 1rem;
     border: 1.5px solid transparent;
 
+    @media screen and (min-width: 431px) {
+        width: $search-width;
+    }
+
     input {
         flex: 1;
         color: #828282;
@@ -174,6 +209,7 @@ $search-width: 380px;
         height: 100%;
         font-size: 1rem;
         padding: 0.6rem 0;
+        width: calc(100% - 42px);
 
     }
 
@@ -198,6 +234,7 @@ $search-width: 380px;
         font-size: 1.2rem;
         color: #828282;
         margin-inline: auto;
+
         &:hover {
             cursor: pointer;
             background-color: rgba(22, 24, 35, 0.03);
@@ -205,26 +242,12 @@ $search-width: 380px;
     }
 }
 
-
 @media screen and (max-width: 430px) {
-    .search-box {
+    .search {
         width: 90%;
-        justify-content: flex-end;
-        display: flex;
-
-        .search {
-            width: 90%;
-            margin: 0;
-        }
     }
 
     .wrapper {
         justify-content: space-between;
-    }
-}
-
-@media screen and (min-width: 431px) {
-    .search {
-        width: $search-width;
     }
 }

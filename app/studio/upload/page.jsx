@@ -64,18 +64,16 @@ export default function UploadPage() {
   }, [context.ses])
 
   const handleFinal = async () => {
+
     if (videoFile == null || imageFile == null || title.trim().length == 0) {
+
     } else {
+      console.log(channelData)
       if (channelData != null) {
-        const imageFormData = new FormData();
         let t = makeid();
-        imageFormData.append("file", imageFile, t + "." + getFileExt(imageFile));
         const videoStorageRef = ref(storage, `/video/videos/${t}`)
         const thumbnailStorageRef = ref(storage, `/video/thumbnails/${t}`)
-
-        uploadBytes(videoStorageRef, videoFile).then(() => { console.log("video uploaded") })
-        uploadBytes(thumbnailStorageRef, imageFile).then(() => { console.log("thumbnail uploaded") })
-        await axios
+        axios
           .post("/api/video/create", {
             title: title,
             des: des,
@@ -89,6 +87,9 @@ export default function UploadPage() {
           .catch((error) => {
             console.error(error);
           });
+        uploadBytes(videoStorageRef, videoFile).then(() => { console.log("video uploaded") })
+        uploadBytes(thumbnailStorageRef, imageFile).then(() => { console.log("thumbnail uploaded") })
+
       }
     }
   };

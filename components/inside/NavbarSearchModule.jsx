@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation'
-import { useState, useEffect, useRef} from "react"
+import { useState, useEffect, useRef } from "react"
 import { CloseOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
 import styles from '@/styles/navbar.module.scss'
@@ -51,7 +51,7 @@ const NavbarSearchModule = () => {
                 {showLoading && <LoadingOutlined className={cx('spinner')} />}
                 <SearchOutlined onClick={() => { handleSearch() }} className={cx('search-button')} />
             </div>
-            {showSearchResult && <ul ref={searchDropdownRef} className={cx('search-result')}>
+            {showSearchResult && <ul ref={searchDropdownRef} className={cx('search-result')} onClick={() => { setShowSearchResult(true) }}>
                 {searchData != null ? searchData.map((data, index) => {
                     return <li key={index} className={cx('result')}>{data.title}</li>
                 }) : <></>}

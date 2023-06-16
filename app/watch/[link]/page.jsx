@@ -1,15 +1,15 @@
 "use client";
 import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from '@/lib/firebase'
+import { useRouter } from "next/navigation";
 import { CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, RightOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined } from "@ant-design/icons";
 import Context from "@/GlobalVariableProvider/Context";
 import style from "@/styles/watch.module.scss";
 import clsx from "clsx";
 import axios from "axios";
 import classNames from "classnames/bind";
-import { useRouter } from "next/navigation";
 import VideoComment from '@/components/inside/VideoComment';
-import { ref, getDownloadURL } from "firebase/storage";
-import { storage } from '@/lib/firebase'
 
 const cx = classNames.bind(style);
 
@@ -17,6 +17,7 @@ const CommentZone = ({ videoInfo }) => {
     const [value, setValue] = useState("");
     const [change, setChange] = useState(true);
     const [listComment, setListComment] = useState([]);
+
 
     const handleCreateComment = () => {
         if (session) {
@@ -217,6 +218,8 @@ function Watch({ params }) {
     const [channelData, setChannelData] = useState({});
     const [channelAva, setChannelAva] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
+    const [videoDuration, setVideoDuration] = useState(0);
+    const [triggerView, setTriggerView] = useState(false);
 
     useLayoutEffect(() => {
         axios.get(`/api/channel/find`, {
@@ -288,6 +291,48 @@ function Watch({ params }) {
         }
     }, [context.ses])
 
+    useEffect(() => {
+        const handleSpacebar = (e) => {
+            if (e.code === "Space" && e.target.tagName !== "INPUT") {
+                e.preventDefault();
+                e.target.value += " ";
+                const video = playerRef.current;
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleSpacebar);
+
+        return () => {
+            document.removeEventListener("keydown", handleSpacebar);
+        };
+    }, []);
+
+    useEffect(() => {
+        const videoElement = playerRef.current;
+
+        const handleTimeUpdate = () => {
+            const { currentTime, duration } = videoElement;
+            const seventyFivePercent = duration * 0.75;
+            if (currentTime >= seventyFivePercent && (triggerView == false)) {
+                setTriggerView(true)
+                axios.post('/api/video/increaseview', {
+                    videoId: videoInfo.id,
+                    link: videoInfo.link
+                })
+            }
+        }
+        videoElement.addEventListener('timeupdate', handleTimeUpdate);
+
+        return () => {
+            videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+        };
+    }, [videoDuration, triggerView])
+
     const handleLike = () => {
         if (context.ses) {
             if (like) {
@@ -328,26 +373,7 @@ function Watch({ params }) {
         }
     };
 
-    useEffect(() => {
-        const handleSpacebar = (e) => {
-            if (e.code === "Space" && e.target.tagName !== "INPUT") {
-                e.preventDefault();
-                e.target.value += " ";
-                const video = playerRef.current;
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            }
-        };
 
-        document.addEventListener("keydown", handleSpacebar);
-
-        return () => {
-            document.removeEventListener("keydown", handleSpacebar);
-        };
-    }, []);
 
     const volumex = () => {
         if (volume > 0.5) {
@@ -463,21 +489,26 @@ function Watch({ params }) {
             }
         }
 
-        return (
-            <>
-                {deviceType == 0 ? <>
-                    <div className={cx("left-housing")}>
-                        <div className={cx("video-box")}>
-                            <div className={cx("frame-box")}>
-                                <video
-                                    className={cx("video-player")}
-                                    src={videoFile}
-                                    allowFullScreen
-                                    autoPlay
-                                    controls
-                                    ref={playerRef}
-                                ></video>
-                                {/* <div className={cx("timeline")}></div>
+
+        const handleLoadedMetadata = () => {
+            const { duration } = playerRef.current;
+            setVideoDuration(duration);
+        };
+
+        const deviceTypeLayoutPanel1 = () => {
+            return (
+                <div className={cx("video-box")}>
+                    <div className={cx("frame-box")}>
+                        <video
+                            className={cx("video-player")}
+                            src={videoFile}
+                            allowFullScreen
+                            autoPlay
+                            controls
+                            onLoadedMetadata={handleLoadedMetadata}
+                            ref={playerRef}
+                        ></video>
+                        {/* <div className={cx("timeline")}></div>
                                 <div className={cx("control")}>
                                     <div className={cx("left-control")}>
                                         {playPauseController()}
@@ -502,58 +533,75 @@ function Watch({ params }) {
                                         <SettingOutlined />
                                     </div>
                                 </div> */}
-                            </div>
-                        </div>
-                        <div className={cx("below-box")}>
-                            <div className={cx("infomation-box")}>
-                                <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
-                                <div>
-                                    <div className={cx("left-housing")}>
-                                        <img
-                                            className={cx("avatar")}
-                                            src={channelAva}
-                                            onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
-                                        ></img>
-                                        <div>
-                                            <div>
-                                                <p className={cx("channel-name")}>{channelData.name}</p>
-                                            </div>
-                                            <div>
-                                                <p className={cx("channel-info")}>{channelData.sub} lượt đăng ký</p>
-                                            </div>
-                                        </div>
-                                        {!subcribe ? (
-                                            <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}>
-                                                đăng ký
-                                            </button>
-                                        ) : (
-                                            <button
-                                                className={cx("unsubcribe-button")}
-                                                onClick={() => { handleSubcribe(); }}
-                                            >
-                                                đã đăng ký
-                                            </button>
-                                        )}
-                                    </div>
+                    </div>
+                </div>
+            )
+        }
 
-                                    <div className={cx("right-housing")}>
-                                        {VideoOptionRender()}
-                                        <button>
-                                            <EllipsisOutlined />
-                                        </button>
+        const deviceTypeLayoutPanel2 = () => {
+            return (
+                <>
+                    <div className={cx("infomation-box")}>
+                        <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
+                        <div>
+                            <div className={cx("left-housing")}>
+                                <img
+                                    className={cx("avatar")}
+                                    src={channelAva}
+                                    onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
+                                ></img>
+                                <div>
+                                    <div>
+                                        <p className={cx("channel-name")}>{channelData.name}</p>
+                                    </div>
+                                    <div>
+                                        <p className={cx("channel-info")}>{channelData.sub} lượt đăng ký</p>
                                     </div>
                                 </div>
+                                {!subcribe ? (
+                                    <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}>
+                                        đăng ký
+                                    </button>
+                                ) : (
+                                    <button
+                                        className={cx("unsubcribe-button")}
+                                        onClick={() => { handleSubcribe(); }}
+                                    >
+                                        đã đăng ký
+                                    </button>
+                                )}
                             </div>
-                            <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
-                                <p
-                                    className={cx("handle-collapse-expand-button")}
-                                    onClick={() => {
-                                        setCollapseDescription(!collapseDescription);
-                                    }}
-                                >
-                                    {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
-                                </p>
+
+                            <div className={cx("right-housing")}>
+                                {VideoOptionRender()}
+                                <button>
+                                    <EllipsisOutlined />
+                                </button>
                             </div>
+                        </div>
+                    </div>
+                    <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
+                        <p>{typeof videoInfo.view !== 'undefined' ? `${videoInfo.view} lượt xem` : ''}</p>
+                        <p
+                            className={cx("handle-collapse-expand-button")}
+                            onClick={() => {
+                                setCollapseDescription(!collapseDescription);
+                            }}
+                        >
+                            {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
+                        </p>
+                    </div>
+                </>
+            )
+        }
+
+        return (
+            <>
+                {deviceType == 0 ? <>
+                    <div className={cx("left-housing")}>
+                        {deviceTypeLayoutPanel1()}
+                        <div className={cx("below-box")}>
+                            {deviceTypeLayoutPanel2()}
                             <CommentZone videoInfo={videoInfo} />
                         </div>
                     </div>
@@ -561,92 +609,9 @@ function Watch({ params }) {
                         <ListSidebarBox />
                     </div>
                 </> : <>
-                    <div className={cx('video-box')}>
-                        <div className={cx("frame-box")}>
-                            <video
-                                className={cx("video-player")}
-                                src={videoFile}
-                                allowFullScreen
-                                controls
-                                autoPlay
-                                ref={playerRef}
-                            ></video>
-                            <div className={cx("timeline")}></div>
-                            {/* <div className={cx("control")}>
-                                <div className={cx("left-control")}>
-                                    {playPauseController()}
-                                    <StepForwardOutlined />
-                                    <>
-                                        {volumex()}
-                                        <input
-                                            type="range"
-                                            min="0"
-                                            max="1"
-                                            step="0.01"
-                                            className={cx("volume-controller")}
-                                            onChange={(e) => {
-                                                setVolume(e.target.value);
-                                            }}
-                                            defaultValue="1"
-                                        />
-                                    </>
-                                </div>
-                                <div className={cx("right-control")}>
-                                    {cc ? <IeOutlined /> : <IeOutlined />}
-                                    <SettingOutlined />
-                                </div>
-                            </div> */}
-                        </div>
-                    </div>
+                    {deviceTypeLayoutPanel1()}
                     <div className={cx('below-side')}>
-                        <div className={cx("infomation-box")}>
-                            <p className={cx("title")}>{videoInfo ? videoInfo.title : ""}</p>
-                            <div>
-                                <div className={cx("left-housing")}>
-                                    <img
-                                        className={cx("avatar")}
-                                        src={channelAva}
-                                        onClick={() => { router.push(`/channel/${channelData.tagName}`) }}
-                                    ></img>
-                                    <div>
-                                        <div>
-                                            <p className={cx("channel-name")}>{channelData.name}</p>
-                                        </div>
-                                        <div>
-                                            <p className={cx("channel-info")}>{channelData.sub} lượt đăng ký</p>
-                                        </div>
-                                    </div>
-                                    {!subcribe ? (
-                                        <button className={cx("subcribe-button")} onClick={() => { handleSubcribe() }}>
-                                            đăng ký
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className={cx("unsubcribe-button")}
-                                            onClick={() => { handleSubcribe(); }}
-                                        >
-                                            đã đăng ký
-                                        </button>
-                                    )}
-                                </div>
-                                <div className={cx("right-housing")}>
-                                    {VideoOptionRender()}
-                                    <button>
-                                        <EllipsisOutlined />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
-                            <p
-                                className={cx("handle-collapse-expand-button")}
-                                onClick={() => {
-                                    setCollapseDescription(!collapseDescription);
-                                }}
-                            >
-                                {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
-                            </p>
-                        </div>
+                        {deviceTypeLayoutPanel2()}
                         <Tab videoInfo={videoInfo} />
                     </div>
                 </>}

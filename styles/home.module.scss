@@ -7,7 +7,7 @@ $navbar-height: 60px;
     display: flex;
     top: 60px;
 
-    .sidebar-hide{
+    .sidebar-hide {
         display: none;
     }
 
@@ -17,7 +17,7 @@ $navbar-height: 60px;
         min-height: calc(100vh - $navbar-height);
     }
 
-    .sidebar-override{
+    .sidebar-override {
         width: $expand;
         position: fixed;
         min-height: calc(100vh - $navbar-height);
@@ -44,7 +44,7 @@ $navbar-height: 60px;
         min-height: calc(100vh - $navbar-height);
     }
 
-    .main-content-full{
+    .main-content-full {
         position: absolute;
         width: 100vw;
         min-height: calc(100vh - $navbar-height);
@@ -67,9 +67,16 @@ $navbar-height: 60px;
     flex-wrap: wrap;
     padding-left: 50px;
     margin-top: -40px;
+    width: 100%;
 
     .box {
         width: 250px;
+        @media screen and (max-width: 350px){
+            width: clamp(260px, 90%, 300px);
+        }
+        @media screen and (min-width: 351px) and (max-width: 650px){
+            width: clamp(260px, 45%, 300px);
+        }
         height: fit-content;
         display: block;
         z-index: 150;
@@ -94,8 +101,9 @@ $navbar-height: 60px;
                 display: block;
 
                 div {
-                    .title {
+                    a .title {
                         font-size: 1.4rem;
+                        text-decoration: none;
                     }
 
                     .video-details {
@@ -105,9 +113,10 @@ $navbar-height: 60px;
 
                 .channel-name-box {
                     z-index: 200;
-                    .channel-name {
 
+                    a .channel-name {
                         font-size: 1.2rem;
+                        text-decoration: none;
                     }
                 }
 

@@ -1,125 +1,43 @@
-"use client";
-import { useState, useEffect, useContext, useLayoutEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+
 import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
 import axios from "axios";
 import classNames from "classnames/bind";
-import clsx from "clsx";
-import Context from "@/GlobalVariableProvider/Context";
 import style from "@/styles/channel.module.scss";
-import Feature from "@/components/inside/Feature";
-import Videos from "@/components/inside/Videos";
 import Image from "next/image";
+import SubcribeButton from "@/components/inside/SubcribeButton";
+import ChannelTabModule from "@/components/inside/ChannelTabModule";
+const cx = classNames.bind(style);
 
-export default function Channel({ params }) {
-  const router = useRouter();
-  const cx = classNames.bind(style);
+
+
+const channelBasicData = async (slug) => {
+  const x = await fetch(`https://erinasaiyukii.com/api/channel/basicdata?tagName=${slug}`, {
+    method: 'GET'
+  })
+  return x.json();
+}
+
+export default async function Channel({ params }) {
+
   const slug = params.link;
-  //useContext
-  const context = useContext(Context);
 
-  //useState
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [channelData, setChannelData] = useState({});
-  const [subcribed, setSubcribed] = useState(false);
-  const [banner, setBanner] = useState(null);
-  const [avatar, setAvatar] = useState(null);
+  const channelData = await channelBasicData(slug)
 
-  useEffect(() => { }, [selectedTab]);
+  const avaRef = ref(storage, `/channel/avatars/${channelData.tagName}`)
+  const bannerRef = ref(storage, `/channel/banners/${channelData.tagName}`)
 
-  useEffect(() => {
-    if (!slug) return;
-    axios.get(`/api/channel/basicdata`, {
-      params: {
-        tagName: slug
-      }
-    }).then((res) => {
-      setChannelData(res.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (channelData.tagName) {
-      const avaRef = ref(storage, `/channel/avatars/${channelData.tagName}`)
-      const bannerRef = ref(storage, `/channel/banners/${channelData.tagName}`)
-
-      getDownloadURL(avaRef).then(url => setAvatar(url))
-      getDownloadURL(bannerRef).then(url => setBanner(url))
-    }
-  }, [channelData])
-
-
-
-
-  const tabSelector = () => {
-    const tabs = [
-      {
-        index: 0,
-        title: "TRANG CHỦ",
-      },
-      {
-        index: 1,
-        title: "VIDEO",
-      },
-      {
-        index: 2,
-        title: "DANH SÁCH PHÁT",
-      },
-      {
-        index: 3,
-        title: "CỘNG ĐỒNG",
-      },
-      {
-        index: 4,
-        title: "KÊNH",
-      },
-      {
-        index: 5,
-        title: "GIỚI THIỆU",
-      },
-    ];
-
-    return (
-      <>
-        <div>
-          {tabs.map((tab, index) => {
-            return (
-              <button
-                key={index}
-                className={clsx(
-                  { [cx("selected-tab")]: selectedTab === index },
-                  { [cx("tab")]: selectedTab !== index }
-                )}
-                onClick={() => {
-                  setSelectedTab(index);
-                }}
-              >
-                {tab.title}
-              </button>
-            );
-          })}
-        </div>
-      </>
-    );
-  };
-
-  const contentRender = () => {
-    if (selectedTab === 0) {
-      return <Feature slug={params.link}></Feature>;
-    } else {
-      return <Videos></Videos>;
-    }
-  };
+  const avatar = await getDownloadURL(avaRef)
+  const banner = await getDownloadURL(bannerRef)
 
   return (
     <main>
       <div className={cx("inside-content")}>
-        <img className={cx("banner")} src={avatar} loading="lazy" />
+        <img className={cx("banner")} src={banner} loading="lazy" />
         <div className={cx("below-content")}>
           <div className={cx("top-side")}>
             <div className={cx("left-housing")}>
-              <img src={banner} className={cx("avatar")} loading="lazy" />
+              <img src={avatar} className={cx("avatar")} loading="lazy" />
               <div className={cx("data")}>
                 <div>
                   <p className={cx("name")}>
@@ -143,24 +61,15 @@ export default function Channel({ params }) {
               </div>
             </div>
             <div className={cx("right-housing")}>
-              <button
-                className={clsx(
-                  { [cx("subcribe-button")]: !subcribed },
-                  { [cx("unsubcribe-button")]: subcribed }
-                )}
-                onClick={() => {
-                  setSubcribed(!subcribed);
-                }}
-              >
-                {subcribed ? "đã đăng ký" : "đăng ký"}
-              </button>
+              <SubcribeButton channelData={channelData} />
             </div>
           </div>
 
-          <div className={cx("tab-selector")}>{tabSelector()}</div>
-          <div className={cx('content-render')}>{contentRender()}</div>
+          <ChannelTabModule slug={slug} />
         </div>
       </div>
     </main>
   );
 }
+
+
