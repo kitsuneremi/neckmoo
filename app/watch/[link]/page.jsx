@@ -13,7 +13,7 @@ import VideoComment from '@/components/inside/VideoComment';
 
 const cx = classNames.bind(style);
 
-const CommentZone = ({ videoInfo }) => {
+const CommentZone = ({ videoInfo, session }) => {
     const [value, setValue] = useState("");
     const [change, setChange] = useState(true);
     const [listComment, setListComment] = useState([]);
@@ -79,12 +79,12 @@ const CommentZone = ({ videoInfo }) => {
 };
 
 
-const Tab = ({ videoInfo }) => {
+const Tab = ({ videoInfo, session }) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const ViewTab = () => {
         if (selectedTab == 0) {
-            return <CommentZone videoInfo={videoInfo} />
+            return <CommentZone videoInfo={videoInfo} session={session} />
         } else if (selectedTab == 1) {
             return <ListSidebarBox />
         } else {
@@ -602,7 +602,7 @@ function Watch({ params }) {
                         {deviceTypeLayoutPanel1()}
                         <div className={cx("below-box")}>
                             {deviceTypeLayoutPanel2()}
-                            <CommentZone videoInfo={videoInfo} />
+                            <CommentZone videoInfo={videoInfo} session={context.ses} />
                         </div>
                     </div>
                     <div className={cx("right-housing")}>
@@ -612,7 +612,7 @@ function Watch({ params }) {
                     {deviceTypeLayoutPanel1()}
                     <div className={cx('below-side')}>
                         {deviceTypeLayoutPanel2()}
-                        <Tab videoInfo={videoInfo} />
+                        <Tab videoInfo={videoInfo} session={context.ses} />
                     </div>
                 </>}
             </>
