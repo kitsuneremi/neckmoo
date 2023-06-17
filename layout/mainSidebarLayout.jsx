@@ -8,10 +8,7 @@ import clsx from "clsx";
 const cx = classNames.bind(styles);
 export default ({ children }) => {
   const context = useContext(Context);
-  useEffect(() => {
-    context.setCollapseSidebar(false);
-  }, []);
-
+  
   return (
     <div className={cx("box")}>
       <aside

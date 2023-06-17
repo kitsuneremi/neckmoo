@@ -27,7 +27,9 @@ const CommentZone = ({ videoInfo, session }) => {
                 referenceId: null,
                 content: value,
                 status: 0
-            }).then(res => { setChange(true) });
+            })
+                .then(res => { setChange(true) })
+                .then(() => { setValue("") });
         }
     };
 

@@ -68,14 +68,22 @@ $navbar-height: 60px;
     padding-left: 50px;
     margin-top: -40px;
     width: 100%;
+    @media screen and (max-width: 470px){
+        padding: 0;
+        justify-content: center;
+    }
 
     .box {
         width: 250px;
         @media screen and (max-width: 350px){
             width: clamp(260px, 90%, 300px);
         }
-        @media screen and (min-width: 351px) and (max-width: 650px){
-            width: clamp(260px, 45%, 300px);
+        @media screen and (min-width: 471px) and (max-width: 650px){
+            width: 43%;
+        }
+        @media screen and (max-width: 470px){
+            width: 70%;
+            align-items: center;            
         }
         height: fit-content;
         display: block;
