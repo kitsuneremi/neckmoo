@@ -2,14 +2,15 @@ import styles from "@/styles/home.module.scss";
 import classNames from "classnames/bind";
 import MainLayout from "@/layout/mainLayout";
 import MainSidebarLayout from "@/layout/mainSidebarLayout";
-import axios from "axios";
-// import { useRouter } from "next/navigation";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import prisma from "@/lib/prisma";
 import Link from 'next/link'
 const cx = classNames.bind(styles);
 
+export const metadata = {
+  title: 'Home - Carymei',
+}
 
 const GetAllVideo = async function () {
   const video = await prisma.videos.findMany();

@@ -1,4 +1,6 @@
-
+export const metadata = {
+    title: 'term of user - carymei'
+}
 
 function Term() {
     return <div style={{width: '60vw', overflow: 'scroll', position: 'absolute', justifyContent: 'center', right: '20%', marginTop: '10vh'}}>

@@ -164,6 +164,10 @@ $search-width: 380px;
         }
     }
 
+    .menu-box:hover{
+        background-color: #b9b6b6;
+    }
+
     .menu-box::after {
         content: '';
         position: absolute;
