@@ -6,12 +6,7 @@ import { useContext, useEffect } from "react";
 import Context from "@/GlobalVariableProvider/Context";
 import clsx from "clsx";
 import MainLayout from '@/layout/mainLayout'
-export const metadata = {
-  title: {
-    default: 'watch page',
-    template: '%s - carymei'
-  },
-}
+
 export default function WatchLayout({ children }) {
   const context = useContext(Context);
   const cx = classNames.bind(styles);

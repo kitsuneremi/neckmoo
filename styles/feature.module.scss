@@ -7,12 +7,15 @@
 
     .video-slider {
         display: flex;
-        overflow-x: scroll;
+        overflow-x: auto;
+        /* Sử dụng auto thay vì scroll để chỉ hiển thị thanh cuộn khi cần thiết */
         width: 100%;
+        gap: 15px;
 
         .video-box {
+            flex: 0 0 230px;
+            /* Chiều rộng cố định là 230px */
             display: block;
-            width: 230px;
 
             .video-thumbnail {
                 width: 100%;
@@ -21,6 +24,7 @@
 
             .info-box {
                 display: flex;
+                gap: 5px;
             }
 
             .title-box {
@@ -29,6 +33,8 @@
             }
         }
     }
+
+
 
     .video-slider::-webkit-scrollbar {
         width: 0;

@@ -12,7 +12,7 @@ interface RequestBody {
 
 export async function POST(request: Request) {
     const body: RequestBody = await request.json();
-    const comment = await prisma.comments.create({
+    const comment = await prisma.comment.create({
         data: {
             accountId: body.accountId,
             videoId: body.videoId,
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
             status: body.status
         }
     })
-    let x = await prisma.comments.count({
+    let x = await prisma.comment.count({
         where: {
             videoId: body.videoId
         }

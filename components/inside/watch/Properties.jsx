@@ -23,11 +23,16 @@ export default function Properties({ link }) {
                 params: {
                     link: link
                 }
-            }).then(res => { const { channelx, videox } = res.data; setChannel(channelx); setVideo(videox) })
+            }).then(res => { const { channelx, videox } = res.data; setChannel(channelx); setVideo(videox); return channelx })
+                .then(val => {
+                    getDownloadURL(ref(storage, `/channel/avatars/${val.tagName}`))
+                        .then(url => setImg(url))
+                })
+
         }
         fetchData()
 
-        getDownloadURL(ref(storage, `/channel/avatars/${channel.tagName}`)).then(url => setImg(url))
+
     }, [])
     return (
         <div className={cx("infomation-box")}>

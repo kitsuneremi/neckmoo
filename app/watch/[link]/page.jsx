@@ -3,13 +3,12 @@ import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { useRouter } from "next/navigation";
-import { CaretRightOutlined, PauseOutlined, StepForwardOutlined, CloseOutlined, RightOutlined, LikeFilled, DislikeFilled, ShareAltOutlined, EllipsisOutlined, DislikeOutlined, LikeOutlined, FilterOutlined, QuestionOutlined, MehOutlined, LockOutlined, IeOutlined, MessageOutlined, SettingOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import Context from "@/GlobalVariableProvider/Context";
 import style from "@/styles/watch.module.scss";
 import clsx from "clsx";
 import axios from "axios";
 import classNames from "classnames/bind";
-import VideoComment from '@/components/inside/VideoComment';
 import Properties from '@/components/inside/watch/Properties'
 import DescriptionBox from '@/components/inside/watch/DescriptionBox'
 import Comments from '@/components/inside/watch/Comments'
@@ -32,7 +31,7 @@ const cx = classNames.bind(style);
 
 
 
-const Tab = ({ videoInfo }) => {
+const Tab = ({ slug }) => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const ViewTab = () => {
@@ -152,14 +151,11 @@ const ListSidebarBox = () => {
 
 export default function Watch({ params }) {
     const context = useContext(Context);
-    const router = useRouter();
     useLayoutEffect(() => {
         context.setCollapseSidebar(false);
     }, []);
 
     const slug = params.link;
-
-    const [videoInfo, setVideoInfo] = useState({});
 
     const finalRender = () => {
         if (context.deviceType === 0) {
@@ -185,7 +181,7 @@ export default function Watch({ params }) {
                     <div className={cx('below-side')}>
                         <Properties link={slug} />
                         <DescriptionBox link={slug} />
-                        <Tab videoInfo={videoInfo} session={context.ses} />
+                        <Tab slug={slug} />
                     </div>
                 </>
             )

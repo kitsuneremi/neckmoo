@@ -43,9 +43,6 @@ export default function Sidebar() {
     const [selectedTab, setSelectedTab] = useState(-1)
     const [listSub, setListSub] = useState([])
     const context = useContext(Context)
-    useLayoutEffect(() => {
-        context.setCollapseSidebar(true)
-    }, [])
 
     useLayoutEffect(() => {
         if (context.ses) {

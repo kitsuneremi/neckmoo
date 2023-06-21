@@ -10,9 +10,9 @@ export async function GET(request: Request) {
             link: params.link
         }
     })
-    const comment = await prisma.comments.count({
+    const comment = await prisma.comment.count({
         where: {
-            videoId: video.id
+            video: video
         }
     })
     const videoWithCommentCount = { ...video, comment: comment }

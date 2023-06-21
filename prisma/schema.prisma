@@ -19,7 +19,7 @@ model Accounts {
   refreshToken  String?
   isAdmin       Boolean         @default(false)
   channel       Channels?
-  comment       Comments[]
+  comment       Comment[]
   Likes         Likes[]
   Notifications Notifications[]
   Subcribes     Subcribes[]
@@ -48,7 +48,7 @@ model Videos {
   link            String
   channel         Channels          @relation(fields: [channelId], references: [id])
   channelId       Int               @default(3)
-  comment         Comments[]
+  comment         Comment[]
   DetailListVideo DetailListVideo[]
   DetailTags      DetailTags[]
   Likes           Likes[]
@@ -59,17 +59,17 @@ model Categories {
   name String
 }
 
-model Comments {
-  id          Int        @id @default(autoincrement())
-  video       Videos     @relation(fields: [videoId], references: [id])
-  videoId     Int        @unique
-  account     Accounts   @relation(fields: [accountId], references: [id])
-  accountId   Int        @unique
+model Comment {
+  id          Int       @id @default(autoincrement())
+  video       Videos    @relation(fields: [videoId], references: [id])
+  videoId     Int
+  account     Accounts  @relation(fields: [accountId], references: [id])
+  accountId   Int
   content     String
   status      Int
-  comments    Comments[] @relation("ParentComment")
-  referenceId Int?       @map("referenceId")
-  reference   Comments?  @relation("ParentComment", fields: [referenceId], references: [id])
+  comments    Comment[] @relation("ParentComment")
+  referenceId Int?      @map("referenceId")
+  reference   Comment?  @relation("ParentComment", fields: [referenceId], references: [id])
 }
 
 model ListVideos {

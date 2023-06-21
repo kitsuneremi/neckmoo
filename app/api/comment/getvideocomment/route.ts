@@ -6,7 +6,7 @@ export async function GET(request: Request) {
       videoId: parseInt(url.searchParams.get("videoId") || "")
     };
   
-    const list = await prisma.comments.findMany({
+    const list = await prisma.comment.findMany({
       where: {
         videoId: params.videoId
       }

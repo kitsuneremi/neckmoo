@@ -9,9 +9,6 @@ import { storage } from '@/lib/firebase'
 import { ref, uploadBytes, } from 'firebase/storage'
 import clsx from 'clsx'
 
-export const metadata = {
-  title: 'upload - carymei'
-}
 
 function makeid() {
   let length = 8;

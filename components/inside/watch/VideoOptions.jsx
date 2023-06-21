@@ -14,16 +14,18 @@ export default function VideoOption({ link }) {
     const [like, setLike] = useState(false);
     const [dislike, setDislike] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [videoInfo, setVideoInfo] = useState({});
 
     useLayoutEffect(() => {
         if (context.ses) {
             if (link) {
                 const x = async () => {
-                    const videoInfo = await axios.get('/api/video/findbylink', {
+                    await axios.get('/api/video/findbylink', {
                         params: {
                             link: link
                         }
                     }).then(res => {
+                        setVideoInfo(res.data)
                         axios.get('/api/like/find', {
                             params: {
                                 accountId: context.ses.user.id,

@@ -1,0 +1,61 @@
+.box {
+    display: block;
+    width: 100vw;
+
+    .setting-parent-box {
+        padding: 5px 10px;
+
+        .top-side {
+            display: flex;
+            justify-content: space-between;
+
+            .drop-button-box {
+                position: relative;
+                width: 20px;
+
+                .button {
+                    position: absolute;
+                    bottom: 20px;
+                }
+            }
+        }
+
+        .bottom-side {
+            .with-checkbox {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .without-checkbox {
+                display: block;
+            }
+        }
+    }
+}
+
+.pc-box {
+    display: flex;
+    gap: 10vw;
+
+    .left-side {
+        padding: 10px;
+        cursor: pointer;
+
+        div {
+            margin-bottom: 8px;
+        }
+    }
+}
+
+.side-menu-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    a {
+        text-decoration: none;
+        color: black;
+
+    }
+}
+.side-menu-item:hover{
+    background-color: rgba(112, 112, 112, 0.493);
+}

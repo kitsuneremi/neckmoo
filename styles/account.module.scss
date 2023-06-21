@@ -1,0 +1,24 @@
+.box .main-tab{
+    display: flex;
+    gap: 40px;
+    div{
+        div{
+            display: flex;
+            gap: 20px;
+            img{
+                border-radius: 2rem;
+            }
+        }
+
+        a{
+            text-decoration: none;
+            p{
+                color: black;
+                margin: 5px;
+            }
+            p:hover{
+                background-color: rgba(150, 150, 150, 0.548);
+            }
+        }
+    }
+}
