@@ -97,119 +97,17 @@ export default function UploadPage() {
   };
 
   return (
-    // <div className={cx("box")}>
-    //   <div className={cx("left-housing")}>
-    //     <p>tải video lên</p>
-    //     <div className={cx("video-upload-box")}>
-    //       <div className={cx("uploader-box")}>
-    //         <label htmlFor="file-upload" className={cx("inside-uploader")}>
-    //           +
-    //         </label>
-    //         <input
-    //           type="file"
-    //           id="file-upload"
-    //           className={cx("file-upload")}
-    //           onChange={(e) => {
-    //             handleUploadVideo(e.target.files[0]);
-    //           }}
-    //         ></input>
-    //       </div>
-
-    //       <div className={cx("video-infomation-box")}>
-    //         <p className={cx("text")}>tên file</p>
-    //         <p className={cx("text")}>định dạng</p>
-    //         <p className={cx("text")}>kích thước</p>
-    //         <p className={cx("text")}>độ dài</p>
-    //       </div>
-    //     </div>
-    //     <div className={cx("video-detail-box")}>
-    //       <p className={cx("title")}>tiêu đề</p>
-    //       <input
-    //         className={cx("input")}
-    //         value={title}
-    //         onChange={(e) => setTitle(e.target.value)}
-    //       ></input>
-    //       <p className={cx("title")}>mô tả</p>
-    //       <textarea
-    //         className={cx("description")}
-    //         onChange={(e) => {
-    //           setDes(e.target.value);
-    //         }}
-    //       ></textarea>
-    //     </div>
-    //     <div className={cx("video-mode-box")}>
-    //       <input
-    //         type="radio"
-    //         name="mode"
-    //         value={0}
-    //         defaultChecked={true}
-    //         onClick={() => setMode(0)}
-    //       />
-    //       <p className={cx("p")} onClick={() => setMode(0)}>
-    //         công khai
-    //       </p>
-    //       <input
-    //         type="radio"
-    //         name="mode"
-    //         value={1}
-    //         onClick={() => setMode(1)}
-    //       />
-    //       <p className={cx("p")} onClick={() => setMode(1)}>
-    //         không công khai
-    //       </p>
-    //       <input
-    //         type="radio"
-    //         name="mode"
-    //         value={2}
-    //         onClick={() => setMode(2)}
-    //       />
-    //       <p className={cx("p")} onClick={() => setMode(2)}>
-    //         riêng tư
-    //       </p>
-    //     </div>
-    //     <button
-    //       className={cx("finish-form-button")}
-    //       onClick={() => {
-    //         handleFinal();
-    //       }}
-    //     >
-    //       hoàn thành
-    //     </button> 
-    //   </div>
-    //   <div className={cx("right-housing")}>
-    //     <video src={videoPreviewFile} className={cx("video")} autoPlay></video>
-    //     <div className={cx("video-link-box")}>
-    //       <p className={cx("name")}>đường dẫn video:</p>
-    //     </div>
-    //     <div className={cx("thumbnail-upload-box")}>
-    //       <div className={cx("uploader-box")}>
-    //         <label htmlFor="thumbnail-upload" className={cx("inside-uploader")}>
-    //           +
-    //         </label>
-    //         <input
-    //           type="file"
-    //           id="thumbnail-upload"
-    //           className={cx("file-upload")}
-    //           onChange={(e) => {
-    //             handleUploadImage(e.target.files[0]);
-    //           }}
-    //         ></input>
-    //       </div>
-    //       <img src={imagePreviewFile} className={cx("thumbnail-preview")}></img>
-    //     </div>
-    //   </div>
-    // </div>
     <>
       <div className={cx('box')}>
         <div className={cx('left-housing')}>
           <h3>Thông tin cơ bản</h3>
-          <div>
+          <div className={cx('label-box')}>
             <label htmlFor="title">
               tiêu đề
             </label>
           </div>
           <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <div>
+          <div className={cx('label-box')}>
             <label htmlFor="description">
               mô tả
             </label>
@@ -221,7 +119,7 @@ export default function UploadPage() {
               setDes(e.target.value);
             }}
           ></textarea>
-          <h4>chế độ video</h4>
+          <div className={cx('label-box')}><h4>chế độ video</h4></div>
           <div className={cx("video-mode-box")}>
             <input
               type="radio"
