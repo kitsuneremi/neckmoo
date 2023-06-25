@@ -8,6 +8,7 @@ import Context from "@/GlobalVariableProvider/Context";
 import { storage } from '@/lib/firebase'
 import { ref, uploadBytes, } from 'firebase/storage'
 import clsx from 'clsx'
+import NotiBoard from "@/components/NotificationBoard";
 
 
 function makeid() {

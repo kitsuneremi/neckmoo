@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import axios from "axios";
@@ -8,19 +8,34 @@ import classNames from "classnames/bind";
 import clsx from "clsx";
 import MainLayout from "../../layout/mainLayout";
 import Context from "@/GlobalVariableProvider/Context";
+import NotiBoard from "@/components/NotificationBoard";
+
+
+
 
 export default function Register() {
   const cx = classNames.bind(style);
   const router = useRouter();
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
+  const userNameRef = useRef(null)
+  const passwordRef = useRef(null)
+  const confirmPasswordRef = useRef(null)
+  const displayNameRef = useRef(null)
+  const emailRef = useRef(null)
+
   const [showRegister, setShowRegister] = useState(false);
+  const [anyNoti, setAnyNoti] = useState(false);
+  const [title, setTitle] = useState("");
   const { data: session } = useSession();
 
   const context = useContext(Context);
+
+  const getNotification = (title) => {
+    setAnyNoti(true);
+    setTitle(title)
+    setTimeout(() => {
+      setAnyNoti(false)
+    }, 3000)
+  }
 
   useEffect(() => {
     if (session && session.user) {
@@ -30,40 +45,48 @@ export default function Register() {
 
   const handleSubmit = async () => {
     if (showRegister) {
-      if (userName.trim() === "") {
-        console.log("empty username");
-      } else if (displayName.trim() === "") {
-        console.log("empty display name");
-      } else if (password.trim() === "") {
-        console.log("empty password");
-      } else if (confirmPassword.trim() === "") {
-        console.log("empty confirm password");
-      } else if (password !== confirmPassword) {
-        console.log("password mismatch");
-      } else if (
-        !email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-      ) {
-        console.log("email not valid");
-      } else {
-        const register = await axios.post("/api/user/create", {
-          username: userName,
-          password: password,
-          email: email,
-          name: displayName,
-        });
+      if (userNameRef.current.value.trim() === "") {
 
-        signIn("credentials", {
-          username: userName,
-          password: password,
-          redirect: true,
-          callbackUrl: "/",
-        }).then(() => { context.setSes(session) })
+      } else if (displayNameRef.current.value.trim() === "") {
+        getNotification('empty display name')
+      } else if (passwordRef.current.value.trim() === "") {
+        getNotification('empty password')
+      } else if (confirmPasswordRef.current.value.trim() === "") {
+        getNotification('empty confirm password')
+      } else if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+        getNotification('password mismatch')
+      } else if (!emailRef.current.value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+        getNotification('email not valid')
+      } else {
+        getNotification('processing...')
+        axios.post("/api/user/create", {
+          username: userNameRef.current.value,
+          password: passwordRef.current.value,
+          email: emailRef.current.value,
+          name: displayNameRef.current.value,
+        }).then(res => {
+          if (res.status == 200) {
+            signIn("credentials", {
+              username: userNameRef.current.value,
+              password: passwordRef.current.value,
+              redirect: true,
+              callbackUrl: "/",
+            }).then(() => { context.setSes(session) })
+          } else {
+
+          }
+        })
       }
     } else {
-      if (userName.trim() !== "" && password.trim() !== "") {
+      if (userNameRef.current.value.trim() === "") {
+        getNotification('empty username')
+      } else if (passwordRef.current.value.trim() === "") {
+        getNotification('empty password')
+      } else {
+        getNotification('processing...')
         signIn("credentials", {
-          username: userName,
-          password: password,
+          username: userNameRef.current.value,
+          password: passwordRef.current.value,
           redirect: true,
           callbackUrl: "/",
         }).then(() => { context.setSes(session) })
@@ -74,14 +97,14 @@ export default function Register() {
   return (
     <MainLayout>
       <div className={cx("box")}>
+        {anyNoti && <NotiBoard title={title} />}
         <div>
           <label htmlFor="username">tên đăng nhập</label>
         </div>
         <div>
           <input
             type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            ref={userNameRef}
             className={cx("input")}
             id="username"
           ></input>
@@ -97,8 +120,7 @@ export default function Register() {
           <div>
             <input
               type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              ref={displayNameRef}
               className={cx("input")}
               id="name"
             ></input>
@@ -117,8 +139,7 @@ export default function Register() {
           <div>
             <input
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
               className={cx("input")}
               id="email"
             ></input>
@@ -132,8 +153,7 @@ export default function Register() {
         <div>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
             onKeyDown={(e) => {
               if (e.code === "Enter" && !showRegister) {
                 handleSubmit();
@@ -154,10 +174,7 @@ export default function Register() {
           <div>
             <input
               type="password"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
+              ref={confirmPasswordRef}
               className={cx("input")}
               id="confirmPass"
             ></input>

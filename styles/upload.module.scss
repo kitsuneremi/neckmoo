@@ -124,6 +124,9 @@ $image-preview-height: 120px;
             .video {
                 justify-self: flex-end;
                 width: 65%;
+                @media screen and (min-width: 1200px){
+                    width: 80%;
+                }
                 height: auto;
                 border: 1px solid black;
 
