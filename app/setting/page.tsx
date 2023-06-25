@@ -2,13 +2,33 @@
 import Context from '@/GlobalVariableProvider/Context'
 import styles from '@/styles//setting.module.scss'
 import classNames from 'classnames/bind'
-import { useState, useLayoutEffect, useContext, useEffect } from 'react'
-import { DownOutlined, UpOutlined } from '@ant-design/icons'
+import { useContext } from 'react'
 import { useRouter } from 'next/navigation'
+import Setting from '@/components/inside/setting/Settingpage'
 
 const cx = classNames.bind(styles)
 
-const AccountBox = () => {
+type setting = {
+    name: string,
+    des: string,
+    child?: React.ReactElement
+}
+
+const AccountBox: React.FC = () => {
+    return (
+        <>
+            <div className={cx('with-checkbox')}>
+                <div>
+                    <h3>Chế độ hạn chế</h3>
+                    <p>phát triển sau</p>
+                </div>
+                <input type='checkbox' />
+            </div>
+        </>
+    )
+}
+
+const PlaybackBox: React.FC = () => {
     return (
         <>
             <div className={cx('with-checkbox')}>
@@ -41,15 +61,16 @@ const AccountBox = () => {
     )
 }
 
-const listSetting = [
+const listSetting: setting[] = [
     {
         name: 'Tài khoản',
-        des: 'Chọn cách bạn xuất hiện và nội dung trên carymei',
+        des: 'Cài đặt tài khoản',
         child: <AccountBox />
     },
     {
-        name: 'Video đã xem và quyền riêng ttw',
-        des: 'Quản lý nhật ký và lịch sử tìm kiếm'
+        name: 'Video đã xem và quyền riêng tư',
+        des: 'Quản lý nhật ký và lịch sử tìm kiếm',
+        child: <PlaybackBox />
     },
     {
         name: 'Thông báo',
@@ -62,43 +83,22 @@ const listSetting = [
 
 ]
 
-const Setting = ({ setting }) => {
 
-    const [open, setOpen] = useState(false);
-    return (
-        <div className={cx('setting-parent-box')}>
-            <div className={cx('top-side')} onClick={() => { setOpen(!open) }}>
-                <div>
-                    <h3>{setting.name}</h3>
-                    <p>{setting.des}</p>
-                </div>
-                <div className={cx('drop-button-box')}>
-                    {!open && <DownOutlined className={cx('button')} />}
-                    {open && <UpOutlined className={cx('button')} />}
-                </div>
-            </div>
-            {
-                open && <div className={cx('bottom-side')}>
-                    {setting.child ? setting.child : <></>}
-                </div>
-            }
-        </div>
-    )
-}
 
-const render = () => {
-    return listSetting.map((setting, index) => {
-        return (
-            <Setting key={index} setting={setting} />
-        )
-    })
-}
+
 
 export default function Account() {
-    const context = useContext(Context)
+    const context: any = useContext(Context)
     const router = useRouter()
     if (context.deviceType == 0) {
         router.push('/setting/account')
+    }
+    const render = () => {
+        return listSetting.map((setting, index) => {
+            return (
+                <Setting key={index} setting={setting} />
+            )
+        })
     }
     return (
         <div className={cx('box')}>

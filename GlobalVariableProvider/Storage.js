@@ -8,7 +8,7 @@ function VariableProvider({ children }) {
     const [collapseSidebar, setCollapseSidebar] = useState(false)
     const [deviceType, setDeviceType] = useState(0); //0 là pc, 1 là tablet, 2 là mobile
     const [ses, setSes] = useState(null)
-    const {data: session} = useSession();
+    const { data: session } = useSession();
 
     useEffect(() => {
         const handleResize = () => {
@@ -31,20 +31,19 @@ function VariableProvider({ children }) {
         }
     }, []);
     const value = {
-        collapseSidebar,
-        ses,
+        collapseSidebar: collapseSidebar,
+        ses: ses,
         setCollapseSidebar,
         setSes,
         deviceType
     }
 
     useLayoutEffect(() => {
-      setSes(session)
-    },[session])
+        setSes(session)
+    }, [session])
 
-    useEffect
     return (
-        <Context.Provider value={value}>
+        <Context.Provider value={value} >
             {children}
         </Context.Provider>
     )

@@ -6,6 +6,36 @@ import Context from "@/GlobalVariableProvider/Context"
 import clsx from "clsx"
 const cx = classNames.bind(styles)
 
+const props = [
+    {
+        icon: '',
+        title: 'tổng quan',
+    },
+    {
+        icon: '',
+        title: 'nội dung',
+    },
+    {
+        icon: '',
+        title: 'đăng tải',
+    },
+    {
+        icon: '',
+        title: 'cập nhật sau'
+    }
+]
+
+const actionProps = [
+    {
+        icon: '',
+        title: 'cài đặt'
+    },
+    {
+        icon: '',
+        title: 'gửi phản hồi'
+    }
+]
+
 const Item = ({ item, ec }) => {
     return (
         <div className={cx('item-box')}>
@@ -15,37 +45,11 @@ const Item = ({ item, ec }) => {
     )
 }
 
+
+
 export default function StudioSidebar() {
     const context = useContext(Context)
-    const props = [
-        {
-            icon: '',
-            title: 'tổng quan',
-        },
-        {
-            icon: '',
-            title: 'nội dung',
-        },
-        {
-            icon: '',
-            title: 'đăng tải',
-        },
-        {
-            icon: '',
-            title: 'cập nhật sau'
-        }
-    ]
 
-    const actionProps = [
-        {
-            icon: '',
-            title: 'cài đặt'
-        },
-        {
-            icon: '',
-            title: 'gửi phản hồi'
-        }
-    ]
     return (
         <div className={cx('over-box')}>
             <div className={cx('top-housing')}>

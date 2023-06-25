@@ -1,6 +1,6 @@
 'use client'
 import Context from '@/GlobalVariableProvider/Context'
-import styles from '@/styles/account.module.scss'
+import styles from '@/styles/settingComponent.module.scss'
 import classNames from 'classnames/bind'
 import { useState, useLayoutEffect, useContext, useEffect } from 'react'
 import Link from 'next/link'
@@ -9,13 +9,18 @@ import Image from 'next/image'
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
+import NotiBoard from '@/components/NotificationBoard'
 
 const cx = classNames.bind(styles)
 
+type channelDataType = {
+    tagName?: string
+}
+
 export default function AccountSetting() {
-    const context = useContext(Context)
+    const context: any = useContext(Context)
     const [img, setImg] = useState(null)
-    const [channelData, setChannelData] = useState({})
+    const [channelData, setChannelData] = useState<channelDataType>({})
     const router = useRouter()
 
     useLayoutEffect(() => {
@@ -41,7 +46,7 @@ export default function AccountSetting() {
         if (context.deviceType == 2 || context.deviceType == 1) {
             router.push('/setting')
         }
-    },[context.deviceType])
+    }, [context.deviceType])
 
     return (
         <div className={cx('box')}>
@@ -58,7 +63,9 @@ export default function AccountSetting() {
                     <Link href={'/studio'}><p>Xem các cài đặt nâng cao</p></Link>
                 </div>
             </div>
-            <div>...cập nhật sau</div>
+            <div>
+
+            </div>
         </div>
     )
 

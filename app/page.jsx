@@ -43,7 +43,6 @@ const GetAllVideo = async function () {
 export default async function Home() {
   // await axios.get("/api/video/all")
   const video = await GetAllVideo()
-
   const render = () => {
     if (video.length != 0)
       return video.map((vid, index) => {

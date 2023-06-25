@@ -62,10 +62,10 @@ const AccountMenu = ({ session }) => {
                     </div>
                 </li>
                 <li className={cx('menu-box')} onClick={() => { handlePush() }}><p className={cx('title')}>Kênh của bạn</p></li>
-                <li className={cx('menu-box')}><p className={cx('title')}>cài đặt</p></li>
+                <li className={cx('menu-box')} onClick={() => { router.push('/setting') }}><p className={cx('title')}>cài đặt</p></li>
                 <li className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></li>
-                <li className={cx('menu-box')} onClick={() => {router.push('/termofuser')}}><p className={cx('title')}>điều khoản sử dụng</p></li>
-                <li className={cx('menu-box')} onClick={() => {router.push('/account')}}><p className={cx('title')}>thông tin cá nhân</p></li>
+                <li className={cx('menu-box')} onClick={() => { router.push('/termofuser') }}><p className={cx('title')}>điều khoản sử dụng</p></li>
+                <li className={cx('menu-box')} onClick={() => { router.push('/setting/account') }}><p className={cx('title')}>thông tin cá nhân</p></li>
                 <li className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></li>
             </ul> : <></>}
         </div>

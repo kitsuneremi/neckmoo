@@ -33,7 +33,7 @@ export default function Layout({ children }) {
     },
     {
       name: 'Nội dung tải xuống',
-      href: 'downloads'
+      href: 'download'
     },
     {
       name: 'Quyền riêng tư',
@@ -41,7 +41,7 @@ export default function Layout({ children }) {
     },
     {
       name: 'Cài đật nâng cao',
-      href: 'advanced'
+      href: 'advance'
     }
   ]
 
