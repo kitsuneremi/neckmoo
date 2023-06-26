@@ -23,6 +23,8 @@ model Accounts {
   Likes         Likes[]
   Notifications Notifications[]
   Subcribes     Subcribes[]
+  createdAt     DateTime        @default(now()) // Thêm trường createdAt
+  updatedAt     DateTime        @updatedAt // Thêm trường updatedAt
 }
 
 model Channels {
@@ -37,6 +39,8 @@ model Channels {
   Subcribes     Subcribes[]
   Posts         Posts[]
   Videos        Videos[]
+  createdAt     DateTime        @default(now()) // Thêm trường createdAt
+  updatedAt     DateTime        @updatedAt // Thêm trường updatedAt
 }
 
 model Videos {
@@ -52,6 +56,8 @@ model Videos {
   DetailListVideo DetailListVideo[]
   DetailTags      DetailTags[]
   Likes           Likes[]
+  createdAt       DateTime          @default(now()) // Thêm trường createdAt
+  updatedAt       DateTime          @updatedAt // Thêm trường updatedAt
 }
 
 model Categories {
@@ -70,6 +76,8 @@ model Comment {
   comments    Comment[] @relation("ParentComment")
   referenceId Int?      @map("referenceId")
   reference   Comment?  @relation("ParentComment", fields: [referenceId], references: [id])
+  createdAt   DateTime  @default(now()) // Thêm trường createdAt
+  updatedAt   DateTime  @updatedAt // Thêm trường updatedAt
 }
 
 model ListVideos {
@@ -108,6 +116,8 @@ model Likes {
   account   Accounts @relation(fields: [accountId], references: [id])
   accountId Int      @unique
   type      Int
+  createdAt DateTime @default(now()) // Thêm trường createdAt
+  updatedAt DateTime @updatedAt // Thêm trường updatedAt
 
   @@id([videoId, accountId])
 }
@@ -117,6 +127,8 @@ model Notifications {
   accountId Int
   channel   Channels @relation(fields: [channelId], references: [id])
   channelId Int
+  createdAt DateTime @default(now()) // Thêm trường createdAt
+  updatedAt DateTime @updatedAt // Thêm trường updatedAt
 
   @@id([accountId, channelId])
 }
@@ -126,6 +138,8 @@ model Subcribes {
   accountId Int
   channel   Channels @relation(fields: [channelId], references: [id])
   channelId Int
+  createdAt DateTime @default(now()) // Thêm trường createdAt
+  updatedAt DateTime @updatedAt // Thêm trường updatedAt
 
   @@id([accountId, channelId])
 }
@@ -136,4 +150,6 @@ model Posts {
   channelId   Int      @unique
   title       String
   description String
+  createdAt   DateTime @default(now()) // Thêm trường createdAt
+  updatedAt   DateTime @updatedAt // Thêm trường updatedAt
 }

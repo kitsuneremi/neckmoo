@@ -1,8 +1,13 @@
 .box {
     .play-all-box {
-        .list-title {}
+        margin-bottom: 12px;
+        .list-title {
+            
+        }
 
-        button {}
+        button {
+            cursor: pointer;
+        }
     }
 
     .video-slider {
@@ -23,7 +28,7 @@
             }
 
             .info-box {
-                display: flex;
+                display: block;
                 gap: 5px;
             }
 

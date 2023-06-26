@@ -65,7 +65,7 @@ export default async function Channel({ params }) {
             </div>
           </div>
 
-          <ChannelTabModule slug={slug} />
+          <ChannelTabModule tagName={channelData.tagName} />
         </div>
       </div>
     </main>

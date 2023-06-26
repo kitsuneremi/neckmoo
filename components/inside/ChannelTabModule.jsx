@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const cx = classNames.bind(style);
 
-function TabModule({ slug }) {
+function TabModule({ tagName }) {
 
     const [selectedTab, setSelectedTab] = useState(0);
 
@@ -68,9 +68,9 @@ function TabModule({ slug }) {
 
     const contentRender = () => {
         if (selectedTab === 0) {
-            return <Feature slug={slug}></Feature>;
+            return <Feature tagName={tagName}></Feature>;
         } else {
-            return <Videos></Videos>;
+            return <Videos tagName={tagName}></Videos>;
         }
     };
     return (

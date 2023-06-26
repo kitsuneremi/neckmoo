@@ -43,9 +43,13 @@
             }
         }
         .info-box{
-            display: flex;
+            display: block;
+            max-width: 100%;
             .views{
                 margin-right: 10px;
+            }
+            .time-stamp{
+                max-width: 100%;
             }
         }
     }

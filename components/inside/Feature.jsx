@@ -26,17 +26,17 @@ const Thumbnail = ({ link }) => {
 };
 
 
-const Feature = (props) => {
+const Feature = ({ tagName }) => {
     const router = useRouter()
     const [listVideo, setListVideo] = useState([])
     useEffect(() => {
-        if (!props.slug) return
+        if (!tagName) return
         axios.get('/api/video/bychannel', {
             params: {
-                tagName: props.slug
+                tagName: tagName
             }
         }).then(res => setListVideo(res.data))
-    }, [props.slug])
+    }, [tagName])
 
     return (
         <div className={cx('box')}>
@@ -54,8 +54,8 @@ const Feature = (props) => {
                                 <MoreOutlined style={{ cursor: 'pointer' }} />
                             </div>
                             <div className={cx('info-box')}>
-                                <p className={cx('views')}>{video.view}</p>
-                                <p className={cx('time-stamp')}>time stamp</p>
+                                <p className={cx('views')}>{video.view} lượt xem</p>
+                                <p className={cx('time-stamp')}>{video.createdAt}</p>
                             </div>
                         </div>
                     )
