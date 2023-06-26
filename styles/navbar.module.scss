@@ -23,10 +23,6 @@ $search-width: 380px;
             }
         }
 
-
-        .button {
-            background: transparent;
-        }
     }
 
     .search-box {
@@ -67,7 +63,7 @@ $search-width: 380px;
                 position: relative;
             }
 
-            .result::after{
+            .result::after {
                 position: absolute;
                 content: "";
                 bottom: 0;
@@ -96,13 +92,6 @@ $search-width: 380px;
 
         .notification-box {
             position: relative;
-            cursor: pointer;
-
-            .button {
-                vertical-align: middle;
-
-                background: none;
-            }
         }
     }
 }
@@ -110,12 +99,17 @@ $search-width: 380px;
 .button {
     padding: 3px 5px;
     background: none;
+    cursor: pointer;
 
     .avatar {
         width: 20px;
         height: 20px;
         border-radius: 1rem;
     }
+}
+
+.button:hover {
+    background-color: #d6d6d67e;
 }
 
 .dropdown {
@@ -164,7 +158,7 @@ $search-width: 380px;
         }
     }
 
-    .menu-box:hover{
+    .menu-box:hover {
         background-color: #b9b6b6;
     }
 
@@ -238,6 +232,8 @@ $search-width: 380px;
         font-size: 1.2rem;
         color: #828282;
         margin-inline: auto;
+        height: 40px;
+        padding-top: 10px;
 
         &:hover {
             cursor: pointer;

@@ -89,9 +89,9 @@ const NotificationMenu = () => {
 
     return (
         <div className={cx('notification-box')}>
-            <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
+            <div ref={buttonRef} onClick={() => { setShow(!show) }}>
                 <BellOutlined />
-            </button>
+            </div>
 
             {show ? <div className={cx('dropdown')} ref={menuRef}>
                 menu
@@ -108,11 +108,11 @@ function Navbar() {
     const ActionIsLogged = () => {
         if (context.ses && context.ses.user) {
             return <div className={cx('action-box')}>
-                {context.deviceType != 2 ? <></> : <button onClick={() => { setResponsiveShowing(true) }} className={cx('button')}><SearchOutlined></SearchOutlined></button>}
+                {context.deviceType != 2 ? <></> : <button onClick={() => { setResponsiveShowing(true) }} className={cx('button')}><SearchOutlined /></button>}
                 <button onClick={() => { router.push('/studio/upload') }} className={cx('button')}>
                     <UploadOutlined />
                 </button>
-                <button>
+                <button className={cx('button')}>
                     <NotificationMenu />
                 </button>
 

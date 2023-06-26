@@ -4,7 +4,7 @@
     gap: 2%;
     width: 100vw;
 
-    @media screen and (max-width: 1099px) {
+    @media screen and (max-width: 1199px) {
         width: 100vw;
         padding: 0 2%;
         display: block;
@@ -14,14 +14,14 @@
         height: fit-content;
         width: 75%;
 
-        @media screen and (max-width: 1099px) {
+        @media screen and (max-width: 1199px) {
             width: 100%;
         }
     }
 
     .right-housing {
         width: 20%;
-        @media screen and (max-width: 1099px) {
+        @media screen and (max-width: 1199px) {
             width: 100%;
         }
     }
@@ -43,7 +43,7 @@
         .video-player {
             max-width: 100%;
 
-            @media screen and (max-width: 1099px) {
+            @media screen and (max-width: 1199px) {
                 width: 100vw;
             }
         }

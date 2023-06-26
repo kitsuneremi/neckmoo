@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 
 export default function NotiBoard({ title }) {
-    const [visible, setVisible] = useState(true);
-    const [progress, setProgress] = useState(100);
+    const [visible, setVisible] = useState<boolean>(true);
+    const [progress, setProgress] = useState<number>(100);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -19,7 +19,7 @@ export default function NotiBoard({ title }) {
             clearInterval(interval);
         };
     }, []);
-    
+
     return (
         <div style={{ display: 'unset' }}>
             <div style={{ position: 'fixed', width: '100vw', height: '60px', backgroundColor: 'aliceblue', zIndex: '10000', lineHeight: '60px', textAlign: 'center', display: visible ? 'block' : 'none', top: 0, left: 0 }}>

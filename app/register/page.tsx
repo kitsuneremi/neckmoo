@@ -22,12 +22,12 @@ export default function Register() {
   const displayNameRef = useRef(null)
   const emailRef = useRef(null)
 
-  const [showRegister, setShowRegister] = useState(false);
-  const [anyNoti, setAnyNoti] = useState(false);
-  const [title, setTitle] = useState("");
+  const [showRegister, setShowRegister] = useState<boolean>(false);
+  const [anyNoti, setAnyNoti] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
   const { data: session } = useSession();
 
-  const context = useContext(Context);
+  const context: any = useContext(Context);
 
   const getNotification = (title) => {
     setAnyNoti(true);
