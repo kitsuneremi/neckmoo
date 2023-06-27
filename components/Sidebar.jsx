@@ -15,7 +15,7 @@ const Single = (prop) => {
     return (
         <div onClick={() => { router.push(prop.item.href) }} className={clsx({ [cx('parent-box')]: prop.tab !== prop.index }, { [cx('selected-parent-box')]: prop.tab === prop.index })}>
             {prop.item.icon}
-            {prop.full && <div className={cx('title')}>{prop.item.name}</div>}
+            <div className={cx('title')}>{prop.full ? prop.item.name : ""}</div>
         </div>
     )
 }
@@ -30,7 +30,7 @@ const Multiple = (prop) => {
         <>
             <div className={clsx({ [cx('parent-box')]: prop.tab !== prop.index }, { [cx('selected-parent-box')]: prop.tab === prop.index })} onClick={() => { setShow(!show) }}>
                 {prop.item.icon}
-                {prop.full && <div className={cx('title')}>{prop.item.name}</div>}
+                <div className={cx('title')}>{prop.full ? prop.item.name : ""}</div>
             </div>
             {show && prop.item.child.map((x, index) => {
                 return <Link href={`/channel/${x.tagName}`} key={index}><div className={cx('item-child')}>{x.name}</div></Link>

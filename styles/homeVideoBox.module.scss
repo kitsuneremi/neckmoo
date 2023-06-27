@@ -1,0 +1,86 @@
+.box {
+    width: 250px;
+
+    @media screen and (max-width: 350px) {
+        width: clamp(260px, 90%, 300px);
+    }
+
+    @media screen and (min-width: 471px) and (max-width: 650px) {
+        width: 43%;
+    }
+
+    @media screen and (max-width: 470px) {
+        width: 70%;
+        align-items: center;
+    }
+
+    height: fit-content;
+    display: block;
+    z-index: 150;
+
+    .thumbnail {
+        width: 100%;
+        height: 135px;
+        border-radius: 5px;
+    }
+
+    div {
+        display: flex;
+        gap: 10px;
+        text-decoration: none;
+
+        a {
+            height: fit-content;
+
+            .icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 2rem;
+            }
+
+        }
+
+        div {
+            display: block;
+
+            div {
+                a {
+                    text-decoration: none;
+                }
+
+                .title {
+                    font-size: 1.4rem;
+                    color: rgb(107, 107, 107);
+                }
+
+                .title:hover {
+                    color: rgb(32, 32, 32);
+                }
+
+                .video-details {
+                    font-size: 0.8rem;
+                }
+            }
+
+            .channel-name-box {
+                z-index: 200;
+
+                a {
+                    text-decoration: none;
+                    width: fit-content;
+
+                    .channel-name {
+                        font-size: 1.2rem;
+                        color: rgb(107, 107, 107);
+                    }
+
+                    .channel-name:hover {
+                        color: rgb(32, 32, 32);
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+        }
+    }
+}

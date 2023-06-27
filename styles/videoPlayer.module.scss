@@ -1,0 +1,39 @@
+.box {
+    justify-content: center;
+    max-width: 100%;
+    min-width: 60vw;
+
+    .frame-box {
+        position: relative;
+        width: fit-content;
+        height: fit-content;
+        justify-content: center;
+        max-width: 100%;
+
+        .player {
+            max-width: 100%;
+
+            @media screen and (max-width: 1199px) {
+                width: 100vw;
+            }
+        }
+
+        .control {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 175ms ease-in-out;
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+
+}
+
+.box:hover .control {
+    opacity: 1;
+}

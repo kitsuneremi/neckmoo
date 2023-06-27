@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "@/components/DefaultSidebar";
+import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/home.module.scss";
 import classNames from "classnames/bind";
 import { useEffect, useContext } from "react";

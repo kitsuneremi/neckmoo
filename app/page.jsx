@@ -6,6 +6,7 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import prisma from "@/lib/prisma";
 import Link from 'next/link'
+import HomeVideoItem from '@/components/inside/home/HomeVIdeoItem'
 const cx = classNames.bind(styles);
 
 export const metadata = {
@@ -42,19 +43,20 @@ const GetAllVideo = async function () {
 
 export default async function Home() {
   // await axios.get("/api/video/all")
-  const video = await GetAllVideo()
+  //lấy danh sách video từ server
+  const ListVideo = await GetAllVideo()
   const render = () => {
-    if (video.length != 0)
-      return video.map((vid, index) => {
+    if (ListVideo.length != 0)
+      return ListVideo.map((video, index) => {
         return (
           <HomeVideoItem
             key={index}
-            link={vid.link}
-            status={vid.status}
-            view={vid.view}
-            title={vid.title}
-            tagName={vid.tagName}
-            channelName={vid.name}
+            link={video.link}
+            status={video.status}
+            view={video.view}
+            title={video.title}
+            tagName={video.tagName}
+            channelName={video.name}
           ></HomeVideoItem>
         );
       });
@@ -68,42 +70,3 @@ export default async function Home() {
   );
 }
 
-const HomeVideoItem = async (val) => {
-  // const router = useRouter();
-  const cx = classNames.bind(styles);
-  const name = val.title
-  const view = val.view
-
-  const channelAvatarStorageRef = ref(storage, `/channel/avatars/${val.tagName}`)
-  const channelAvatar = await getDownloadURL(channelAvatarStorageRef)
-  const videoImageStorageRef = ref(storage, `/video/thumbnails/${val.link}`)
-  const img = await getDownloadURL(videoImageStorageRef)
-
-
-  return (
-    <div className={cx("box")}>
-      <Link href={`/watch/${val.link}`}><img className={cx("thumbnail")} src={img}></img></Link>
-      <div>
-        <Link href={`/channel/${val.tagName}`}><img className={cx("icon")} src={channelAvatar}></img></Link>
-        <div>
-          <div>
-            <Link href={`/watch/${val.link}`}>
-              <p className={cx("title")}>{name}</p>
-            </Link>
-          </div>
-          <div className={cx('channel-name-box')}>
-            <Link href={`/channel/${val.tagName}`}>
-              <p className={cx("channel-name")}>
-                {val.channelName}
-              </p>
-            </Link>
-          </div>
-          <div>
-            <p className={cx("video-details")}>{view} lượt xem</p>
-            <p className={cx("video-details")}>{val.status == 0 ? 'công khai' : 'không công khai'}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};

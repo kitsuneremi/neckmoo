@@ -5,7 +5,7 @@ $navbar-height: 60px;
 .box {
     position: relative;
     display: flex;
-    top: 60px;
+    padding-top: 60px;
 
     .sidebar-hide {
         display: none;
@@ -31,6 +31,7 @@ $navbar-height: 60px;
     }
 
     .main-content-expand {
+        top: 60px;
         left: 60px;
         position: absolute;
         width: calc(100vw - $collapse);
@@ -38,6 +39,7 @@ $navbar-height: 60px;
     }
 
     .main-content-collapse {
+        top: 60px;
         left: 160px;
         position: absolute;
         width: calc(100vw - $expand);
@@ -45,6 +47,7 @@ $navbar-height: 60px;
     }
 
     .main-content-full {
+        top: 60px;
         position: absolute;
         width: 100vw;
         min-height: calc(100vh - $navbar-height);
@@ -66,69 +69,10 @@ $navbar-height: 60px;
     display: flex;
     flex-wrap: wrap;
     padding-left: 50px;
-    margin-top: -40px;
     width: 100%;
-    @media screen and (max-width: 470px){
+
+    @media screen and (max-width: 470px) {
         padding: 0;
         justify-content: center;
-    }
-
-    .box {
-        width: 250px;
-        @media screen and (max-width: 350px){
-            width: clamp(260px, 90%, 300px);
-        }
-        @media screen and (min-width: 471px) and (max-width: 650px){
-            width: 43%;
-        }
-        @media screen and (max-width: 470px){
-            width: 70%;
-            align-items: center;            
-        }
-        height: fit-content;
-        display: block;
-        z-index: 150;
-
-        .thumbnail {
-            width: 100%;
-            height: 135px;
-        }
-
-        div {
-            display: flex;
-            gap: 10px;
-
-            .icon {
-                width: 30px;
-                height: 30px;
-                border-radius: 2rem;
-                border: 1px solid black;
-            }
-
-            div {
-                display: block;
-
-                div {
-                    a .title {
-                        font-size: 1.4rem;
-                        text-decoration: none;
-                    }
-
-                    .video-details {
-                        font-size: 0.8rem;
-                    }
-                }
-
-                .channel-name-box {
-                    z-index: 200;
-
-                    a .channel-name {
-                        font-size: 1.2rem;
-                        text-decoration: none;
-                    }
-                }
-
-            }
-        }
     }
 }

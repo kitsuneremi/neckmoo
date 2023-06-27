@@ -17,7 +17,7 @@ export default function DescriptionBox({ link }) {
         }).then(res => setVideoInfo(res.data))
     }, [])
     return (
-        <div className={clsx({ [cx("description-box-collapse")]: collapseDescription }, { [cx("description-box-expand")]: !collapseDescription })}>
+        <div className={clsx({ [cx("description-box-collapse")]: !collapseDescription }, { [cx("description-box-expand")]: collapseDescription })}>
             <p>{typeof videoInfo.view !== 'undefined' ? `${videoInfo.view} lượt xem` : ''}</p>
             <p
                 className={cx("handle-collapse-expand-button")}
@@ -25,7 +25,7 @@ export default function DescriptionBox({ link }) {
                     setCollapseDescription(!collapseDescription);
                 }}
             >
-                {collapseDescription ? "Hiện thêm" : "Ẩn bớt"}
+                {collapseDescription ? "Ẩn bớt" : "Hiện thêm"}
             </p>
         </div>
     )

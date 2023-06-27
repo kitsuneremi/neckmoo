@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useState, useLayoutEffect } from "react";
+import { useContext, useState, useLayoutEffect, useEffect } from "react";
 import Context from '@/GlobalVariableProvider/Context'
 import classNames from "classnames/bind";
 import style from "@/styles/watch.module.scss";
@@ -11,7 +11,7 @@ const cx = classNames.bind(style);
 export default function SubcribeButton({ link }) {
     const context = useContext(Context)
     const [subcribe, setSubcribe] = useState(false);
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (context.ses) {
             if (context.ses.user) {
                 axios.get('/api/channel/find', {
@@ -59,12 +59,9 @@ export default function SubcribeButton({ link }) {
 
                 } else {
                     setSubcribe(true);
-                    axios.post('/api/subcribe/delete', {
-                        accountId: context.ses.user.id,
-                        targetChannel: channelData.id
-                    }, {
-                        headers: {
-                            'accessToken': context.ses.accessToken
+                    axios.get('/api/channel/find', {
+                        params: {
+                            link: link
                         }
                     }).then(res => {
                         axios.post('/api/subcribe/add', {

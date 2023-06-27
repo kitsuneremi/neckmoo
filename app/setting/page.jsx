@@ -2,19 +2,13 @@
 import Context from '@/GlobalVariableProvider/Context'
 import styles from '@/styles//setting.module.scss'
 import classNames from 'classnames/bind'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Setting from '@/components/inside/setting/Settingpage'
 
 const cx = classNames.bind(styles)
 
-type setting = {
-    name: string,
-    des: string,
-    child?: React.ReactElement
-}
-
-const AccountBox: React.FC = () => {
+const AccountBox = () => {
     return (
         <>
             <div className={cx('with-checkbox')}>
@@ -28,7 +22,7 @@ const AccountBox: React.FC = () => {
     )
 }
 
-const PlaybackBox: React.FC = () => {
+const PlaybackBox = () => {
     return (
         <>
             <div className={cx('with-checkbox')}>
@@ -61,7 +55,7 @@ const PlaybackBox: React.FC = () => {
     )
 }
 
-const listSetting: setting[] = [
+const listSetting = [
     {
         name: 'Tài khoản',
         des: 'Cài đặt tài khoản',
@@ -84,19 +78,19 @@ const listSetting: setting[] = [
 ]
 
 
-
-
-
 export default function Account() {
-    const context: any = useContext(Context)
+    const context = useContext(Context)
     const router = useRouter()
-    if (context.deviceType == 0) {
-        router.push('/setting/account')
-    }
+    useEffect(() => {
+        if (context.deviceType == 0) {
+            router.push('/setting/account')
+        }
+    }, [])
+
     const render = () => {
-        return listSetting.map((setting, index) => {
+        return listSetting.map((s, index) => {
             return (
-                <Setting key={index} setting={setting} />
+                <Setting key={index} setting={s} />
             )
         })
     }

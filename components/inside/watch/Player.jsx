@@ -3,9 +3,9 @@ import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { CaretRightOutlined, PauseOutlined, MehOutlined, LockOutlined, MessageOutlined } from "@ant-design/icons";
-import style from "@/styles/watch.module.scss";
+import style from "@/styles/videoPlayer.module.scss";
 import classNames from "classnames/bind";
-
+import axios from "axios";
 
 const cx = classNames.bind(style);
 export default function Player({ link }) {
@@ -48,26 +48,25 @@ export default function Player({ link }) {
         };
     }, []);
 
-    // useEffect(() => {
-    //     const videoElement = playerRef.current;
+    useEffect(() => {
+        const videoElement = playerRef.current;
 
-    //     const handleTimeUpdate = () => {
-    //         const { currentTime, duration } = videoElement;
-    //         const seventyFivePercent = duration * 0.75;
-    //         if (currentTime >= seventyFivePercent && (triggerView == false)) {
-    //             setTriggerView(true)
-    //             axios.post('/api/video/increaseview', {
-    //                 videoId: videoInfo.id,
-    //                 link: videoInfo.link
-    //             })
-    //         }
-    //     }
-    //     videoElement.addEventListener('timeupdate', handleTimeUpdate);
+        const handleTimeUpdate = () => {
+            const { currentTime, duration } = videoElement;
+            const seventyFivePercent = duration * 0.75;
+            if (currentTime >= seventyFivePercent && (triggerView == false)) {
+                setTriggerView(true)
+                axios.post('/api/video/increaseview', {
+                    link: link
+                })
+            }
+        }
+        videoElement.addEventListener('timeupdate', handleTimeUpdate);
 
-    //     return () => {
-    //         videoElement.removeEventListener('timeupdate', handleTimeUpdate);
-    //     };
-    // }, [videoDuration, triggerView])
+        return () => {
+            videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+        };
+    }, [videoDuration, triggerView])
 
 
     const volumex = () => {
@@ -108,10 +107,10 @@ export default function Player({ link }) {
     };
 
     return (
-        <div className={cx("video-box")}>
+        <div className={cx("box")}>
             <div className={cx("frame-box")}>
                 <video
-                    className={cx("video-player")}
+                    className={cx("player")}
                     src={videoFile}
                     allowFullScreen
                     autoPlay
@@ -119,31 +118,6 @@ export default function Player({ link }) {
                     onLoadedMetadata={handleLoadedMetadata}
                     ref={playerRef}
                 ></video>
-                {/* <div className={cx("timeline")}></div>
-                    <div className={cx("control")}>
-                        <div className={cx("left-control")}>
-                            {playPauseController()}
-                            <StepForwardOutlined />
-                            <>
-                                {volumex()}
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="1"
-                                    step="0.01"
-                                    className={cx("volume-controller")}
-                                    onChange={(e) => {
-                                        setVolume(e.target.value);
-                                    }}
-                                    defaultValue="1"
-                                />
-                            </>
-                        </div>
-                        <div className={cx("right-control")}>
-                            {cc ? <IeOutlined /> : <IeOutlined />}
-                            <SettingOutlined />
-                        </div>
-                    </div> */}
             </div>
         </div>
     )
