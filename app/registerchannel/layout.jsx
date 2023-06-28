@@ -1,13 +1,11 @@
 "use client";
-import style from "@/styles/defaultLayout.module.scss";
+import { useContext, useEffect } from "react";
+import style from "@/styles/layout/defaultLayout.module.scss";
 import classNames from "classnames/bind";
 import DefaultSidebar from "@/components/DefaultSidebar";
-import { useContext, useEffect } from "react";
 import Context from "@/GlobalVariableProvider/Context";
-import Navbar from "@/components/Navbar";
 import clsx from "clsx";
-import Protector from "@/lib/protector";
-import MainLayout from "../../layout/mainLayout";
+import MainLayout from "@/layout/mainLayout";
 export default function ChannelLayout({ children }) {
   const cx = classNames.bind(style);
   const context = useContext(Context);

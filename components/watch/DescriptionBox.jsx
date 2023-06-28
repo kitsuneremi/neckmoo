@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
-import style from "@/styles/watch.module.scss";
+import style from "@/styles/watch/watch.module.scss";
 import clsx from "clsx";
 import axios from "axios";
 

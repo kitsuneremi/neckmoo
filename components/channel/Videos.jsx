@@ -1,10 +1,10 @@
 'use client'
+import { useState, useEffect } from "react";
+import { MoreOutlined } from "@ant-design/icons";
 import axios from "axios";
 import classNames from "classnames/bind";
-import styles from "@/styles/videoTab.module.scss";
-import { useState, useEffect } from "react";
+import styles from "@/styles/channel/videoTab.module.scss";
 import clsx from "clsx";
-import { MoreOutlined } from "@ant-design/icons";
 import Thumbnail from "./watch/VideoTab/Thumbnail";
 
 const cx = classNames.bind(styles);

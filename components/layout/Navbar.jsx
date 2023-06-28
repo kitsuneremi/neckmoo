@@ -4,11 +4,11 @@ import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
 import { signOut } from 'next-auth/react'
 import { IeOutlined, LeftOutlined, RightOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
-import styles from '@/styles/navbar.module.scss'
+import styles from '@/styles/component/navbar.module.scss'
 import Link from "next/link"
 import Context from "@/GlobalVariableProvider/Context"
 import axios from "axios"
-import NavbarSearchModule from './inside/NavbarSearchModule'
+import NavbarSearchModule from '@/components/layout/NavbarSearchModule'
 
 const cx = classNames.bind(styles)
 

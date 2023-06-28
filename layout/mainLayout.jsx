@@ -1,6 +1,6 @@
-import style from "@/styles/defaultLayout.module.scss";
+import style from "@/styles/layout/defaultLayout.module.scss";
 import classNames from "classnames/bind";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 export default ({ children }) => {
   const cx = classNames.bind(style);
   return (

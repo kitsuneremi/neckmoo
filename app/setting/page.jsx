@@ -1,10 +1,10 @@
 'use client'
-import Context from '@/GlobalVariableProvider/Context'
-import styles from '@/styles//setting.module.scss'
-import classNames from 'classnames/bind'
 import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Setting from '@/components/inside/setting/Settingpage'
+import Context from '@/GlobalVariableProvider/Context'
+import styles from '@/styles/setting/setting.module.scss'
+import classNames from 'classnames/bind'
+import Setting from '@/components/setting/Settingpage'
 
 const cx = classNames.bind(styles)
 

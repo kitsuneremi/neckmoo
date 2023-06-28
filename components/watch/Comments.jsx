@@ -3,9 +3,9 @@ import { useContext, useState, useEffect } from "react";
 import Context from '@/GlobalVariableProvider/Context'
 import { RightOutlined, FilterOutlined } from "@ant-design/icons";
 import classNames from "classnames/bind";
-import style from "@/styles/watch.module.scss";
+import style from "@/styles/watch/watch.module.scss";
 import axios from "axios";
-import VideoComment from '../VideoComment'
+import VideoComment from './VideoComment'
 
 
 const cx = classNames.bind(style);

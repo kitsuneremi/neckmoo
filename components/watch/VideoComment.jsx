@@ -1,6 +1,6 @@
 'use client'
 import { memo, useState } from "react";
-import style from '@/styles/WatchComment.module.scss'
+import style from '@/styles/watch/comment.module.scss'
 import classNames from 'classnames/bind'
 import { RightOutlined } from '@ant-design/icons'
 function WatchVideoComment({ props }) {

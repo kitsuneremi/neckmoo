@@ -1,9 +1,8 @@
 'use client'
+import { useLayoutEffect, useContext, useState } from "react";
 import { LikeFilled, DislikeFilled, ShareAltOutlined, DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import classNames from "classnames/bind";
-import style from "@/styles/watch.module.scss";
-import clsx from "clsx";
-import { useLayoutEffect, useContext, useState } from "react";
+import style from "@/styles/watch/watch.module.scss";
 import Context from '@/GlobalVariableProvider/Context'
 import axios from "axios";
 

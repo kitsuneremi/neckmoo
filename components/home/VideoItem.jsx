@@ -1,4 +1,4 @@
-import styles from "@/styles/homeVideoBox.module.scss";
+import styles from "@/styles/home/videoBox.module.scss";
 import classNames from "classnames/bind";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'

@@ -1,8 +1,11 @@
 'use client'
+import { useEffect, useState } from 'react'
+import { ref, getDownloadURL } from 'firebase/storage'
+import { Storage } from '@/lib/firebase'
 import classNames from 'classnames/bind'
-import React, { useEffect, useState } from 'react'
 import styles from '@/styles/adminvideo.module.scss'
 import axios from 'axios'
+
 
 const cx = classNames.bind(styles)
 
@@ -10,6 +13,16 @@ const Videobox = (val) => {
   const [showEdit, setShowEdit] = useState(false)
   const [name, setName] = useState("")
   const [des, setDes] = useState("")
+  const [thumbnail, setThumbnail] = useState(null)
+
+  useEffect(() => {
+    const x = async () => {
+      const thumbnailRef = ref(Storage, `/videos/thumbnail/${val.link}`)
+      getDownloadURL(thumbnailRef).then(url => setThumbnail(url))
+    }
+    x();
+
+  }, [])
 
 
   const handleUpdate = () => {
@@ -35,7 +48,7 @@ const Videobox = (val) => {
     <>
       <div className={cx('infomation-box')}>
         <div className={cx('row-0')}><p>{val.serial}</p></div>
-        <div className={cx('row-1')}><img src={`http://localhost:5000/api/fileout/videoimage/${val.link}`}></img></div>
+        <div className={cx('row-1')}><img src={thumbnail}></img></div>
         <div className={cx('row-2')}><p>{val.title}</p></div>
         <div className={cx('row-3')}><p>{val.des}</p></div>
         <div className={cx('row-4')}><p>{val.channelName}</p></div>

@@ -1,10 +1,9 @@
 'use client'
 import clsx from "clsx";
-import Context from "@/GlobalVariableProvider/Context";
-import Feature from "@/components/inside/Feature";
-import Videos from "@/components/inside/Videos";
+import Feature from "./Feature";
+import Videos from "./Videos";
 import classNames from "classnames/bind";
-import style from "@/styles/channel.module.scss";
+import style from "@/styles/channel/channel.module.scss";
 import { useState } from "react";
 
 const cx = classNames.bind(style);

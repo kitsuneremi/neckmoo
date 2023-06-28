@@ -1,16 +1,14 @@
 'use client'
-import SubcribeButton from "./SubcribeButton";
-import Link from 'next/link'
+import { useLayoutEffect, useState, useEffect } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
+import SubcribeButton from "./SubcribeButton";
+import Link from 'next/link'
 import classNames from "classnames/bind";
-import style from "@/styles/watch.module.scss";
+import style from "@/styles/watch/watch.module.scss";
 import VideoOptions from './VideoOptions'
-import clsx from "clsx";
-import { useLayoutEffect, useState, useEffect } from "react";
 import axios from "axios";
-
 
 const cx = classNames.bind(style);
 export default function Properties({ link }) {

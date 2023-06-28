@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { CaretRightOutlined, PauseOutlined, MehOutlined, LockOutlined, MessageOutlined } from "@ant-design/icons";
-import style from "@/styles/videoPlayer.module.scss";
+import style from "@/styles/watch/player.module.scss";
 import classNames from "classnames/bind";
 import axios from "axios";
 

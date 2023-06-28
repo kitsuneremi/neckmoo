@@ -1,14 +1,15 @@
 'use client'
-import Context from '@/GlobalVariableProvider/Context'
-import styles from '@/styles/settingComponent.module.scss'
-import classNames from 'classnames/bind'
-import { useState, useLayoutEffect, useContext, useEffect } from 'react'
-import Link from 'next/link'
-import axios from 'axios'
-import Image from 'next/image'
+import { useState, useLayoutEffect, useContext } from 'react'
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
+import Context from '@/GlobalVariableProvider/Context'
+import styles from '@/styles/setting/settingComponent.module.scss'
+import classNames from 'classnames/bind'
+import Link from 'next/link'
+import axios from 'axios'
+import Image from 'next/image'
+
 import NotiBoard from '@/components/NotificationBoard'
 
 const cx = classNames.bind(styles)

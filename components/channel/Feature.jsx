@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
 import classNames from "classnames/bind"
-import styles from '@/styles/feature.module.scss'
+import styles from '@/styles/channel/feature.module.scss'
 import axios from "axios"
 
 

@@ -1,10 +1,9 @@
 "use client";
+import { SessionProvider } from "next-auth/react"
 import '@/styles/global.scss'
-import style from '@/styles/mainLayout.module.scss'
+import style from '@/styles/layout/mainLayout.module.scss'
 import classNames from "classnames/bind"
 import VariableProvider from "@/GlobalVariableProvider/Storage"
-import { SessionProvider } from "next-auth/react"
-
 
 const cx = classNames.bind(style)
 

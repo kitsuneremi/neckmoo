@@ -1,9 +1,8 @@
 'use client'
-import classNames from "classnames/bind"
-import styles from '@/styles/studioSidebar.module.scss'
 import { useContext } from "react"
+import classNames from "classnames/bind"
+import styles from '@/styles/studio/studioSidebar.module.scss'
 import Context from "@/GlobalVariableProvider/Context"
-import clsx from "clsx"
 const cx = classNames.bind(styles)
 
 const props = [

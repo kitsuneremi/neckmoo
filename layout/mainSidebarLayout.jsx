@@ -1,14 +1,14 @@
 "use client";
-import Sidebar from "@/components/Sidebar";
-import styles from "@/styles/home.module.scss";
-import classNames from "classnames/bind";
 import { useEffect, useContext } from "react";
+import Sidebar from "@/components/layout/Sidebar";
+import styles from "@/styles/home/home.module.scss";
+import classNames from "classnames/bind";
 import Context from "@/GlobalVariableProvider/Context";
 import clsx from "clsx";
 const cx = classNames.bind(styles);
 export default ({ children }) => {
   const context = useContext(Context);
-  
+
   return (
     <div className={cx("box")}>
       <aside

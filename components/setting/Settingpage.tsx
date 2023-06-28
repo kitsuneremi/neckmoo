@@ -1,5 +1,5 @@
 'use client'
-import styles from '@/styles//setting.module.scss'
+import styles from '@/styles/setting/setting.module.scss'
 import classNames from 'classnames/bind'
 import { useState } from 'react'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'

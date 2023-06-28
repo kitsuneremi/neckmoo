@@ -1,12 +1,12 @@
 "use client";
-import styles from "@/styles/upload.module.scss";
-import classNames from "classnames/bind";
-import { useContext, useLayoutEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import Context from "@/GlobalVariableProvider/Context";
 import { storage } from '@/lib/firebase'
 import { ref, uploadBytes, } from 'firebase/storage'
+import { useContext, useLayoutEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "@/styles/studio/upload.module.scss";
+import classNames from "classnames/bind";
+import axios from "axios";
+import Context from "@/GlobalVariableProvider/Context";
 import clsx from 'clsx'
 import NotiBoard from "@/components/NotificationBoard";
 

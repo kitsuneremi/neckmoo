@@ -1,9 +1,9 @@
 'use client'
-import styles from '@/styles/defaultLayout.module.scss'
+import { useContext, useEffect } from "react"
+import styles from '@/styles/layout/defaultLayout.module.scss'
 import classNames from "classnames/bind"
 import Context from "@/GlobalVariableProvider/Context"
-import { useContext, useEffect } from "react"
-import Navbar from "@/components/Navbar"
+import Navbar from "@/components/layout/Navbar"
 import Protector from '@/lib/protector'
 import MainStudioLayout from '@/layout/mainStudioLayout'
 const cx = classNames.bind(styles)

@@ -1,6 +1,6 @@
 "use client"
 import classNames from "classnames/bind"
-import styles from '@/styles/sidebar.module.scss'
+import styles from '@/styles/component/sidebar.module.scss'
 import { useState, useContext, useEffect, useLayoutEffect } from "react"
 import { HomeOutlined, ClockCircleOutlined, CoffeeOutlined, HistoryOutlined, BookOutlined } from '@ant-design/icons'
 import { useRouter } from "next/navigation"

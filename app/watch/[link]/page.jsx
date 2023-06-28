@@ -5,14 +5,14 @@ import { storage } from '@/lib/firebase'
 import { useRouter } from "next/navigation";
 import { CloseOutlined } from "@ant-design/icons";
 import Context from "@/GlobalVariableProvider/Context";
-import style from "@/styles/watch.module.scss";
+import style from "@/styles/watch/watch.module.scss";
 import clsx from "clsx";
 import axios from "axios";
 import classNames from "classnames/bind";
-import Properties from '@/components/inside/watch/Properties'
-import DescriptionBox from '@/components/inside/watch/DescriptionBox'
-import Comments from '@/components/inside/watch/Comments'
-import Player from '@/components/inside/watch/Player'
+import Properties from '@/components/watch/Properties'
+import DescriptionBox from '@/components/watch/DescriptionBox'
+import Comments from '@/components/watch/Comments'
+import Player from '@/components/watch/Player'
 const cx = classNames.bind(style);
 
 // export async function generateMetadata({ params }) {

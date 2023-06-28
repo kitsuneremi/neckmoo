@@ -1,8 +1,8 @@
 'use client'
-import Sidebar from "@/components/Sidebar";
-import styles from "@/styles/defaultLayout.module.scss";
-import classNames from "classnames/bind";
 import { useContext, useEffect } from "react";
+import Sidebar from "@/components/layout/Sidebar";
+import styles from "@/styles/layout/defaultLayout.module.scss";
+import classNames from "classnames/bind";
 import Context from "@/GlobalVariableProvider/Context";
 import clsx from "clsx";
 import MainLayout from '@/layout/mainLayout'

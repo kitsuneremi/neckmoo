@@ -1,16 +1,13 @@
 "use client";
-import clsx from "clsx";
-import classNames from "classnames/bind";
-import styles from "@/styles/registerChannel.module.scss";
 import { useState } from "react";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { uploadBytes, ref } from 'firebase/storage'
 import { storage } from '@/lib/firebase'
+import clsx from "clsx";
+import classNames from "classnames/bind";
+import styles from "@/styles/registerChannel.module.scss";
+import axios from "axios";
 
-const getFileExt = (fileName) => {
-  return fileName.name.substring(fileName.name.lastIndexOf(".") + 1);
-};
 export default function RegisterChannel() {
   const cx = classNames.bind(styles);
   const [channelName, setChannelName] = useState("");

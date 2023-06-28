@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from "react"
 import { CloseOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
-import styles from '@/styles/navbar.module.scss'
+import styles from '@/styles/component/navbar.module.scss'
 import axios from "axios"
 
 const cx = classNames.bind(styles)

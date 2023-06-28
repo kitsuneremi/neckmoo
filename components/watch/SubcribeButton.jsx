@@ -1,9 +1,8 @@
 'use client'
-import { useContext, useState, useLayoutEffect, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import Context from '@/GlobalVariableProvider/Context'
 import classNames from "classnames/bind";
-import style from "@/styles/watch.module.scss";
-import clsx from "clsx";
+import style from "@/styles/watch/watch.module.scss";
 import axios from "axios";
 
 const cx = classNames.bind(style);

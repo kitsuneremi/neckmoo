@@ -3,14 +3,12 @@ import { useEffect, useState, useContext, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import axios from "axios";
-import style from "../../styles/register.module.scss";
+import style from "@/styles/register/register.module.scss";
 import classNames from "classnames/bind";
 import clsx from "clsx";
-import MainLayout from "../../layout/mainLayout";
+import MainLayout from "@/layout/mainLayout";
 import Context from "@/GlobalVariableProvider/Context";
 import NotiBoard from "@/components/NotificationBoard";
-
-
 
 
 export default function Register() {

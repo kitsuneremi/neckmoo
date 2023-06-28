@@ -1,12 +1,10 @@
 
 import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
-import axios from "axios";
 import classNames from "classnames/bind";
 import style from "@/styles/channel.module.scss";
-import Image from "next/image";
-import SubcribeButton from "@/components/inside/SubcribeButton";
-import ChannelTabModule from "@/components/inside/ChannelTabModule";
+import SubcribeButton from "@/components/channel/SubcribeButton";
+import ChannelTabModule from "@/components/channel/TabModule";
 const cx = classNames.bind(style);
 
 

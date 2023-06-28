@@ -1,4 +1,4 @@
-import MainLayout from "../../layout/mainLayout";
+import MainLayout from "@/layout/mainLayout";
 import MainSidebarLayout from "@/layout/mainSidebarLayout";
 export default function AdminLayout({ children }) {
 
