@@ -1,7 +1,8 @@
-.box{
-    .top-housing{
+.box {
+    .top-housing {
         margin-bottom: 15px;
-        .tab-button{
+
+        .tab-button {
             background-color: transparent;
             border: 0;
             padding: 5px 10px;
@@ -9,7 +10,8 @@
             font-weight: 450;
             border-radius: 2%;
         }
-        .selected-tab-button{
+
+        .selected-tab-button {
             background-color: #030303;
             color: aliceblue;
             border: 0;
@@ -19,38 +21,10 @@
             border-radius: 10px;
         }
     }
-    .bottom-housing{
+
+    .bottom-housing {
         display: flex;
         width: fit-content;
-        .video-box{
-            padding: 7px 10px;
-            .thumbnail-box{
-                .video-thumbnail{
-                    width: 180px;
-                    height: 90px;
-                }
-            }
-        }
-        .title-box{
-            display: flex;
-            justify-content: space-between;
-            .title{
-                font-size: 1.2rem;
-                font-weight: 500;
-                max-width: 160px;
-                max-height: 50px;
-                word-wrap: break-word;
-            }
-        }
-        .info-box{
-            display: block;
-            max-width: 100%;
-            .views{
-                margin-right: 10px;
-            }
-            .time-stamp{
-                max-width: 100%;
-            }
-        }
+        gap: 15px;
     }
 }

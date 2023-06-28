@@ -5,7 +5,7 @@ import { uploadBytes, ref } from 'firebase/storage'
 import { storage } from '@/lib/firebase'
 import clsx from "clsx";
 import classNames from "classnames/bind";
-import styles from "@/styles/registerChannel.module.scss";
+import styles from "@/styles/registerchannel/registerChannel.module.scss";
 import axios from "axios";
 
 export default function RegisterChannel() {
@@ -81,14 +81,15 @@ export default function RegisterChannel() {
 
   const handleThumbnailFile = (file) => {
     if (file) {
-      setOriginalAvatar(file);
+
+      setOriginalThumbnail(file);
       setThumbnail(URL.createObjectURL(file));
     }
   };
 
   const handleAvatarFile = (file) => {
     if (file) {
-      setOriginalThumbnail(file);
+      setOriginalAvatar(file);
       setAvatar(URL.createObjectURL(file));
     }
   };

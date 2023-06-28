@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import classNames from "classnames/bind";
-import styles from "@/styles/videoTab.module.scss";
 import { ref, getDownloadURL } from 'firebase/storage'
 import { storage } from "@/lib/firebase";
+import classNames from "classnames/bind";
+import styles from "@/styles/channel/videoTab.module.scss";
 
 const cx = classNames.bind(styles)
 export default function Thumbnail({ link }: { link: string }) {

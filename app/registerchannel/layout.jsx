@@ -2,7 +2,7 @@
 import { useContext, useEffect } from "react";
 import style from "@/styles/layout/defaultLayout.module.scss";
 import classNames from "classnames/bind";
-import DefaultSidebar from "@/components/DefaultSidebar";
+import Sidebar from "@/components/layout/Sidebar";
 import Context from "@/GlobalVariableProvider/Context";
 import clsx from "clsx";
 import MainLayout from "@/layout/mainLayout";
@@ -24,7 +24,7 @@ export default function ChannelLayout({ children }) {
               { [cx("sidebar-expand")]: !context.collapseSidebar }
             )}
           >
-            <DefaultSidebar />
+            <Sidebar />
           </aside>
           <aside
             className={clsx(

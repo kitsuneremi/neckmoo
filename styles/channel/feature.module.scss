@@ -13,37 +13,45 @@
     .video-slider {
         display: flex;
         overflow-x: auto;
-        /* Sử dụng auto thay vì scroll để chỉ hiển thị thanh cuộn khi cần thiết */
         width: 100%;
         gap: 15px;
 
-        .video-box {
-            flex: 0 0 230px;
-            /* Chiều rộng cố định là 230px */
-            display: block;
-
-            .video-thumbnail {
-                width: 100%;
-                height: 100px;
-            }
-
-            .info-box {
-                display: block;
-                gap: 5px;
-            }
-
-            .title-box {
-                justify-content: space-between;
-                display: flex;
-            }
-        }
+        
     }
-
-
 
     .video-slider::-webkit-scrollbar {
         width: 0;
         height: 0;
     }
 
+}
+
+.video-box {
+    width: 256px;
+    height: auto;
+    display: block;
+    cursor: pointer;
+
+    .video-thumbnail {
+        width: 100%;
+        height: 144px;
+        border-radius: 5px;
+    }
+
+    .info-box {
+        display: block;
+        gap: 5px;
+        p{
+            font-size: 0.8rem;
+        }
+    }
+
+    .title-box {
+        justify-content: space-between;
+        display: flex;
+        gap: 5px;
+        p{
+            font-size: 1.4rem;
+        }
+    }
 }

@@ -21,7 +21,13 @@ export default function CommentComponents({ link }) {
             params: {
                 link: link
             }
-        }).then(res => setData(res.data))
+        }).then(res => { setData(res.data); return res }).then(val => {
+            axios.get('/api/comment/getvideocomment', {
+                params: {
+                    videoId: val.data.id
+                }
+            }).then(res => { setListComment(res.data); setChange(false); });
+        })
     }, [])
 
     useEffect(() => {
@@ -70,7 +76,7 @@ export default function CommentComponents({ link }) {
                 </div>
             </div>
             <div className={cx('middle-housing')}>
-                <img src={null} alt={null}/>
+                <img src={null} alt={null} />
                 <div className={cx('response-box')}>
                     <input value={value} onChange={e => setValue(e.target.value)} className={cx('response-input')} />
                     <div>

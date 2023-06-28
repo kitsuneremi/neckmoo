@@ -2,18 +2,29 @@
 import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
 import classNames from "classnames/bind";
-import style from "@/styles/channel.module.scss";
-import SubcribeButton from "@/components/channel/SubcribeButton";
+import style from "@/styles/channel/channel.module.scss";
+import SubcribeButton from "@/components/watch/SubcribeButton";
 import ChannelTabModule from "@/components/channel/TabModule";
+import axios from 'axios';
 const cx = classNames.bind(style);
 
 
 
 const channelBasicData = async (slug) => {
-  const x = await fetch(`https://erinasaiyukii.com/api/channel/basicdata?tagName=${slug}`, {
+  // kiểu lấy fetch data bằng fecth
+  const baseurl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000'
+  const x = await fetch(`${baseurl}/api/channel/basicdata?tagName=${slug}`, {
+
     method: 'GET'
   })
   return x.json();
+  // kiểu fetch data bằng axios (không hoạt động???)
+  // const y = await axios.get('/api/channel/basicdata', {
+  //   params: {
+  //     tagName: slug
+  //   }
+  // })
+  // return y.data
 }
 
 export default async function Channel({ params }) {
@@ -46,9 +57,9 @@ export default async function Channel({ params }) {
                   <p className={cx("infomation")}>
                     {channelData ? channelData.tagName : ""}
                   </p>
-                  <p className={cx("infomation")}>{channelData != null ? `${channelData.sub}sub` : ""}</p>
+                  <p className={cx("infomation")}>{channelData != null ? `${channelData.sub} sub` : ""}</p>
                   <p className={cx("infomation")}>
-                    {channelData != null ? `${channelData.video}video` : ""}
+                    {channelData != null ? `${channelData.video} video` : ""}
                   </p>
                 </div>
                 <div>

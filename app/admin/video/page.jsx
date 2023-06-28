@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { ref, getDownloadURL } from 'firebase/storage'
 import { Storage } from '@/lib/firebase'
 import classNames from 'classnames/bind'
-import styles from '@/styles/adminvideo.module.scss'
+import styles from '@/styles/admin/adminvideo.module.scss'
 import axios from 'axios'
 
 
