@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from 'next/navigation'
-import { useState, useEffect, useRef, useContext, useLayoutEffect } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { signOut } from 'next-auth/react'
-import { IeOutlined, LeftOutlined, RightOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
+import { LeftOutlined, RightOutlined, CloseOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
 import styles from '@/styles/component/navbar.module.scss'
 import Link from "next/link"

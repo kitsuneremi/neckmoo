@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { ref, getDownloadURL } from 'firebase/storage'
-import { Storage } from '@/lib/firebase'
+import { storage } from '@/lib/firebase'
 import classNames from 'classnames/bind'
-import styles from '@/styles/admin/adminvideo.module.scss'
+import styles from '@/styles/admin/adminVideo.module.scss'
 import axios from 'axios'
 
 
@@ -17,7 +17,7 @@ const Videobox = (val) => {
 
   useEffect(() => {
     const x = async () => {
-      const thumbnailRef = ref(Storage, `/videos/thumbnail/${val.link}`)
+      const thumbnailRef = ref(storage, `/videos/thumbnail/${val.link}`)
       getDownloadURL(thumbnailRef).then(url => setThumbnail(url))
     }
     x();
