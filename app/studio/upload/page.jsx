@@ -1,7 +1,7 @@
 "use client";
 import { storage } from '@/lib/firebase'
 import { ref, uploadBytes, } from 'firebase/storage'
-import { useContext, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/studio/upload.module.scss";
 import classNames from "classnames/bind";
@@ -43,6 +43,10 @@ export default function UploadPage() {
   const [channelData, setChannelData] = useState({});
   const [agreeTermsOfService, setAgreeTermsOfService] = useState(false)
 
+  //setup cho phần thông báo
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiTitle, setNotiTitle] = useState("")
+
   const handleUploadVideo = (file) => {
     setVideoFile(file);
     setVideoPreviewFile(URL.createObjectURL(file));
@@ -66,16 +70,33 @@ export default function UploadPage() {
 
   }, [context.ses])
 
-  const handleFinal = async () => {
+  useEffect(() => {
+    if (showNoti) {
+      setTimeout(() => {
+        setShowNoti(false)
+      }, 3000)
+    }
+  }, [showNoti])
 
+  const handleUploadFinal = async () => {
     if (videoFile == null || imageFile == null || title.trim().length == 0) {
-
+      // if (false) {
+      setShowNoti(true);
+      setNotiTitle("hãy điền đủ dữ liệu")
     } else {
-      console.log(channelData)
       if (channelData != null) {
         let t = makeid();
-        const videoStorageRef = ref(storage, `/video/videos/${t}`)
-        const thumbnailStorageRef = ref(storage, `/video/thumbnails/${t}`)
+        const formData = new FormData();
+        formData.append('link', t)
+        formData.append('video', videoFile, t + '.' + getFileExt(videoFile));
+        axios
+          .post("http://localhost:5000/api/upload/video", formData)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         axios
           .post("/api/video/create", {
             title: title,
@@ -90,7 +111,8 @@ export default function UploadPage() {
           .catch((error) => {
             console.error(error);
           });
-        uploadBytes(videoStorageRef, videoFile).then(() => { console.log("video uploaded") })
+
+        const thumbnailStorageRef = ref(storage, `/video/thumbnails/${t}`)
         uploadBytes(thumbnailStorageRef, imageFile).then(() => { console.log("thumbnail uploaded") })
 
       }
@@ -100,6 +122,7 @@ export default function UploadPage() {
   return (
     <>
       <div className={cx('box')}>
+        {showNoti && <NotiBoard title={notiTitle} />}
         <div className={cx('left-housing')}>
           <h3>Thông tin cơ bản</h3>
           <div className={cx('label-box')}>
@@ -205,9 +228,7 @@ export default function UploadPage() {
 
         <button
           className={clsx({ [cx("finish-form-button")]: agreeTermsOfService }, { [cx("finish-form-button-dis")]: !agreeTermsOfService })}
-          onClick={() => {
-            handleFinal();
-          }}
+          onClick={handleUploadFinal}
           disabled={!agreeTermsOfService}
         >
           hoàn thành

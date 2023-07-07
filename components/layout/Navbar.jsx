@@ -51,7 +51,7 @@ const AccountMenu = ({ session }) => {
     return (
         <div className={cx('account-menu-box')}>
             <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
-                <img src="" className={cx('avatar')} />
+                <img src={null} className={cx('avatar')} />
             </button>
             {show ? <ul className={cx('dropdown')} ref={menuRef}>
                 <li className={cx('infomation-box')}>

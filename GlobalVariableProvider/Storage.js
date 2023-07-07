@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 
 function VariableProvider({ children }) {
-    const [collapseSidebar, setCollapseSidebar] = useState(false)
+    const [collapseSidebar, setCollapseSidebar] = useState(true)
     const [deviceType, setDeviceType] = useState(0); //0 là pc, 1 là tablet, 2 là mobile
     const [ses, setSes] = useState(null)
     const { data: session } = useSession();

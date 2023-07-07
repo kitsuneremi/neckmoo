@@ -34,7 +34,7 @@ model Channels {
   des           String          @default("")
   account       Accounts        @relation(fields: [accountId], references: [id])
   accountId     Int             @unique
-  ListVideos    ListVideos[]
+  ListVideo     ListVideo[]
   Notifications Notifications[]
   Subcribes     Subcribes[]
   Posts         Posts[]
@@ -50,6 +50,7 @@ model Videos {
   view            Int?              @default(0)
   status          Int
   link            String
+  fragmentMode    Boolean           @default(false)
   channel         Channels          @relation(fields: [channelId], references: [id])
   channelId       Int               @default(3)
   comment         Comment[]
@@ -80,20 +81,20 @@ model Comment {
   updatedAt   DateTime  @updatedAt // Thêm trường updatedAt
 }
 
-model ListVideos {
+model ListVideo {
   id              Int               @id @default(autoincrement())
   channel         Channels          @relation(fields: [channelId], references: [id])
-  channelId       Int               @unique
-  name            String
+  channelId       Int
+  name            String            @default("")
   DetailListVideo DetailListVideo[]
 }
 
 model DetailListVideo {
-  id      Int        @id @default(autoincrement())
-  video   Videos     @relation(fields: [videoId], references: [id])
-  videoId Int        @unique
-  list    ListVideos @relation(fields: [listId], references: [id])
-  listId  Int        @unique
+  id      Int       @id @default(autoincrement())
+  video   Videos    @relation(fields: [videoId], references: [id])
+  videoId Int
+  list    ListVideo @relation(fields: [listId], references: [id])
+  listId  Int
 }
 
 model Tags {

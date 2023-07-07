@@ -53,7 +53,7 @@ export default function StudioSidebar() {
         <div className={cx('over-box')}>
             <div className={cx('top-housing')}>
                 <div className={cx('infomation-box')}>
-                    <img src="" className="avartar" />
+                    <img src={null} className="avartar" />
                     <p></p>
                 </div>
                 <div className={cx('navigation-box')}>

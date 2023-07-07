@@ -7,7 +7,7 @@ import HomeVideoItem from '@/components/home/VideoItem'
 const cx = classNames.bind(styles);
 
 export const metadata = {
-  title: 'Home - Carymei',
+  title: 'Home',
 }
 
 const GetAllVideo = async function () {
@@ -40,8 +40,10 @@ const GetAllVideo = async function () {
 
 export default async function Home() {
   // await axios.get("/api/video/all")
-  //lấy danh sách video từ server
+  //lấy danh sách video
   const ListVideo = await GetAllVideo()
+
+  //hàm render trả ra các thẻ video nằm trên trang chủ
   const render = () => {
     if (ListVideo.length != 0)
       return ListVideo.map((video, index) => {

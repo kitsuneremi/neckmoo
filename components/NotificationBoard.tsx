@@ -1,24 +1,26 @@
 'use client'
 import { useState, useEffect } from 'react';
 
-export default function NotiBoard({ title }) {
+export default function NotiBoard({ title }: { title: string }) {
     const [visible, setVisible] = useState<boolean>(true);
     const [progress, setProgress] = useState<number>(100);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setVisible(false);
-        }, 3000);
+        if (title != "") {
+            const timeout = setTimeout(() => {
+                setVisible(false);
+            }, 3000);
 
-        const interval = setInterval(() => {
-            setProgress((prevProgress) => prevProgress - 100 / 300);
-        }, 10);
+            const interval = setInterval(() => {
+                setProgress((prevProgress) => prevProgress - 100 / 300);
+            }, 10);
 
-        return () => {
-            clearTimeout(timeout);
-            clearInterval(interval);
-        };
-    }, []);
+            return () => {
+                clearTimeout(timeout);
+                clearInterval(interval);
+            };
+        }
+    }, [title]);
 
     return (
         <div style={{ display: 'unset' }}>
