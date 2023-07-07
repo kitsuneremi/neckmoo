@@ -16,7 +16,7 @@ const Player = ({ link }) => {
         const loadVideo = async () => {
             const video = document.getElementById("plyr") as HTMLVideoElement;
             var hls = new Hls();
-            hls.loadSource("http://localhost:5000/api/merge/MWzAXYBg/playlist.m3u8");
+            hls.loadSource(`http://localhost:5000/api/merge/${link}/playlist.m3u8`);
             hls.attachMedia(video);
             // @ts-ignore
             videoRef.current!.plyr.media = video;
