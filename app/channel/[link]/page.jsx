@@ -6,25 +6,28 @@ import style from "@/styles/channel/channel.module.scss";
 import SubcribeButton from "@/components/watch/SubcribeButton";
 import ChannelTabModule from "@/components/channel/TabModule";
 import axios from 'axios';
+import prisma from '@/lib/prisma';
 const cx = classNames.bind(style);
 
+const baseurl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000'
 
+export async function generateMetadata({ params }) {
+  const channel = await fetch(`${baseurl}/api/channel?tagName=${params.link}`, {
+    method: 'GET'
+  }).then(res => res.json())
+
+  return {
+    title: channel.name,
+    description: channel.des
+  }
+}
 
 const channelBasicData = async (slug) => {
   // kiểu lấy fetch data bằng fecth
-  const baseurl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000'
   const x = await fetch(`${baseurl}/api/channel/basicdata?tagName=${slug}`, {
-
     method: 'GET'
   })
   return x.json();
-  // kiểu fetch data bằng axios (không hoạt động???)
-  // const y = await axios.get('/api/channel/basicdata', {
-  //   params: {
-  //     tagName: slug
-  //   }
-  // })
-  // return y.data
 }
 
 export default async function Channel({ params }) {

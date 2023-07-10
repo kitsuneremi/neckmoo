@@ -9,6 +9,7 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import axios from 'axios'
 import Image from 'next/image'
+import SettingLayout from '@/components/layout/SettingLayout'
 
 import NotiBoard from '@/components/NotificationBoard'
 
@@ -50,24 +51,26 @@ export default function AccountSetting() {
     }, [context.deviceType])
 
     return (
-        <div className={cx('box')}>
-            <div></div>
-            <div className={cx('main-tab')}>
-                <p>Kênh của bạn</p>
-                <div>
+        <SettingLayout>
+            <div className={cx('box')}>
+                <div></div>
+                <div className={cx('main-tab')}>
+                    <p>Kênh của bạn</p>
                     <div>
-                        {img != null && <Image width={60} height={60} src={img} alt='loading' defaultValue={`https://pbs.twimg.com/profile_images/1561821281716142080/xdZX4AF0_400x400.jpg`} />}
-                        <p>{channelData.tagName}</p>
+                        <div>
+                            {img != null && <Image width={60} height={60} src={img} alt='loading' defaultValue={`https://pbs.twimg.com/profile_images/1561821281716142080/xdZX4AF0_400x400.jpg`} />}
+                            <p>{channelData.tagName}</p>
+                        </div>
+                        <Link href={'/studio'}><p>Trạng thái và tính năng của kênh</p></Link>
+                        <Link href={'/studio'}><p>Tạo hoặc quản lý kênh của bạn</p></Link>
+                        <Link href={'/studio'}><p>Xem các cài đặt nâng cao</p></Link>
                     </div>
-                    <Link href={'/studio'}><p>Trạng thái và tính năng của kênh</p></Link>
-                    <Link href={'/studio'}><p>Tạo hoặc quản lý kênh của bạn</p></Link>
-                    <Link href={'/studio'}><p>Xem các cài đặt nâng cao</p></Link>
+                </div>
+                <div>
+
                 </div>
             </div>
-            <div>
-
-            </div>
-        </div>
+        </SettingLayout>
     )
 
 

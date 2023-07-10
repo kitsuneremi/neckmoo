@@ -5,6 +5,11 @@ import Context from '@/GlobalVariableProvider/Context'
 import styles from '@/styles/setting/setting.module.scss'
 import classNames from 'classnames/bind'
 import Setting from '@/components/setting/Settingpage'
+import SettingLayout from '@/components/layout/SettingLayout'
+
+
+//this component work only for mobile devices, pc devices will be redirect to /... page instead
+
 
 const cx = classNames.bind(styles)
 
@@ -13,7 +18,7 @@ const AccountBox = () => {
         <>
             <div className={cx('with-checkbox')}>
                 <div>
-                    <h3>Chế độ hạn chế</h3>
+                    <p>...</p>
                     <p>phát triển sau</p>
                 </div>
                 <input type='checkbox' />
@@ -27,28 +32,28 @@ const PlaybackBox = () => {
         <>
             <div className={cx('with-checkbox')}>
                 <div>
-                    <h3>Chế độ hạn chế</h3>
+                    <p>Chế độ hạn chế</p>
                     <p>phát triển sau</p>
                 </div>
                 <input type='checkbox' />
             </div>
             <div className={cx('with-checkbox')}>
                 <div>
-                    <h3>Đoạn xem trước video</h3>
+                    <p>Đoạn xem trước video</p>
                     <p>phát triển sau</p>
                 </div>
                 <input type='checkbox' />
             </div>
             <div className={cx('without-checkbox')}>
-                <h3>Ngôn ngữ</h3>
+                <p>Ngôn ngữ</p>
                 <p>phát triển sau</p>
             </div>
             <div className={cx('without-checkbox')}>
-                <h3>Vị trí</h3>
+                <p>Vị trí</p>
                 <p>phát triển sau</p>
             </div>
             <div className={cx('without-checkbox')}>
-                <h3>Giao diện</h3>
+                <p>Giao diện</p>
                 <p>phát triển sau</p>
             </div>
         </>
@@ -78,9 +83,12 @@ const listSetting = [
 ]
 
 
+
+
 export default function Account() {
     const context = useContext(Context)
     const router = useRouter()
+
     useEffect(() => {
         if (context.deviceType == 0) {
             router.push('/setting/account')
@@ -95,8 +103,10 @@ export default function Account() {
         })
     }
     return (
-        <div className={cx('box')}>
-            {render()}
-        </div>
+        <SettingLayout>
+            <div className={cx('box')}>
+                {render()}
+            </div>
+        </SettingLayout>
     )
 }

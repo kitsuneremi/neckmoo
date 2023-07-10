@@ -4,6 +4,7 @@ import styles from '@/styles/setting/settingComponent.module.scss'
 import classNames from 'classnames/bind'
 import { useState, useLayoutEffect, useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import SettingLayout from '@/components/layout/SettingLayout'
 
 const cx = classNames.bind(styles)
 
@@ -19,8 +20,8 @@ export default function NotificationSetting() {
     }, [context.deviceType])
 
     return (
-        <div className={cx('box')}>
+        <SettingLayout>
             cập nhật sau(in progress)
-        </div>
+        </SettingLayout>
     )
 }
