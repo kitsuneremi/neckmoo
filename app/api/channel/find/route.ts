@@ -4,14 +4,15 @@ import prisma from "@/lib/prisma";
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const params = {
-        link: url.searchParams.get("link") || ""
+        link: url.searchParams.get("link"),
+        videoId: url.searchParams.get("videoId")
     }
     const video = await prisma.videos.findFirst({
         where: {
             link: params.link
         }
     })
-    if(video.id){
+    if (video.id) {
         const channel = await prisma.channels.findFirst({
             where: {
                 id: video.channelId
@@ -22,10 +23,10 @@ export async function GET(request: Request) {
                 channelId: channel.id
             }
         })
-        const channelWithSubcount = {...channel, sub: sub}
+        const channelWithSubcount = { ...channel, sub: sub }
         return new Response(JSON.stringify(channelWithSubcount));
-    }else{
-        return new Response(JSON.stringify(null));
+    } else {
+        return new Response(null, { status: 404 });
     }
 
 

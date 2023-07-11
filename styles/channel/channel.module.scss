@@ -167,28 +167,24 @@
     
 }
 
+//Subcribe button
+.subcribe-button {
+    border-radius: 2rem;
+    padding: 6px 16px;
+    margin-left: 10px;
+    border: 0;
+    background-color: #272727;
+    color: aliceblue;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
 
-
-
-.right-housing {
-    .subcribe-button {
-        border-radius: 2rem;
-        padding: 6px 16px;
-        margin-left: 10px;
-        border: 0;
-        background-color: #272727;
-        color: aliceblue;
-        font-size: 1.1rem;
-        font-weight: 400;
-    }
-
-    .unsubcribe-button {
-        border-radius: 2rem;
-        padding: 6px 16px;
-        margin-left: 10px;
-        border: 0;
-        background-color: #e5e5e5;
-        font-size: 1.1rem;
-        font-weight: 400;
-    }
+.unsubcribe-button {
+    border-radius: 2rem;
+    padding: 6px 16px;
+    margin-left: 10px;
+    border: 0;
+    background-color: #e5e5e5;
+    font-size: 1.1rem;
+    font-weight: 400;
 }

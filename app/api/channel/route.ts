@@ -3,7 +3,9 @@ import prisma from "@/lib/prisma"
 export async function GET(req: Request) {
     const url = new URL(req.url)
     const params = {
-        tagName: url.searchParams.get('tagName')
+        tagName: url.searchParams.get('tagName'),
+        link: url.searchParams.get('link'),
+        videoId: url.searchParams.get('videoId')
     }
     if (params.tagName != null) {
         const channel = await prisma.channels.findFirst({

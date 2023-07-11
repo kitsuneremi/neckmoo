@@ -3,11 +3,12 @@ import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
 import classNames from "classnames/bind";
 import style from "@/styles/channel/channel.module.scss";
-import SubcribeButton from "@/components/watch/SubcribeButton";
-import ChannelTabModule from "@/components/channel/TabModule";
-import axios from 'axios';
-import prisma from '@/lib/prisma';
+import dynamic from 'next/dynamic'
+import ChannelTabModule from '/components/channel/TabModule'
 const cx = classNames.bind(style);
+
+const SubcribeButton = dynamic(() => import("@/components/watch/SubcribeButton"))
+// const ChannelTabModule = dynamic(() => import("@/components/channel/TabModule"))
 
 const baseurl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000'
 
@@ -85,3 +86,4 @@ export default async function Channel({ params }) {
 }
 
 
+ 

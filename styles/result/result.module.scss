@@ -1,0 +1,70 @@
+//page.tsx
+.box{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .left{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .right{
+        width: 30%;
+    }
+}
+
+
+//Channel.tsx component
+.channel-box{
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    height: 202px;
+    .img-box{
+        width: 360px;
+        display: flex;
+        justify-content: center;
+        margin-block: auto;
+        img{
+            border-radius: 50%;
+        }
+    }
+
+    .des-box{
+        min-width: 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+    .sub-box{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+
+//Video box component
+.video-box{
+    display: flex;
+    gap: 30px;
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        img{
+            border-radius: 1rem;
+        }
+
+        div{
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+        }
+    }
+}

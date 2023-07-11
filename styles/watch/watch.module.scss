@@ -10,7 +10,7 @@
         display: block;
     }
 
-    .left-housing {
+    .left-housing { 
         height: fit-content;
         width: 75%;
 
@@ -97,20 +97,6 @@
                 .channel-info {
                     font-size: 0.9rem;
                 }
-            }
-
-            .subcribe-button {
-                width: fit-content;
-                border-radius: 1rem;
-                padding: 0 10px;
-                background-color: rgb(64, 64, 65);
-                color: aliceblue;
-            }
-
-            .unsubcribe-button {
-                width: fit-content;
-                border-radius: 1rem;
-                padding: 0 10px;
             }
         }
 
@@ -377,4 +363,19 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
+}
+
+//Subcribe button
+.subcribe-button {
+    width: fit-content;
+    border-radius: 1rem;
+    padding: 0 10px;
+    background-color: rgb(64, 64, 65);
+    color: aliceblue;
+}
+
+.unsubcribe-button {
+    width: fit-content;
+    border-radius: 1rem;
+    padding: 0 10px;
 }

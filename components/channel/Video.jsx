@@ -1,26 +1,19 @@
-'use client'
-import { useRouter } from "next/navigation"
 import { MoreOutlined } from "@ant-design/icons"
-import { useEffect, useState } from "react"
 import { storage } from '@/lib/firebase'
 import { ref, getDownloadURL } from 'firebase/storage'
 import classNames from "classnames/bind"
 import styles from '@/styles/channel/feature.module.scss'
+import Image from "next/image"
+import Link from "next/link"
 
 const cx = classNames.bind(styles)
 
-const Thumbnail = ({ link }) => {
-    const [src, setSrc] = useState();
+async function Thumbnail({ link }) {
 
-    useEffect(() => {
-        const videoImageStorageRef = ref(storage, `/video/thumbnails/${link}`)
-        getDownloadURL(videoImageStorageRef).then(url => setSrc(url))
-    }, [link]);
+    const src = await getDownloadURL(ref(storage, `/video/thumbnails/${link}`))
 
     return (
-        <>
-            <img className={cx('video-thumbnail')} src={src} alt="thumbnail" />
-        </>
+        <Image src={src} width={256} height={144} alt="thumbnail" loading="lazy"/>
     );
 };
 
@@ -53,19 +46,19 @@ function formatDateTime(dateTime) {
 }
 
 export default function Video({ video }) {
-    const router = useRouter()
-
     return (
-        <div className={cx('video-box')} onClick={() => { router.push(`/watch/${video.link}`) }}>
-            <Thumbnail link={video.link} />
-            <div className={cx('title-box')}>
-                <p>{video.title}</p>
-                <MoreOutlined style={{ cursor: 'pointer' }} />
+        <Link href={`/watch/${video.link}`}>
+            <div className={cx('video-box')}>
+                <Thumbnail link={video.link} />
+                <div className={cx('title-box')}>
+                    <p>{video.title}</p>
+                    <MoreOutlined style={{ cursor: 'pointer' }} />
+                </div>
+                <div className={cx('info-box')}>
+                    <p className={cx('views')}>{video.view} lượt xem</p>
+                    <p className={cx('time-stamp')}>{formatDateTime(video.createdAt)}</p>
+                </div>
             </div>
-            <div className={cx('info-box')}>
-                <p className={cx('views')}>{video.view} lượt xem</p>
-                <p className={cx('time-stamp')}>{formatDateTime(video.createdAt)}</p>
-            </div>
-        </div>
+        </Link>
     )
 }

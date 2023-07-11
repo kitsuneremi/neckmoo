@@ -1,27 +1,18 @@
-'use client'
-import { useRouter } from "next/navigation"
-import { MoreOutlined } from "@ant-design/icons"
-import { useEffect, useState } from "react"
-import { storage } from '@/lib/firebase'
-import { ref, getDownloadURL } from 'firebase/storage'
 import classNames from "classnames/bind"
 import styles from '@/styles/channel/feature.module.scss'
-import axios from "axios"
 import Video from "./Video"
 
 const cx = classNames.bind(styles)
 
-const Feature = ({ tagName }) => {
+async function findVideoByChannel(tagName) {
+    const baseUrl = process.env.VERCEL ? 'https://erinsaiyukii.com' : 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/video/bychannel?tagName=${tagName}`)
+    return res.json()
+}
 
-    const [listVideo, setListVideo] = useState([])
-    useEffect(() => {
-        if (!tagName) return
-        axios.get('/api/video/bychannel', {
-            params: {
-                tagName: tagName
-            }
-        }).then(res => setListVideo(res.data))
-    }, [tagName])
+export default async function Feature({ tagName }) {
+
+    const [listVideo] = await Promise.all([findVideoByChannel(tagName)])
 
     return (
         <div className={cx('box')}>
@@ -40,5 +31,3 @@ const Feature = ({ tagName }) => {
 
     )
 }
-
-export default Feature
