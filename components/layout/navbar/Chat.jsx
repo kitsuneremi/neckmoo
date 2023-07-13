@@ -22,7 +22,7 @@ export default function Chat({ session }) {
     const socketRef = useRef(null);
 
     useEffect(() => {
-        socketRef.current = io.connect('http://localhost:6000');
+        socketRef.current = io.connect('http://localhost:6075');
         return () => {
             socketRef.current.disconnect();
         };
@@ -60,6 +60,17 @@ export default function Chat({ session }) {
             }
         }).then(res => { setListMsg(res.data); setChange(false) })
     }, [room])
+
+    useEffect(() => {
+        const button = buttonRef.current;
+        const menu = menuRef.current;
+        if (button && menu) {
+            const buttonRect = button.getBoundingClientRect();
+            // menu.style.left = `-400px`;
+            menu.style.right = '0px'
+            menu.style.top = `${buttonRect.bottom}px`;
+        }
+    }, [show]);
 
     const handleSend = () => {
         if (room != -1) {
@@ -121,16 +132,11 @@ export default function Chat({ session }) {
         })
     }
 
-    useEffect(() => {
-        const button = buttonRef.current;
-        const menu = menuRef.current;
-        if (button && menu) {
-            const buttonRect = button.getBoundingClientRect();
-            // menu.style.left = `-400px`;
-            menu.style.right = '0px'
-            menu.style.top = `${buttonRect.bottom}px`;
-        }
-    }, [show]);
+    const handleUpdateInput = (e) => {
+        setMsg(e.target.value);
+    }
+
+
     return (
         <button className={cx('button')}>
             <div className={cx('chat-box')}>
@@ -138,7 +144,7 @@ export default function Chat({ session }) {
                     <CommentOutlined />
                 </div>
 
-                {show ? <div className={cx('drop-down')} ref={menuRef}>
+                {show ? <div className={cx('dropdown')} ref={menuRef}>
                     <div className={cx('top')}>
                         <UnorderedListOutlined onClick={() => { setOpen(!open) }} />
                         <div>
@@ -162,8 +168,8 @@ export default function Chat({ session }) {
                                 </div>
                             </div>
                             <div className={cx('bottom')}>
-                                <input value={msg} onChange={e => setMsg(e.target.value)} />
-                                <button onClick={handleSend}>send</button>
+                                <textarea className={cx('input')} value={msg} onChange={e => handleUpdateInput(e)} />
+                                <button className={cx('send-button')} onClick={handleSend}>send</button>
                             </div>
                         </div>
                     </div>

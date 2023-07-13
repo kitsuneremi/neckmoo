@@ -2,10 +2,11 @@
     display: flex;
     flex-direction: column;
     margin-inline: auto;
-    justify-content: center;
+    justify-content: flex-start;
+    text-align: start;
     width: 26px;
     height: 26px;
-    background: none; 
+    background: none;
     cursor: pointer;
 
     .account-menu-box {
@@ -22,12 +23,13 @@
         .dropdown {
             position: absolute;
             z-index: 100;
-            background-color: #f5f5f5;
             border-radius: 5px;
             width: 240px;
             font-size: 1.2rem;
             user-select: none;
             padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
             .infomation-box {
                 display: flex;
@@ -35,10 +37,13 @@
                 list-style: none;
                 position: relative;
                 cursor: pointer;
+                padding-bottom: 5px;
 
                 .avatar {
                     width: 35px;
                     height: 35px;
+                    outline: 0;
+                    border: 0;
                     border-radius: 2rem;
                     margin-top: 15px;
                 }
@@ -51,12 +56,12 @@
                 left: 0;
                 width: 100%;
                 height: 1px;
-                background-color: rgb(187, 187, 187);
+                background-color: #e5e5e5;
             }
 
             .menu-box {
                 list-style: none;
-                padding: 5px 0;
+                padding: 5px;
                 position: relative;
                 cursor: pointer;
 
@@ -66,18 +71,18 @@
             }
 
             .menu-box:hover {
-                background-color: #b9b6b6;
+                background-color: #f2f2f2;
             }
 
-            .menu-box::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 1px;
-                background-color: rgba(221, 220, 220, 0.616);
-            }
+            // .menu-box::after {
+            //     content: '';
+            //     position: absolute;
+            //     bottom: 0;
+            //     left: 0;
+            //     width: 100%;
+            //     height: 1px;
+            //     background-color: #e5e5e5;
+            // }
         }
 
     }
