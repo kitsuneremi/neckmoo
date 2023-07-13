@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Plyr, { PlyrProps, PlyrInstance } from "plyr-react";
 import "plyr/dist/plyr.css";
 import Hls from "hls.js";
-import axios from "axios";
+
 
 const Player = ({ link }) => {
     const videoRef = useRef(null);
