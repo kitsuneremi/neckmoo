@@ -10,10 +10,8 @@ const cx = classNames.bind(style);
 const SubcribeButton = dynamic(() => import("@/components/watch/SubcribeButton"))
 // const ChannelTabModule = dynamic(() => import("@/components/channel/TabModule"))
 
-const baseurl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000'
-
 export async function generateMetadata({ params }) {
-  const channel = await fetch(`${baseurl}/api/channel?tagName=${params.link}`, {
+  const channel = await fetch(`https://www.erinasaiyukii.com/api/channel?tagName=${params.link}`, {
     method: 'GET'
   }).then(res => res.json())
 
@@ -25,7 +23,7 @@ export async function generateMetadata({ params }) {
 
 const channelBasicData = async (slug) => {
   // kiểu lấy fetch data bằng fecth
-  const x = await fetch(`${baseurl}/api/channel/basicdata?tagName=${slug}`, {
+  const x = await fetch(`https://www.erinasaiyukii.com/api/channel/basicdata?tagName=${slug}`, {
     method: 'GET'
   })
   return x.json();

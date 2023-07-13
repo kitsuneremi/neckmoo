@@ -74,7 +74,7 @@ const Videobox = (val) => {
   )
 }
 
-const Page = () => {
+export default function Page() {
 
   const [listVideo, setListVideo] = useState([])
 
@@ -100,5 +100,3 @@ const Page = () => {
     </div>
   )
 }
-
-export default Page

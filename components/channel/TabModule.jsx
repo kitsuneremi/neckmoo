@@ -1,10 +1,13 @@
 'use client'
 import clsx from "clsx";
-import Feature from "./Feature";
+// import Feature from "./Feature";
 import Videos from "./Videos";
 import classNames from "classnames/bind";
 import style from "@/styles/channel/channel.module.scss";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const Feature = dynamic(() => import("./Feature"), {loading: () => {return <div>loading...</div>}})
 
 const cx = classNames.bind(style);
 

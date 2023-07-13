@@ -48,7 +48,7 @@ type resultData = {
 
 
 
-const baseUrl = process.env.VERCEL ? 'https://erinsaiyukii.com' : 'http://localhost:3000'
+const baseUrl = process.env.VERCEL ? 'https://www.erinasaiyukii.com' : 'http://localhost:3000'
 
 const cx = classNames.bind(styles)
 

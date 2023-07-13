@@ -56,7 +56,7 @@ const Tab = ({ link }) => {
     )
 }
 
-const finalRender = ({ link }) => {
+export default function FinalRender({ link }) {
     const context = useContext(Context);
     useLayoutEffect(() => {
         context.setCollapseSidebar(false);
@@ -90,6 +90,6 @@ const finalRender = ({ link }) => {
             </>
         )
     }
-}
 
-export default finalRender
+    return <></>
+}

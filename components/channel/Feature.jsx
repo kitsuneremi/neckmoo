@@ -1,18 +1,27 @@
+'use client'
 import classNames from "classnames/bind"
 import styles from '@/styles/channel/feature.module.scss'
 import Video from "./Video"
+import axios from "axios"
+import { useEffect, useState } from "react"
 
 const cx = classNames.bind(styles)
 
-async function findVideoByChannel(tagName) {
-    const baseUrl = process.env.VERCEL ? 'https://erinsaiyukii.com' : 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/video/bychannel?tagName=${tagName}`)
-    return res.json()
-}
 
-export default async function Feature({ tagName }) {
+export default function Feature({ tagName }) {
+    
+    const [listVideo, setListVideo] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            axios.get('/api/video/bychannel', {
+                params: {
+                    tagName: tagName
+                }
+            }).then(res => { setListVideo(res.data) })
+        }
 
-    const [listVideo] = await Promise.all([findVideoByChannel(tagName)])
+        fetchData()
+    }, [])
 
     return (
         <div className={cx('box')}>

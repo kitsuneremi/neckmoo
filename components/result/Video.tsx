@@ -39,7 +39,7 @@ type channelData = {
 }
 
 
-export default function ({ videoData }: { videoData: videoData }) {
+export default function Video({ videoData }: { videoData: videoData }) {
     const [src, setSrc] = useState<string | null>(null)
     const [channelData, setChannelData] = useState<channelData | null>(null)
     const [channelAvatar, setChannelAvatar] = useState<string | null>(null)

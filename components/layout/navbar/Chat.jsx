@@ -9,7 +9,7 @@ import styles from '@/styles/component/chatModule.module.scss'
 
 const cx = classNames.bind(styles)
 
-export default function ({ session }) {
+export default function Chat({ session }) {
     const [show, setShow] = useState(false)
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
@@ -22,7 +22,7 @@ export default function ({ session }) {
     const socketRef = useRef(null);
 
     useEffect(() => {
-        socketRef.current = io.connect('http://localhost:5000');
+        socketRef.current = io.connect('http://localhost:6000');
         return () => {
             socketRef.current.disconnect();
         };
@@ -112,8 +112,8 @@ export default function ({ session }) {
             const flex = msg.member.accountId == session.user.id
 
             return (
-                <div className={clsx({ [cx('end')]: flex }, { [cx('start')]: !flex })}>
-                    <div key={index} className={clsx({ [cx('msg-box-self')]: flex }, { [cx('msg-box-another')]: !flex })}>
+                <div key={index} className={clsx({ [cx('end')]: flex }, { [cx('start')]: !flex })}>
+                    <div className={clsx({ [cx('msg-box-self')]: flex }, { [cx('msg-box-another')]: !flex })}>
                         <p>{msg.content}</p>
                     </div>
                 </div>
