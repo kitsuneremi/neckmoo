@@ -82,6 +82,7 @@ export default function Register() {
         getNotification('empty password')
       } else {
         getNotification('processing...')
+        console.log(passwordRef.current.value)
         signIn("credentials", {
           username: userNameRef.current.value,
           password: passwordRef.current.value,

@@ -13,7 +13,6 @@ const cx = classNames.bind(styles)
 const baseUrl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000';
 
 type channelData = {
-
     id: number,
     name: string,
     tagName: string,

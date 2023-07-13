@@ -24,6 +24,7 @@ model Accounts {
   Subcribes     Subcribes[]
   createdAt     DateTime        @default(now()) // Thêm trường createdAt
   updatedAt     DateTime        @updatedAt // Thêm trường updatedAt
+  Member        Member[]
 }
 
 model Channels {
@@ -152,4 +153,37 @@ model Posts {
   description String
   createdAt   DateTime @default(now()) // Thêm trường createdAt
   updatedAt   DateTime @updatedAt // Thêm trường updatedAt
+}
+
+model Room {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Member  Member[]
+  Message Message[]
+}
+
+model Member {
+  id        Int       @id @default(autoincrement())
+  roomId    Int
+  accountId Int
+  name      String
+  Account   Accounts  @relation(fields: [accountId], references: [id])
+  Room      Room      @relation(fields: [roomId], references: [id])
+  Message   Message[]
+
+  @@index([accountId], map: "Member_accountId_fkey")
+  @@index([roomId], map: "Member_roomId_fkey")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  roomId    Int
+  memberId  Int
+  content   String
+  createdAt DateTime @default(now())
+  Member    Member   @relation(fields: [memberId], references: [id])
+  Room      Room     @relation(fields: [roomId], references: [id])
+
+  @@index([roomId, memberId], name: "Messages_roomId_memberId_unique")
+  @@index([memberId], map: "Messages_memberId_fkey")
 }

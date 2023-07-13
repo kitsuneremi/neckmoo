@@ -19,11 +19,11 @@ my major in college is java but i'm quite interested with javascript so i learn 
 this is my first personal project using reactjs(nextjs) clone from youtube
 
 #### future plan
--use hls to build video segments loading(done) and livestream component
+-use hls to build livestream component
 -build live chat component (50%)
 
 ### side server project
--- nodejs hls server
+-- nodejs mpeg-ts server
 https://github.com/kitsuneremi/neckmoo-video-server
 
 ### contact

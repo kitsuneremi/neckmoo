@@ -1,104 +1,19 @@
 "use client";
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useRef, useContext } from "react"
-import { signOut } from 'next-auth/react'
-import { LeftOutlined, RightOutlined, CloseOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
+import { LeftOutlined, RightOutlined, CloseOutlined, SearchOutlined, BellOutlined, UploadOutlined, CommentOutlined, UnorderedListOutlined, SettingOutlined } from '@ant-design/icons'
 import classNames from "classnames/bind"
 import styles from '@/styles/component/navbar.module.scss'
 import Link from "next/link"
 import Context from "@/GlobalVariableProvider/Context"
 import axios from "axios"
 import NavbarSearchModule from '@/components/layout/NavbarSearchModule'
+import ChatModule from '@/components/layout/navbar/Chat'
+import NotificationModule from '@/components/layout/navbar/Notification'
+import AccountModule from '@/components/layout/navbar/Account'
 
 const cx = classNames.bind(styles)
 
-const AccountMenu = ({ session }) => {
-    const [show, setShow] = useState(false)
-    const [channelData, setChannelData] = useState(null);
-    const buttonRef = useRef(null);
-    const menuRef = useRef(null);
-    const router = useRouter();
-
-
-    useEffect(() => {
-        const button = buttonRef.current;
-        const menu = menuRef.current;
-        if (button && menu) {
-            const buttonRect = button.getBoundingClientRect();
-            menu.style.left = `-220px`;
-            menu.style.top = `${buttonRect.bottom}px`;
-        }
-    }, [show]);
-
-    useEffect(() => {
-        if (session && session.user) {
-            axios.get(`/api/channel/getdatabyaccountid`, {
-                params: {
-                    accountId: session.user.id
-                }
-            }).then(res => { setChannelData(res.data) })
-        }
-    }, [session])
-
-    const handlePush = () => {
-        if (channelData != null) {
-            router.push(`/channel/${channelData.tagName}`)
-        } else {
-            router.push('/registerchannel')
-        }
-    }
-
-    return (
-        <div className={cx('account-menu-box')}>
-            <button ref={buttonRef} onClick={() => { setShow(!show) }} className={cx('button')}>
-                <img src={null} className={cx('avatar')} />
-            </button>
-            {show ? <ul className={cx('dropdown')} ref={menuRef}>
-                <li className={cx('infomation-box')}>
-                    <img src="" className={cx('avatar')} />
-                    <div className={cx('infomation')}>
-                        <p>@{session ? session.user.name : ''}</p>
-                        <p>{session ? session.user.email : ''}</p>
-                    </div>
-                </li>
-                <li className={cx('menu-box')} onClick={() => { handlePush() }}><p className={cx('title')}>Kênh của bạn</p></li>
-                <li className={cx('menu-box')} onClick={() => { router.push('/setting') }}><p className={cx('title')}>cài đặt</p></li>
-                <li className={cx('menu-box')}><p className={cx('title')}>chế độ sáng</p></li>
-                <li className={cx('menu-box')} onClick={() => { router.push('/termofuser') }}><p className={cx('title')}>điều khoản sử dụng</p></li>
-                <li className={cx('menu-box')} onClick={() => { router.push('/setting/account') }}><p className={cx('title')}>thông tin cá nhân</p></li>
-                <li className={cx('menu-box')}><p className={cx('title')} onClick={() => { signOut() }}>đăng xuất</p></li>
-            </ul> : <></>}
-        </div>
-    )
-}
-
-const NotificationMenu = () => {
-    const [show, setShow] = useState(false)
-    const buttonRef = useRef(null);
-    const menuRef = useRef(null);
-
-    useEffect(() => {
-        const button = buttonRef.current;
-        const menu = menuRef.current;
-        if (button && menu) {
-            const buttonRect = button.getBoundingClientRect();
-            menu.style.left = `-180px`;
-            menu.style.top = `${buttonRect.bottom}px`;
-        }
-    }, [show]);
-
-    return (
-        <div className={cx('notification-box')}>
-            <div ref={buttonRef} onClick={() => { setShow(!show) }}>
-                <BellOutlined />
-            </div>
-
-            {show ? <div className={cx('dropdown')} ref={menuRef}>
-                menu
-            </div> : <></>}
-        </div>
-    )
-}
 
 function Navbar() {
     const context = useContext(Context)
@@ -112,11 +27,9 @@ function Navbar() {
                 <button onClick={() => { router.push('/studio/upload') }} className={cx('button')}>
                     <UploadOutlined />
                 </button>
-                <button className={cx('button')}>
-                    <NotificationMenu />
-                </button>
-
-                <AccountMenu session={context.ses} />
+                <NotificationModule session={context.ses} />
+                <ChatModule session={context.ses} />
+                <AccountModule session={context.ses} />
 
             </div>
         } else {
@@ -144,7 +57,7 @@ function Navbar() {
                     <>
                         <div className={cx('navigation-box')}>
                             {context.collapseSidebar ? <RightOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} /> : <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar); }} className={cx('sidebar-button')} />}
-                            <div><p className={'logo'} onClick={() => { router.push('/') }}>Zootube</p></div>
+                            <div><p className={'logo'} onClick={() => { router.push('/') }}>Neckmoo</p></div>
                         </div>
                         {ActionIsLogged()}
                     </>
@@ -156,7 +69,7 @@ function Navbar() {
                 <>
                     <div className={cx('navigation-box')}>
                         {context.collapseSidebar ? <RightOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} /> : <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar); setResponsiveShowing(!responsiveShowing) }} className={cx('sidebar-button')} />}
-                        <div><p className={'logo'} onClick={() => { router.push('/') }}>Zootube</p></div>
+                        <div><p className={'logo'} onClick={() => { router.push('/') }}>Neckmoo</p></div>
                     </div>
                     <NavbarSearchModule />
                     {ActionIsLogged()}
