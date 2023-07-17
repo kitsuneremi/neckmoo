@@ -1,41 +1,41 @@
 'use client'
-import { useState, useLayoutEffect, useContext } from 'react'
+import { useState, useLayoutEffect, useEffect } from 'react'
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
-import Context from '@/GlobalVariableProvider/Context'
 import styles from '@/styles/setting/settingComponent.module.scss'
 import classNames from 'classnames/bind'
 import Link from 'next/link'
 import axios from 'axios'
 import Image from 'next/image'
 import SettingLayout from '@/components/layout/SettingLayout'
-
+import { useSession } from 'next-auth/react'
 import NotiBoard from '@/components/NotificationBoard'
+import { Session } from 'next-auth';
 
 const cx = classNames.bind(styles)
 
-type channelDataType = {
-    tagName?: string
-}
 
 export default function AccountSetting() {
-    const context: any = useContext(Context)
     const [img, setImg] = useState(null)
-    const [channelData, setChannelData] = useState<channelDataType>({})
+    const [channelData, setChannelData] = useState({})
     const router = useRouter()
-
-    useLayoutEffect(() => {
-
-        if (context.ses != null) {
+    const { data: session } = useSession()
+    const deviceType = {
+        isPc: useMediaQuery('(min-width: 1200px'),
+        isTablet: useMediaQuery('(min-width:700px) and (max-width: 1199px)'),
+        isMobile: useMediaQuery('(max-width: 699px)')
+    }
+    useEffect(() => {
+        if (session && session.user) {
             axios.get('/api/channel/getdatabyaccountid', {
                 params: {
-                    accountId: context.ses.user.id
+                    accountId: session.user.id
                 }
             }).then(res => {
                 setChannelData(res.data)
                 if (res.data == null) {
-
+                    setChannelData({})
                 } else {
                     const avatarRef = ref(storage, `/channel/avatars/${res.data.tagName}`)
                     getDownloadURL(avatarRef).then(url => setImg(url))
@@ -43,12 +43,12 @@ export default function AccountSetting() {
             })
 
         }
-    }, [context.ses])
+    }, [session])
     useLayoutEffect(() => {
-        if (context.deviceType == 2 || context.deviceType == 1) {
+        if (deviceType.isMobile || deviceType.isTablet) {
             router.push('/setting')
         }
-    }, [context.deviceType])
+    }, [deviceType])
 
     return (
         <SettingLayout>

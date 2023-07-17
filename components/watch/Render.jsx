@@ -1,6 +1,5 @@
 'use client'
-import { useState, useContext, useLayoutEffect, Suspense } from "react";
-import Context from "@/GlobalVariableProvider/Context";
+import { useState, useLayoutEffect, Suspense } from "react";
 import style from "@/styles/watch/watch.module.scss";
 import clsx from "clsx";
 import classNames from "classnames/bind";
@@ -10,6 +9,11 @@ import Comments from '@/components/watch/Comments'
 // import Player from '@/components/watch/Player'
 import List from "@/components/watch/List";
 import dynamic from "next/dynamic";
+import { useAppSelector } from "@/redux/storage";
+import { useDispatch } from 'react-redux'
+import { close } from "@/redux/features/sidebar-slice";
+import { useMediaQuery } from 'usehooks-ts'
+
 
 const cx = classNames.bind(style);
 const Player = dynamic(() => import('@/components/watch/Player'))
@@ -57,12 +61,20 @@ const Tab = ({ link }) => {
 }
 
 export default function FinalRender({ link }) {
-    const context = useContext(Context);
+    const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
+    const dispatch = useDispatch()
+
+    const deviceType = {
+        isPc: useMediaQuery('(min-width: 1200px'),
+        isTablet: useMediaQuery('(min-width:700px) and (max-width: 1199px)'),
+        isMobile: useMediaQuery('(max-width: 699px)')
+    }
+
     useLayoutEffect(() => {
-        context.setCollapseSidebar(false);
+        dispatch(close())
     }, []);
 
-    if (context.deviceType === 0) {
+    if (deviceType.isPc) {
         return (
             <>
                 <div className={cx("left-housing")}>
@@ -78,7 +90,7 @@ export default function FinalRender({ link }) {
                 </div>
             </>
         )
-    } else if (context.deviceType === 1 || context.deviceType === 2) {
+    } else if (deviceType.isTablet || deviceType.isMobile) {
         return (
             <>
                 <Player link={link} />

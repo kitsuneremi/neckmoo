@@ -1,5 +1,4 @@
 'use client'
-import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 //component
 import Sidebar from "@/components/layout/Sidebar";
@@ -10,8 +9,8 @@ import pagestyles from '@/styles/setting/setting.module.scss'
 import layoutstyles from "@/styles/layout/defaultLayout.module.scss";
 //?
 import Link from "next/link";
-import Context from '@/GlobalVariableProvider/Context'
-
+import { useAppSelector } from '@/redux/storage';
+import { useMediaQuery } from 'usehooks-ts'
 
 
 const settingTabClassName = classNames.bind(pagestyles)
@@ -46,12 +45,17 @@ const props = [
 ]
 
 export default function SettingLayout({ children }) {
-    const context = useContext(Context)
+    const deviceType = {
+        isPc: useMediaQuery('(min-width: 1200px'),
+        isTablet: useMediaQuery('(min-width:700px) and (max-width: 1199px)'),
+        isMobile: useMediaQuery('(max-width: 699px)')
+    }
+    const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
 
 
     // ý tưởng ở đây là giao diện mobile sẽ cho hiển thị sidebar bình thường để có thể redirect sang trang home các thứ
     const pclayout = () => {
-        if (context.deviceType == 0) {
+        if (deviceType.isPc == 0) {
             return (
                 <div>
                     {props.map((prop, index) => {
@@ -72,8 +76,8 @@ export default function SettingLayout({ children }) {
         <div className={layoutCx("box")}>
             <aside
                 className={clsx(
-                    { [layoutCx("sidebar-hide")]: context.collapseSidebar },
-                    { [layoutCx("sidebar-expand")]: !context.collapseSidebar }
+                    { [layoutCx("sidebar-hide")]: !sidebar },
+                    { [layoutCx("sidebar-expand")]: sidebar }
                 )}
             >
                 <Sidebar />

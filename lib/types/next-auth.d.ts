@@ -1,8 +1,8 @@
 
 
-declare module 'next-auth'{
-    interface DefaultSession{
-        user:{
+declare module 'next-auth' {
+    interface DefaultSession {
+        user: {
             id: number;
             name: string;
             email: string;
@@ -11,8 +11,18 @@ declare module 'next-auth'{
         }
     }
 
-    interface session{
-        user:{
+    interface session {
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            accessToken: string;
+            isAdmin: Boolean;
+        }
+    }
+
+    interface Session {
+        user: {
             id: number;
             name: string;
             email: string;
@@ -21,3 +31,15 @@ declare module 'next-auth'{
         }
     }
 }
+
+// declare module 'next-auth/react' {
+//     interface DefaultSession {
+//         user: {
+//             id: number;
+//             name: string;
+//             email: string;
+//             accessToken: string;
+//             isAdmin: Boolean;
+//         }
+//     }
+// }

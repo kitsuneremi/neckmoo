@@ -4,6 +4,7 @@ import MainLayout from "@/layout/mainLayout";
 import MainSidebarLayout from "@/layout/mainSidebarLayout";
 import prisma from "@/lib/prisma";
 import HomeVideoItem from '@/components/home/VideoItem'
+import { Suspense } from "react";
 const cx = classNames.bind(styles);
 
 export const metadata = {
@@ -48,15 +49,17 @@ export default async function Home() {
     if (ListVideo.length != 0)
       return ListVideo.map((video, index) => {
         return (
-          <HomeVideoItem
-            key={index}
-            link={video.link}
-            status={video.status}
-            view={video.view}
-            title={video.title}
-            tagName={video.tagName}
-            channelName={video.name}
-          ></HomeVideoItem>
+          <Suspense fallback={<div>loading...</div>} key={index}>
+            <HomeVideoItem
+              key={index}
+              link={video.link}
+              status={video.status}
+              view={video.view}
+              title={video.title}
+              tagName={video.tagName}
+              channelName={video.name}
+            ></HomeVideoItem>
+          </Suspense>
         );
       });
   };

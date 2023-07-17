@@ -1,14 +1,14 @@
 "use client";
 import { storage } from '@/lib/firebase'
 import { ref, uploadBytes, } from 'firebase/storage'
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/studio/upload.module.scss";
 import classNames from "classnames/bind";
 import axios from "axios";
-import Context from "@/GlobalVariableProvider/Context";
 import clsx from 'clsx'
 import NotiBoard from "@/components/NotificationBoard";
+import { useSession } from 'next-auth/react'
 
 
 function makeid() {
@@ -30,7 +30,6 @@ const getFileExt = (fileName) => {
 };
 
 export default function UploadPage() {
-  const context = useContext(Context)
   const cx = classNames.bind(styles);
   const router = useRouter();
   const [videoFile, setVideoFile] = useState(null);
@@ -42,6 +41,7 @@ export default function UploadPage() {
   const [des, setDes] = useState("");
   const [channelData, setChannelData] = useState({});
   const [agreeTermsOfService, setAgreeTermsOfService] = useState(false)
+  const { data: session } = useSession()
 
   //setup cho phần thông báo
   const [showNoti, setShowNoti] = useState(false)
@@ -58,17 +58,16 @@ export default function UploadPage() {
   };
 
   useLayoutEffect(() => {
-    if (context.ses != null && context.ses != undefined) {
-      axios.get(
-        `/api/channel/getdatabyaccountid`, {
+    if (session != null && session != undefined) {
+      axios.get(`/api/channel/getdatabyaccountid`, {
         params: {
-          accountId: context.ses.user.id
+          accountId: session.user.id
         }
       }
       ).then(res => { setChannelData(res.data) })
     }
 
-  }, [context.ses])
+  }, [session])
 
   useEffect(() => {
     if (showNoti) {

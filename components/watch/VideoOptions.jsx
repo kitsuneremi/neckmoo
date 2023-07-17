@@ -1,22 +1,22 @@
 'use client'
-import { useLayoutEffect, useContext, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { LikeFilled, DislikeFilled, ShareAltOutlined, DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import classNames from "classnames/bind";
 import style from "@/styles/watch/watch.module.scss";
-import Context from '@/GlobalVariableProvider/Context'
 import axios from "axios";
+import { useSession } from 'next-auth/react'
 
 
 const cx = classNames.bind(style);
 export default function VideoOption({ link }) {
-    const context = useContext(Context)
+    const { data: session } = useSession()
     const [like, setLike] = useState(false);
     const [dislike, setDislike] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [videoInfo, setVideoInfo] = useState({});
 
     useLayoutEffect(() => {
-        if (context.ses) {
+        if (session) {
             if (link) {
                 const x = async () => {
                     await axios.get('/api/video/findbylink', {
@@ -27,7 +27,7 @@ export default function VideoOption({ link }) {
                         setVideoInfo(res.data)
                         axios.get('/api/like/find', {
                             params: {
-                                accountId: context.ses.user.id,
+                                accountId: session.user.id,
                                 targetId: res.data.id
                             }
                         }).then(val => {
@@ -52,22 +52,22 @@ export default function VideoOption({ link }) {
                 x();
             }
         }
-    }, [context.ses])
+    }, [session])
 
     const handleLike = () => {
-        if (context.ses) {
+        if (session) {
             if (like) {
                 setLike(false);
                 setDislike(false);
                 axios.post('/api/like/delete', {
-                    accountId: context.ses.user.id,
+                    accountId: session.user.id,
                     targetId: videoInfo.id,
                 }).then(res => { setLikeCount(res.data.count) })
             } else {
                 setLike(true);
                 setDislike(false);
                 axios.post('/api/like/add', {
-                    accountId: context.ses.user.id,
+                    accountId: session.user.id,
                     targetId: videoInfo.id,
                     type: 0
                 }).then(res => { setLikeCount(res.data.count) })
@@ -76,17 +76,17 @@ export default function VideoOption({ link }) {
     };
     const handleDislike = () => {
 
-        if (context.ses) {
+        if (session) {
             setDislike(!dislike);
             setLike(false);
             if (dislike) {
                 axios.post('/api/like/delete', {
-                    accountId: context.ses.user.id,
+                    accountId: session.user.id,
                     targetId: videoInfo.id,
                 }).then(res => { setLikeCount(res.data.count) })
             } else {
                 axios.post('/api/like/add', {
-                    accountId: context.ses.user.id,
+                    accountId: session.user.id,
                     targetId: videoInfo.id,
                     type: 1
                 }).then(res => { setLikeCount(res.data.count) })

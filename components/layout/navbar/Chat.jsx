@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useContext } from "react"
+import { useState, useEffect, useRef } from "react"
 import { CommentOutlined, UnorderedListOutlined, SettingOutlined } from '@ant-design/icons'
 import axios from "axios"
 import io from 'socket.io-client'
@@ -20,9 +20,9 @@ export default function Chat({ session }) {
     const [list, setList] = useState([])
     const [anyChange, setChange] = useState(false)
     const socketRef = useRef(null);
-
     useEffect(() => {
         socketRef.current = io.connect('http://localhost:6075');
+        // socketRef.current = io.connect('https://socket.erinasaiyukii.com');
         return () => {
             socketRef.current.disconnect();
         };
@@ -168,7 +168,7 @@ export default function Chat({ session }) {
                                 </div>
                             </div>
                             <div className={cx('bottom')}>
-                                <textarea className={cx('input')} value={msg} onChange={e => handleUpdateInput(e)} />
+                                <input className={cx('input')} value={msg} onChange={e => handleUpdateInput(e)} />
                                 <button className={cx('send-button')} onClick={handleSend}>send</button>
                             </div>
                         </div>

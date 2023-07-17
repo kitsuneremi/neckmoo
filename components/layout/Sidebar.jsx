@@ -1,22 +1,28 @@
 "use client"
 import classNames from "classnames/bind"
 import styles from '@/styles/component/sidebar.module.scss'
-import { useState, useContext, useEffect, useLayoutEffect } from "react"
+import { useState, useEffect, useLayoutEffect, Suspense } from "react"
 import { HomeOutlined, ClockCircleOutlined, CoffeeOutlined, HistoryOutlined, BookOutlined } from '@ant-design/icons'
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import clsx from "clsx"
-import Context from "@/GlobalVariableProvider/Context"
 import axios from "axios"
+import { useSession } from 'next-auth/react'
+import { AppDispatch, useAppSelector } from '@/redux/storage'
+import { useDispatch } from 'react-redux'
 
 const cx = classNames.bind(styles)
+
+
+
 const Single = (prop) => {
-    const router = useRouter()
     return (
-        <div onClick={() => { router.push(prop.item.href) }} className={clsx({ [cx('parent-box')]: prop.tab !== prop.index }, { [cx('selected-parent-box')]: prop.tab === prop.index })}>
-            {prop.item.icon}
-            <div className={cx('title')}>{prop.full ? prop.item.name : ""}</div>
-        </div>
+        <Link href={prop.item.href}>
+            <div className={clsx({ [cx('parent-box')]: prop.tab !== prop.index }, { [cx('selected-parent-box')]: prop.tab === prop.index })}>
+                {prop.item.icon}
+                <div className={cx('title')}>{prop.full ? prop.item.name : ""}</div>
+            </div>
+        </Link>
     )
 }
 
@@ -40,19 +46,32 @@ const Multiple = (prop) => {
 }
 
 export default function Sidebar() {
-    const [selectedTab, setSelectedTab] = useState(-1)
-    const [listSub, setListSub] = useState([])
-    const context = useContext(Context)
+    return (
+        <div className={cx('box')}>
+            <Render />
+        </div>
+    )
+}
 
-    useLayoutEffect(() => {
-        if (context.ses) {
+
+
+const Render = () => {
+    const [selectedTab, setSelectedTab] = useState(-1)
+    const [listSub, setListSub] = useState([]);
+
+    const { data: session } = useSession()
+
+    const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
+
+    useEffect(() => {
+        if (session) {
             axios.get('/api/subcribe/findmany', {
                 params: {
-                    accountId: context.ses.user.id
+                    accountId: session.user.id
                 }
             }).then(res => setListSub(res.data))
         }
-    }, [context.ses])
+    }, [])
     const props = [
         { name: 'Trang chủ', icon: <HomeOutlined className={cx('icon')} />, href: '/' },
         { name: 'Shorts', icon: <ClockCircleOutlined className={cx('icon')} />, href: '/shorts' },
@@ -67,18 +86,11 @@ export default function Sidebar() {
         { name: 'Thư viện', icon: <BookOutlined className={cx('icon')} />, href: '/libary' }
     ]
 
-    const render = () => {
-        return props.map((prop, index) => {
-            if (prop.child) {
-                return <Multiple item={prop} key={index} index={index} full={!context.collapseSidebar} tab={selectedTab} onClick={() => { setSelectedTab(index) }}></Multiple>
-            } else {
-                return <Single item={prop} key={index} index={index} full={!context.collapseSidebar} tab={selectedTab} onClick={() => { setSelectedTab(index) }}></Single>
-            }
-        })
-    }
-    return (
-        <div className={cx('box')}>
-            {render()}
-        </div>
-    )
+    return props.map((prop, index) => {
+        if (prop.child) {
+            return <Suspense fallback={<div>loading...</div>} key={index}><Multiple item={prop} key={index} index={index} full={sidebar} tab={selectedTab} onClick={() => { setSelectedTab(index) }}></Multiple></Suspense>
+        } else {
+            return <Suspense fallback={<div>loading...</div>} key={index}><Single item={prop} key={index} index={index} full={sidebar} tab={selectedTab} onClick={() => { setSelectedTab(index) }}></Single></Suspense>
+        }
+    })
 }

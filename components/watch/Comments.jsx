@@ -1,20 +1,20 @@
 'use client'
-import { useContext, useState, useEffect } from "react";
-import Context from '@/GlobalVariableProvider/Context'
+import { useState, useEffect } from "react";
 import { RightOutlined, FilterOutlined } from "@ant-design/icons";
 import classNames from "classnames/bind";
 import style from "@/styles/watch/watch.module.scss";
 import axios from "axios";
 import VideoComment from './VideoComment'
+import { useSession } from 'next-auth/react'
 
 
 const cx = classNames.bind(style);
 export default function CommentComponents({ link }) {
-    const context = useContext(Context)
     const [videoInfo, setData] = useState({});
     const [value, setValue] = useState("");
     const [change, setChange] = useState(true);
     const [listComment, setListComment] = useState([]);
+    const { data: session } = useSession()
 
     useEffect(() => {
         axios.get('/api/video/findbylink', {
@@ -53,9 +53,9 @@ export default function CommentComponents({ link }) {
         }
     };
     const handleCreateComment = () => {
-        if (context.ses) {
+        if (session) {
             axios.post("/api/comment/create", {
-                accountId: context.ses.user.id,
+                accountId: session.user.id,
                 videoId: videoInfo.id,
                 referenceId: null,
                 content: value,

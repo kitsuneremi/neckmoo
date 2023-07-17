@@ -3,15 +3,17 @@ import classNames from "classnames/bind"
 import styles from '@/styles/navbar.module.scss'
 import Link from "next/link"
 import { Router } from "next/router"
-import { useState, useEffect, useRef, useContext } from "react"
+import { useState, useEffect, useRef } from "react"
 import { IeOutlined, LeftOutlined, CloseOutlined, LoadingOutlined, SearchOutlined, BellOutlined, UploadOutlined } from '@ant-design/icons'
-import Context from "@/GlobalVariableProvider/Context"
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useDispatch } from "react-redux"
+import { AppDispatch, useAppSelector } from '@/redux/storage';
+import { close, reverse, open } from '@/redux/features/sidebar-slice';
 const cx = classNames.bind(styles)
 
 
-const AccountMenu = ({session}) => {
+const AccountMenu = ({ session }) => {
     const [show, setShow] = useState(false)
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
@@ -78,12 +80,14 @@ const NotificationMenu = () => {
 
 
 function Navbar() {
-    const context = useContext(Context)
     const [showClear, setShowClear] = useState(false)
     const [showLoading, setShowLoading] = useState(false)
     const [showSearchResult, setShowSearchResult] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const [searchData, setSearchData] = useState([])
+
+    const dispatch = useDispatch();
+    const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
 
     const searchDropdownRef = useRef(null)
     const searchInputRef = useRef(null)
@@ -111,7 +115,7 @@ function Navbar() {
         <nav className={'navbar'}>
             <div className={cx('wrapper')}>
                 <div className={cx('navigation-box')}>
-                    <LeftOutlined onClick={() => { context.setCollapseSidebar(!context.collapseSidebar) }} className={cx('sidebar-button')} />
+                    <LeftOutlined onClick={() => { dispatch(reverse()) }} className={cx('sidebar-button')} />
                     <Link href={'/'}><IeOutlined className={'logo'} /></Link>
                 </div>
                 <div className={cx('search-box')}>

@@ -1,32 +1,37 @@
 "use client";
-import { useEffect, useContext } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import styles from "@/styles/home/home.module.scss";
 import classNames from "classnames/bind";
-import Context from "@/GlobalVariableProvider/Context";
 import clsx from "clsx";
+import { AppDispatch, useAppSelector } from '@/redux/storage'
+import { useMediaQuery } from 'usehooks-ts'
+
 const cx = classNames.bind(styles);
 export default ({ children }) => {
-  const context = useContext(Context);
-
+  const deviceType = {
+    isPc: useMediaQuery('(min-width: 1200px'),
+    isTablet: useMediaQuery('(min-width:700px) and (max-width: 1199px)'),
+    isMobile: useMediaQuery('(max-width: 699px)')
+  }
+  const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
   return (
     <div className={cx("box")}>
       <aside
         className={clsx(
-          { [cx("sidebar-collapse")]: context.collapseSidebar && context.deviceType == 0 },
-          { [cx("sidebar-expand")]: !context.collapseSidebar && (context.deviceType == 0 || context.deviceType == 1) },
-          { [cx("sidebar-hide")]: context.collapseSidebar && (context.deviceType == 1 || context.deviceType == 2) },
-          { [cx("sidebar-override")]: !context.collapseSidebar && context.deviceType == 2 }
+          { [cx("sidebar-collapse")]: !sidebar && deviceType.isPc },
+          { [cx("sidebar-expand")]: sidebar && (deviceType.isPc || deviceType.isTablet) },
+          { [cx("sidebar-hide")]: !sidebar && (deviceType.isTablet || deviceType.isMobile) },
+          { [cx("sidebar-override")]: sidebar && deviceType.isMobile }
         )}
       >
         <Sidebar />
       </aside>
       <aside
         className={clsx(
-          { [cx("main-content-expand")]: context.collapseSidebar && context.deviceType == 0 },
-          { [cx("main-content-collapse")]: !context.collapseSidebar && (context.deviceType == 0 || context.deviceType == 1) },
-          { [cx("main-content-full")]: context.collapseSidebar && context.deviceType == 1 },
-          { [cx("main-content-full")]: context.deviceType == 2 },
+          { [cx("main-content-expand")]: !sidebar && deviceType.isPc },
+          { [cx("main-content-collapse")]: sidebar && (deviceType.isPc || deviceType.isTablet) },
+          { [cx("main-content-full")]: !sidebar && deviceType.isTablet },
+          { [cx("main-content-full")]: deviceType.isMobile },
         )}
       >
         {children}

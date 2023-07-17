@@ -54,6 +54,9 @@ export async function GET(req: Request) {
         const messages = await prisma.message.findMany({
             where: {
                 roomId: Number.parseInt(params.room)
+            },
+            orderBy: {
+                createdAt: 'asc'
             }
         });
 

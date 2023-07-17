@@ -1,25 +1,25 @@
 'use client'
-import { useContext, useState, useEffect } from "react";
-import Context from '@/GlobalVariableProvider/Context'
+import { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import watchstyle from "@/styles/watch/watch.module.scss";
 import channelstyle from "@/styles/channel/channel.module.scss";
 import axios from "axios";
+import { useSession } from 'next-auth/react'
 
 
 
 export default function SubcribeButton({ link, channelData }) {
     let cx;
     channelData == null ? cx = classNames.bind(watchstyle) : cx = classNames.bind(channelstyle)
-    const context = useContext(Context)
     const [subcribe, setSubcribe] = useState(false);
+    const session = useSession()
     useEffect(() => {
-        if (context.ses) {
-            if (context.ses.user) {
+        if (session) {
+            if (session.user) {
                 if (channelData != null) {
                     axios.get('/api/subcribe/issubcribed', {
                         params: {
-                            accountId: context.ses.user.id,
+                            accountId: session.user.id,
                             targetChannel: channelData.id
                         }
                     }).then(val => {
@@ -33,7 +33,7 @@ export default function SubcribeButton({ link, channelData }) {
                     }).then(res => {
                         axios.get('/api/subcribe/issubcribed', {
                             params: {
-                                accountId: context.ses.user.id,
+                                accountId: session.user.id,
                                 targetChannel: res.data.id
                             }
                         }).then(val => {
@@ -47,17 +47,17 @@ export default function SubcribeButton({ link, channelData }) {
 
 
     const handleSubcribe = () => {
-        if (context.ses) {
-            if (context.ses.user) {
+        if (session) {
+            if (session.user) {
                 if (subcribe) {
                     setSubcribe(false);
                     if (channelData != null) {
                         axios.post('/api/subcribe/delete', {
-                            accountId: context.ses.user.id,
+                            accountId: session.user.id,
                             targetChannel: channelData.id
                         }, {
                             headers: {
-                                'accessToken': context.ses.accessToken
+                                'accessToken': session.accessToken
                             }
                         })
                     } else {
@@ -67,11 +67,11 @@ export default function SubcribeButton({ link, channelData }) {
                             }
                         }).then(res => {
                             axios.post('/api/subcribe/delete', {
-                                accountId: context.ses.user.id,
+                                accountId: session.user.id,
                                 targetChannel: res.data.id
                             }, {
                                 headers: {
-                                    'accessToken': context.ses.accessToken
+                                    'accessToken': session.accessToken
                                 }
                             })
                         })
@@ -80,11 +80,11 @@ export default function SubcribeButton({ link, channelData }) {
                     setSubcribe(true);
                     if (channelData != null) {
                         axios.post('/api/subcribe/add', {
-                            accountId: context.ses.user.id,
+                            accountId: session.user.id,
                             targetChannel: channelData.id
                         }, {
                             headers: {
-                                'accessToken': context.ses.accessToken
+                                'accessToken': session.accessToken
                             }
                         })
                     } else {
@@ -94,11 +94,11 @@ export default function SubcribeButton({ link, channelData }) {
                             }
                         }).then(res => {
                             axios.post('/api/subcribe/add', {
-                                accountId: context.ses.user.id,
+                                accountId: session.user.id,
                                 targetChannel: res.data.id
                             }, {
                                 headers: {
-                                    'accessToken': context.ses.accessToken
+                                    'accessToken': session.accessToken
                                 }
                             })
                         })

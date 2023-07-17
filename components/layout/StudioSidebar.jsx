@@ -1,8 +1,7 @@
 'use client'
-import { useContext } from "react"
 import classNames from "classnames/bind"
 import styles from '@/styles/studio/studioSidebar.module.scss'
-import Context from "@/GlobalVariableProvider/Context"
+import {useAppSelector} from '@/redux/storage'
 const cx = classNames.bind(styles)
 
 const props = [
@@ -47,8 +46,7 @@ const Item = ({ item, ec }) => {
 
 
 export default function StudioSidebar() {
-    const context = useContext(Context)
-
+    const sidebar = useAppSelector(state => state.sidebarReducer.value.sidebar)
     return (
         <div className={cx('over-box')}>
             <div className={cx('top-housing')}>
@@ -58,13 +56,13 @@ export default function StudioSidebar() {
                 </div>
                 <div className={cx('navigation-box')}>
                     {props.map((item, index) => {
-                        return <Item item={item} key={index} ec={!context.collapseSidebar}></Item>
+                        return <Item item={item} key={index} ec={sidebar}></Item>
                     })}
                 </div>
             </div>
             <div className={cx('action-box')}>
                 {actionProps.map((item, index) => {
-                    return <Item item={item} key={index} ec={!context.collapseSidebar}></Item>
+                    return <Item item={item} key={index} ec={sidebar}></Item>
                 })}
             </div>
         </div>

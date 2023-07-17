@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import axios from "axios";
@@ -7,7 +7,6 @@ import style from "@/styles/register/register.module.scss";
 import classNames from "classnames/bind";
 import clsx from "clsx";
 import MainLayout from "@/layout/mainLayout";
-import Context from "@/GlobalVariableProvider/Context";
 import NotiBoard from "@/components/NotificationBoard";
 
 
@@ -25,9 +24,7 @@ export default function Register() {
   const [title, setTitle] = useState<string>("");
   const { data: session } = useSession();
 
-  const context: any = useContext(Context);
-
-  const getNotification = (title) => {
+  const getNotification = (title: string) => {
     setAnyNoti(true);
     setTitle(title)
     setTimeout(() => {
@@ -69,7 +66,7 @@ export default function Register() {
               password: passwordRef.current.value,
               redirect: true,
               callbackUrl: "/",
-            }).then(() => { context.setSes(session) })
+            })
           } else {
 
           }
@@ -82,13 +79,12 @@ export default function Register() {
         getNotification('empty password')
       } else {
         getNotification('processing...')
-        console.log(passwordRef.current.value)
         signIn("credentials", {
           username: userNameRef.current.value,
           password: passwordRef.current.value,
           redirect: true,
           callbackUrl: "/",
-        }).then(() => { context.setSes(session) })
+        })
       }
     }
   };
