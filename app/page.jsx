@@ -3,40 +3,24 @@ import classNames from "classnames/bind";
 import MainLayout from "@/layout/mainLayout";
 import MainSidebarLayout from "@/layout/mainSidebarLayout";
 import prisma from "@/lib/prisma";
-import HomeVideoItem from '@/components/home/VideoItem'
+// import HomeVideoItem from '@/components/home/VideoItem'
 import { Suspense } from "react";
+import { baseURL } from "@/function/function";
+import dynamic from "next/dynamic"
+
+const HomeVideoItem = dynamic(() => import('@/components/home/VideoItem'))
 const cx = classNames.bind(styles);
 
 export const metadata = {
-  title: 'Home',
+  title: 'Trang chủ - neckmoo',
 }
 
 const GetAllVideo = async function () {
-  const video = await prisma.videos.findMany();
-  const wait = new Promise((resolve, reject) => {
-    const list = [];
-    const promises = video.map(async (item) => {
-      const channelData = await prisma.channels.findFirst({
-        where: {
-          id: item.channelId
-        }
-      });
-      const middle = { ...item, tagName: channelData.tagName, name: channelData.name }
-      list.push(middle);
-    });
-    Promise.all(promises)
-      .then(() => {
-        resolve(list);
-      })
-      .catch((error) => {
-        reject(error);
-      });
+  const list = await fetch(`${baseURL}/api/video/all`, {
+    method: 'GET',
   })
-  return wait.then((res) => {
-    return res;
-  }).catch((error) => {
-    return error;
-  });
+
+  return await list.json()
 }
 
 export default async function Home() {
@@ -47,17 +31,13 @@ export default async function Home() {
   //hàm render trả ra các thẻ video nằm trên trang chủ
   const render = () => {
     if (ListVideo.length != 0)
-      return ListVideo.map((video, index) => {
+      return ListVideo.map((v, index) => {
         return (
           <Suspense fallback={<div>loading...</div>} key={index}>
             <HomeVideoItem
               key={index}
-              link={video.link}
-              status={video.status}
-              view={video.view}
-              title={video.title}
-              tagName={video.tagName}
-              channelName={video.name}
+              videoData={v.videoData}
+              channelData={v.channelData}
             ></HomeVideoItem>
           </Suspense>
         );
