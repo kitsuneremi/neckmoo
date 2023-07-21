@@ -10,7 +10,8 @@ export async function GET() {
                     id: item.channelId
                 }
             });
-            const middle = { ...item, tagName: channelData.tagName, name: channelData.name }
+
+            const middle = { videoData: { ...item }, channelData: channelData }
             list.push(middle);
         });
         Promise.all(promises)
