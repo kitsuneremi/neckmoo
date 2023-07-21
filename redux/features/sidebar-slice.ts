@@ -10,7 +10,7 @@ export const sidebar = createSlice({
     name: 'sidebar',
     initialState: {
         value: {
-            sidebar: false
+            sidebar: true
         }
     } as init,
     reducers: {

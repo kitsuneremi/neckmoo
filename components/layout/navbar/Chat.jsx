@@ -1,25 +1,30 @@
 "use client";
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, use } from "react"
 import { CommentOutlined, UnorderedListOutlined, SettingOutlined } from '@ant-design/icons'
 import axios from "axios"
 import io from 'socket.io-client'
 import clsx from 'clsx';
 import classNames from "classnames/bind";
 import styles from '@/styles/component/chatModule.module.scss'
+import { useOnClickOutside } from 'usehooks-ts'
 
 const cx = classNames.bind(styles)
 
 export default function Chat({ session }) {
     const [show, setShow] = useState(false)
-    const buttonRef = useRef(null);
-    const menuRef = useRef(null);
     const [open, setOpen] = useState(true);
     const [msg, setMsg] = useState("");
     const [room, setRoom] = useState(-1)
     const [listMsg, setListMsg] = useState([])
     const [list, setList] = useState([])
     const [anyChange, setChange] = useState(false)
+
+    const buttonRef = useRef(null);
+    const menuRef = useRef(null);
     const socketRef = useRef(null);
+
+    useOnClickOutside(menuRef, () => { if (show) { setShow(false) } }, 'mouseup')
+
     useEffect(() => {
         socketRef.current = io.connect('http://localhost:6075');
         // socketRef.current = io.connect('https://socket.erinasaiyukii.com');
@@ -34,7 +39,7 @@ export default function Chat({ session }) {
 
     useEffect(() => {
         if (socketRef.current !== undefined && socketRef.current != null) {
-            socketRef.current.on('rcvmsg', data => {
+            socketRef.current.on('rcvmsg', () => {
                 setChange(true)
             })
         }
@@ -50,7 +55,6 @@ export default function Chat({ session }) {
             }).then(res => { setListMsg(res.data); setChange(false) })
         }
     }, [anyChange])
-
 
 
     useEffect(() => {

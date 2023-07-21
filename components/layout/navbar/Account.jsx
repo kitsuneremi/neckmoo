@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react'
 import axios from "axios"
 import styles from '@/styles/component/accountModule.module.scss'
 import classNames from "classnames/bind";
+import { useOnClickOutside } from 'usehooks-ts'
 
 const cx = classNames.bind(styles)
 
@@ -14,6 +15,8 @@ export default function AccountModule({ session }) {
     const buttonRef = useRef(null);
     const menuRef = useRef(null);
     const router = useRouter();
+
+    useOnClickOutside(menuRef, () => { setShow(false) }, 'mouseup')
 
 
     useEffect(() => {

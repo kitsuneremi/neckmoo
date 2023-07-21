@@ -1,6 +1,6 @@
 "use client";
 import MainLayout from "@/layout/mainLayout";
-import ExpandeCollapseLayout from '@/layout/expandeCollapseOnly';
+import ExpandeCollapseLayout from '@/layout/expandCollapseOnly';
 import { useDispatch } from 'react-redux'
 import { close, reverse, open } from '@/redux/features/sidebar-slice';
 export default function ChannelLayout({ children }) {

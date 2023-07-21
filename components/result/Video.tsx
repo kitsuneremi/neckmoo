@@ -2,15 +2,15 @@
 import styles from '@/styles/result/result.module.scss'
 import classNames from 'classnames/bind'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/firebase'
 import axios from 'axios'
+import { useIsomorphicLayoutEffect } from 'usehooks-ts'
+import { useWindowSize } from 'usehooks-ts'
 
 
 const cx = classNames.bind(styles)
-const baseUrl = process.env.VERCEL ? 'https://erinasaiyukii.com' : 'http://localhost:3000';
-
 type videoData = {
     id: number,
     title: string,
@@ -44,7 +44,7 @@ export default function Video({ videoData }: { videoData: videoData }) {
     const [channelData, setChannelData] = useState<channelData | null>(null)
     const [channelAvatar, setChannelAvatar] = useState<string | null>(null)
 
-    useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         const fetchData = async () => {
             axios.get('/api/channel/find', {
                 params: {
@@ -59,22 +59,18 @@ export default function Video({ videoData }: { videoData: videoData }) {
 
     return (
         <div className={cx('video-box')}>
+            {src && <Image src={src} className={cx('thumbnail')} alt='thumbnail' width={360} height={202} priority={true} />}
             <div>
-                {src && <Image src={src} alt='thumbnail' width={360} height={202} priority={true} />}
-            </div>
-            <div>
-                <h2>{videoData.title}</h2>
+                <p className={cx('title')}>{videoData.title}</p>
                 <div>
-                    <p>{videoData.view} lượt xem</p>
-                    <p>{formatDateTime(videoData.createdAt)}</p>
+                    <p className={cx('infomation')}>{videoData.view} lượt xem</p>
+                    <p className={cx('infomation')}>{formatDateTime(videoData.createdAt)}</p>
                 </div>
                 <div>
                     {channelAvatar && <Image src={channelAvatar} width={20} height={20} loading='lazy' alt='avatar' />}
-                    {channelData == null ? <p>loading...</p> : <p>{channelData.name}</p>}
+                    {channelData == null ? <p>loading...</p> : <p className={cx('channel-name')}>{channelData.name}</p>}
                 </div>
-                <p>
-                    {videoData.des}
-                </p>
+                <p className={cx('des')}>{videoData.des}</p>
             </div>
         </div>
     )

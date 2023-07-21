@@ -18,10 +18,6 @@ import { useMediaQuery } from 'usehooks-ts'
 
 const cx = classNames.bind(styles)
 
-
-
-
-
 function Navbar() {
     const deviceType = {
         isPc: useMediaQuery('(min-width: 1200px'),
@@ -50,7 +46,6 @@ function Navbar() {
                     <NotificationModule session={session} />
                     <ChatModule session={session} />
                     <Suspense fallback={<div>loading...</div>}><AccountModule session={session} /></Suspense>
-                    {console.log(deviceType)}
                 </div>
             } else {
                 return <button className={cx('login-button')} onClick={() => { router.push('/register') }}>đăng nhập</button>

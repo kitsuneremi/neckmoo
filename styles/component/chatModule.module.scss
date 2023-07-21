@@ -17,7 +17,8 @@ $left-width: 144px;
 
         .dropdown {
             position: absolute;
-            z-index: 100;
+            z-index: 200;
+            background-color: #ffffff;
             border-radius: 5px;
             user-select: none;
             width: 400px;
@@ -174,12 +175,12 @@ $left-width: 144px;
                             resize: none;
                         }
 
-                        .input::-webkit-resizer{
+                        .input::-webkit-resizer {
                             display: none;
                             width: 0;
                             height: 0;
                         }
-                        
+
 
                         .input::-webkit-scrollbar {
                             width: 2px;

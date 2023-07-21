@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import classNames from "classnames/bind"
 import styles from '@/styles/result/result.module.scss'
 import dynamic from "next/dynamic"
+import Link from 'next/link'
 const SubcribeButton = dynamic(() => import("@/components/watch/SubcribeButton"))
 const Channel = dynamic(() => import("@/components/result/Channel"), {
     loading: () => <div>Loading...</div>,
@@ -62,7 +63,7 @@ export default async function Result({ params }) {
                 {VideosRender(results.videos)}
             </div>
             <div className={cx('right')}>
-
+                {/* {results.channels.length > 0 && handleChannelResultSideRender({ data: results.channels })} */}
             </div>
 
         </div>
@@ -81,4 +82,22 @@ function VideosRender(videosData: videoData[]) {
     return videosData.map((video, index) => {
         return (<Video key={index} videoData={video} />)
     })
+}
+
+const handleChannelResultSideRender: React.FC = ({ data }: {data: channelData}) => {
+    return (
+        <>
+            {/* update in future */}
+            <div className={cx('target-channel-overview-box')}>
+                <div className={cx('top')}>
+                    <Link href={`/channel/${data.tagName}`}>
+
+                    </Link>
+                </div>
+                <div className={cx('bottom')}>
+
+                </div>
+            </div>
+        </>
+    )
 }

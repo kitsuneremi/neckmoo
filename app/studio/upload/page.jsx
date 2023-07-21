@@ -89,13 +89,14 @@ export default function UploadPage() {
         formData.append('link', t)
         formData.append('video', videoFile, t + '.' + getFileExt(videoFile));
         axios
-          .post("http://localhost:5000/api/upload/video", formData)
+          .post("http://localhost:5000/api/decay/video", formData)
           .then((response) => {
             console.log(response.data);
           })
-          .catch((error) => {
+          .catch((error) => { 
             console.error(error);
           });
+        
         axios
           .post("/api/video/create", {
             title: title,

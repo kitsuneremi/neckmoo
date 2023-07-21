@@ -4,39 +4,95 @@ import Plyr, { PlyrProps, PlyrInstance } from "plyr-react";
 import "plyr/dist/plyr.css";
 import Hls from "hls.js";
 
+type defaultOption = {
+    controls?: string[]
+    qualitys?: {
+        default: number,
+        options: number[],
+        forced: boolean,
+        onChange: Function
+    }
+}
 
 const Player = ({ link }) => {
     const videoRef = useRef(null);
-    const [url, setUrl] = useState<string>("")
-    // useEffect(() => {
-    //     getDownloadURL(ref(storage, `video/videos/${link}`)).then(res => setUrl(res))
-    // }, [])
+
+    const [qua, setQua] = useState<number>(1080)
+    const [src, setSrc] = useState<string>(`http://localhost:5000/api/merge/${link}/playlist.m3u8?quality=${qua}`)
 
     useEffect(() => {
         const loadVideo = async () => {
             const video = document.getElementById("plyr") as HTMLVideoElement;
             var hls = new Hls();
-            hls.loadSource(`http://localhost:5000/api/merge/${link}/playlist.m3u8`);
+            hls.loadSource(src);
             hls.attachMedia(video);
             // @ts-ignore
             videoRef.current!.plyr.media = video;
 
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            const defaultOptions: defaultOption = { controls: [] }
+
+            hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+                const availableQuality = hls.levels.map((l) => l.height);
+                defaultOptions.controls = [
+                    'play-large',
+                    'restart',
+                    'rewind',
+                    'play',
+                    'fast-forward',
+                    'progress',
+                    'current-time',
+                    'duration',
+                    'mute',
+                    'volume',
+                    'captions',
+                    'settings',
+                    'pip',
+                    'airplay',
+                    'fullscreen'
+                ];
+                defaultOptions.qualitys = {
+                    default: availableQuality[0],
+                    options: availableQuality,
+                    forced: true,
+                    onChange: updateQuality
+                };
                 (videoRef.current!.plyr as PlyrInstance).play();
             });
+
+            const updateQuality = (newQuality: number) => {
+                // Sử dụng hàm hls.levels để tìm index của chất lượng mới dựa trên newQuality.
+                const newIndex = hls.levels.findIndex((l) => l.height === newQuality);
+
+                // Nếu tìm thấy index hợp lệ, hãy cập nhật chất lượng trong HLS.
+                if (newIndex !== -1) {
+                    hls.currentLevel = newIndex;
+                }
+            };
         };
         loadVideo();
     });
 
     return (
         <div>
-            <Plyr ref={videoRef} source={{} as PlyrProps["source"]} id="plyr" />
+            <Plyr
+                ref={videoRef}
+                // source={{
+                //     type: "video",
+                //     sources: [
+                //         {
+                //             src: src,
+                //             type: "application/x-mpegURL",
+                //         },
+                //     ],
+                // }}
+                source={{} as PlyrProps["source"]}
+                id="plyr"
+            />
         </div>
     );
 };
 
 export default Player;
-
 
 
 

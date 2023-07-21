@@ -8,6 +8,8 @@ import { storage } from '@/lib/firebase'
 import SubcribeButton from '../watch/SubcribeButton';
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
+import { useIsomorphicLayoutEffect } from 'usehooks-ts'
+import Video from './Video';
 
 
 const cx = classNames.bind(styles)
@@ -26,15 +28,29 @@ type channelData = {
 
 }
 
+type videoData = {
+    id: number,
+    title: string,
+    des: string,
+    view: number,
+    status: number,
+    link: string,
+    fragmentMode: boolean,
+    channelId: number,
+    createdAt: Date,
+    updatedAt: Date
+}
+
 export default function Channel({ tagName }) {
     const [channelData, setChannelData] = useState<channelData>();
     const [src, setSrc] = useState<string | null>(null)
+    const [listNewestVideo, setListNewestVideo] = useState<videoData[]>([])
     const router = useRouter()
 
-    useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         async function fetchData() {
             // const response = await fetch(`${baseUrl}/api/channel?tagName=${tagName}`);
-            const response = await axios.get(`/api/channel`, {
+            axios.get(`/api/channel`, {
                 params: {
                     tagName: tagName
                 }
@@ -43,7 +59,13 @@ export default function Channel({ tagName }) {
                 getDownloadURL(ref(storage, `/channel/avatars/${res.data.tagName}`)).then(url => setSrc(url))
             })
 
-            // const data = await response.json();
+            axios.get('/api/channel/newest', {
+                params: {
+                    tagName: tagName
+                }
+            }).then(res =>
+                setListNewestVideo(res.data)
+            )
 
         }
         fetchData();
@@ -54,18 +76,36 @@ export default function Channel({ tagName }) {
     }
 
     return (
-        <div className={cx('channel-box')} onClick={() => { router.push(`/channel/${tagName}`) }}>
-            <div className={cx('img-box')}>
-                {src && <Image src={src} width={140} height={140} alt='thumbnail' priority={true} />}
+        <>
+            <div className={cx('channel-box')} onClick={() => { router.push(`/channel/${tagName}`) }}>
+                <div className={cx('img-box')}>
+                    {src && <Image src={src} width={140} height={140} alt='thumbnail' priority={true} />}
+                </div>
+                <div className={cx('des-box')}>
+                    <h2>{channelData ? channelData.name : ''}</h2>
+                    <p>{channelData ? `@${channelData.tagName}` : ''}</p>
+                    <p>{channelData ? channelData.des : ''}</p>
+                </div>
+                <div className={cx('sub-box')}>
+                    <SubcribeButton link={null} channelData={channelData} />
+                </div>
             </div>
-            <div className={cx('des-box')}>
-                <h2>{channelData ? channelData.name : ''}</h2>
-                <p>{channelData ? `@${channelData.tagName}` : ''}</p>
-                <p>{channelData ? channelData.des : ''}</p>
-            </div>
-            <div className={cx('sub-box')}>
-                <SubcribeButton link={null} channelData={channelData} />
-            </div>
-        </div >
+            {videoNewestRender({ listNewestVideo, channelData })}
+        </>
     );
+}
+
+const videoNewestRender: React.FC<{ listNewestVideo: videoData[], channelData: channelData }> = ({ listNewestVideo, channelData }: { listNewestVideo: videoData[], channelData: channelData }) => {
+    return (
+        <div className={cx('video-relation-box')}>
+            <p>{`video mới nhất của ${channelData.name}`}</p>
+            {
+                listNewestVideo.length > 0 ? listNewestVideo.map((video, index) => {
+                    return (
+                        <Video videoData={video} key={index}></Video>
+                    )
+                }) : <></>
+            }
+        </div>
+    )
 }
