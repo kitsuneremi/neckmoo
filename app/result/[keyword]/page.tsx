@@ -60,6 +60,7 @@ export default async function Result({ params }) {
         <div className={cx('box')}>
             <div className={cx('left')}>
                 {ChannelsRender(results.channels)}
+                <p>{`các kết quả liên quan đến từ khóa ${params.keyword}`}</p>
                 {VideosRender(results.videos)}
             </div>
             <div className={cx('right')}>
@@ -84,7 +85,7 @@ function VideosRender(videosData: videoData[]) {
     })
 }
 
-const handleChannelResultSideRender: React.FC = ({ data }: {data: channelData}) => {
+const handleChannelResultSideRender: React.FC = ({ data }: { data: channelData }) => {
     return (
         <>
             {/* update in future */}
