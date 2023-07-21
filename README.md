@@ -20,20 +20,26 @@ this is my first personal project using reactjs(nextjs) clone from youtube
 
 #### future plan
 -use hls to build livestream component
--build live chat component (50%)
+-build live chat for live stream component
+-build spring-kafka server for message queue server
 
 ### side server project
+```bash
 -- nodejs mpeg-ts server
+(require to watch and upload video)
 https://github.com/kitsuneremi/neckmoo-video-server
 
+-- nodejs socket server
+(require to chat component)
+https://github.com/kitsuneremi/neckmoo-socket-server
+```
 ### contact
+```bash
 if you have any question pls send through
 #email (prefer)
-```bash
 lilypeachew@gmail.com
-```
+
 #facebook
-```bash
 https://facebook.com/kitsuneremi
 
 ```
