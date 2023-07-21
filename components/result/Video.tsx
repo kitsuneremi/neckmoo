@@ -8,6 +8,7 @@ import { storage } from '@/lib/firebase'
 import axios from 'axios'
 import { useIsomorphicLayoutEffect } from 'usehooks-ts'
 import { useWindowSize } from 'usehooks-ts'
+import { ReduceString, FormatDateTime } from '@/function/function'
 
 
 const cx = classNames.bind(styles)
@@ -61,47 +62,18 @@ export default function Video({ videoData }: { videoData: videoData }) {
         <div className={cx('video-box')}>
             {src && <Image src={src} className={cx('thumbnail')} alt='thumbnail' width={360} height={202} priority={true} />}
             <div>
-                <p className={cx('title')}>{videoData.title}</p>
+                <p className={cx('title')}>{ReduceString({ string: videoData.title, maxLength: 70 })}</p>
                 <div>
                     <p className={cx('infomation')}>{videoData.view} lượt xem</p>
-                    <p className={cx('infomation')}>{formatDateTime(videoData.createdAt)}</p>
+                    <p className={cx('infomation')}>{FormatDateTime(videoData.createdAt)}</p>
                 </div>
                 <div>
                     {channelAvatar && <Image src={channelAvatar} width={20} height={20} loading='lazy' alt='avatar' />}
                     {channelData == null ? <p>loading...</p> : <p className={cx('channel-name')}>{channelData.name}</p>}
                 </div>
-                <p className={cx('des')}>{videoData.des}</p>
+                <p className={cx('des')}>{ReduceString({ string: videoData.des, maxLength: 80 })}</p>
             </div>
         </div>
     )
 }
 
-
-
-function formatDateTime(dateTime: Date) {
-    const currentTime: any = new Date();
-    const inputTime: any = new Date(dateTime);
-
-    const timeDiff: any = Math.abs(currentTime - inputTime); // Độ chênh lệch thời gian
-
-    // Đổi milliseconds thành phút
-    const minutesDiff = Math.floor(timeDiff / (1000 * 60));
-
-    if (minutesDiff < 1) {
-        return "Vừa xong";
-    } else if (minutesDiff < 60) {
-        return minutesDiff + " phút trước";
-    } else if (minutesDiff < 1440) {
-        const hoursDiff = Math.floor(minutesDiff / 60);
-        return hoursDiff + " giờ trước";
-    } else if (minutesDiff < 43200) {
-        const daysDiff = Math.floor(minutesDiff / 1440);
-        return daysDiff + " ngày trước";
-    } else if (minutesDiff < 525600) {
-        const monthsDiff = Math.floor(minutesDiff / 43200);
-        return monthsDiff + " tháng trước";
-    } else {
-        const yearsDiff = Math.floor(minutesDiff / 525600);
-        return yearsDiff + " năm trước";
-    }
-}
