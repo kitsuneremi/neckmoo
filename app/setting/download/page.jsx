@@ -1,8 +1,11 @@
-import SettingLayout from '@/components/layout/SettingLayout'
-export default function DownloadSetting(){
+import SettingLayout from '@/layout/SettingLayout'
+import PcSettingLayout from '@/layout/PcSettingLayout';
+export default function DownloadSetting() {
     return (
         <SettingLayout>
-                    cập nhật sau(in progress)
+            <PcSettingLayout>
+                cập nhật sau(in progress)
+            </PcSettingLayout>
         </SettingLayout>
     )
 }

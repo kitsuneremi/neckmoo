@@ -1,0 +1,24 @@
+.left {
+    position: relative;
+    .item-box {
+        padding: 10px 14px;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .item-box:hover{
+        background-color: #f2f2f2;
+    }
+}
+
+.left::after{
+    position: absolute;
+    top: 5%;
+    right: 0;
+    width: 1px;
+    height: 90%;
+    content: "";
+    background-color: #f2f2f2;
+}

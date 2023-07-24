@@ -1,19 +1,31 @@
 'use client'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Context from '@/GlobalVariableProvider/Context'
 import styles from '@/styles/setting/setting.module.scss'
 import classNames from 'classnames/bind'
 import Setting from '@/components/setting/Settingpage'
-import SettingLayout from '@/components/layout/SettingLayout'
-
-
+import SettingLayout from '@/layout/SettingLayout'
+import { useMediaQuery } from 'usehooks-ts'
+import { LoadingOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 //this component work only for mobile devices, pc devices will be redirect to /... page instead
 
 
 const cx = classNames.bind(styles)
 
-const AccountBox = () => {
+type listSettingType = {
+    name: string,
+    des: string,
+    child: React.ReactNode | null
+}
+
+type sidebarSettingType = {
+    name: string,
+    href: string,
+    icon: React.ReactNode
+}
+
+const AccountBox: React.FC = ({ }) => {
     return (
         <>
             <div className={cx('with-checkbox')}>
@@ -27,7 +39,7 @@ const AccountBox = () => {
     )
 }
 
-const PlaybackBox = () => {
+const PlaybackBox: React.FC = ({ }) => {
     return (
         <>
             <div className={cx('with-checkbox')}>
@@ -60,7 +72,7 @@ const PlaybackBox = () => {
     )
 }
 
-const listSetting = [
+const listSetting: listSettingType[] = [
     {
         name: 'Tài khoản',
         des: 'Cài đặt tài khoản',
@@ -73,11 +85,8 @@ const listSetting = [
     },
     {
         name: 'Thông báo',
-        des: 'Chọn các thông báo sẽ được gửi qua email'
-    },
-    {
-        name: 'Carymei',
-        des: 'dự án cá nhân của sinh viên năm 2 trường F'
+        des: 'Chọn các thông báo sẽ được gửi qua email',
+        child: null
     }
 
 ]
@@ -85,28 +94,66 @@ const listSetting = [
 
 
 
+
+const sidebarSettings: sidebarSettingType[] = [
+    {
+        name: 'Tài khoản',
+        href: '/setting/account',
+        icon: <LoadingOutlined />
+    },
+    {
+        name: 'Thông báo',
+        href: '/setting/notification',
+        icon: <LoadingOutlined />
+    },
+    {
+        name: 'Chức năng phát và hiệu suất',
+        href: '/setting/playback',
+        icon: <LoadingOutlined />
+    },
+    {
+        name: 'Nội dung tải xuống',
+        href: 'setting/download',
+        icon: <LoadingOutlined />
+    },
+    {
+        name: 'Quyền riêng tư',
+        href: '/setting/privacy',
+        icon: <LoadingOutlined />
+    },
+    {
+        name: 'Cài đật nâng cao',
+        href: '/setting/advance',
+        icon: <LoadingOutlined />
+    }
+]
+
+
+
 export default function Account() {
-    const context = useContext(Context)
+    const deviceType = {
+        isPc: useMediaQuery('(min-width: 1200px')
+    }
     const router = useRouter()
 
     useEffect(() => {
-        if (context.deviceType == 0) {
+        if (deviceType.isPc) {
             router.push('/setting/account')
         }
     }, [])
 
-    const render = () => {
-        return listSetting.map((s, index) => {
-            return (
-                <Setting key={index} setting={s} />
-            )
-        })
-    }
     return (
         <SettingLayout>
-            <div className={cx('box')}>
-                {render()}
-            </div>
+            <main className={cx('box')}>
+                {listSetting.map((s, index) => {
+                        return (
+                            <Setting key={index} setting={s} />
+                        )
+                    })}
+            </main>
         </SettingLayout>
     )
 }
+
+
+

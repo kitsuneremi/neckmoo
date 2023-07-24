@@ -8,10 +8,12 @@ import classNames from 'classnames/bind'
 import Link from 'next/link'
 import axios from 'axios'
 import Image from 'next/image'
-import SettingLayout from '@/components/layout/SettingLayout'
+import SettingLayout from '@/layout/SettingLayout'
 import { useSession } from 'next-auth/react'
 import NotiBoard from '@/components/NotificationBoard'
 import { Session } from 'next-auth';
+import { useMediaQuery } from 'usehooks-ts'
+import PcSetiingLayout from '@/layout/PcSettingLayout';
 
 const cx = classNames.bind(styles)
 
@@ -52,24 +54,18 @@ export default function AccountSetting() {
 
     return (
         <SettingLayout>
-            <div className={cx('box')}>
-                <div></div>
-                <div className={cx('main-tab')}>
-                    <p>Kênh của bạn</p>
+            <PcSetiingLayout>
+                <div className={cx('box')}>
                     <div>
-                        <div>
-                            {img != null && <Image width={60} height={60} src={img} alt='loading' defaultValue={`https://pbs.twimg.com/profile_images/1561821281716142080/xdZX4AF0_400x400.jpg`} />}
-                            <p>{channelData.tagName}</p>
-                        </div>
-                        <Link href={'/studio'}><p>Trạng thái và tính năng của kênh</p></Link>
-                        <Link href={'/studio'}><p>Tạo hoặc quản lý kênh của bạn</p></Link>
-                        <Link href={'/studio'}><p>Xem các cài đặt nâng cao</p></Link>
+                        {img != null && <Image width={60} height={60} src={img} alt='loading' />}
+                        <p>{channelData.tagName}</p>
                     </div>
-                </div>
-                <div>
 
+                    <div className={cx('redirect-box')}><Link href={'/studio'}>Trạng thái và tính năng của kênh</Link></div>
+                    <div className={cx('redirect-box')}><Link href={'/studio'}>Tạo hoặc quản lý kênh của bạn</Link></div>
+                    <div className={cx('redirect-box')}><Link href={'/studio'}>Xem các cài đặt nâng cao</Link></div>
                 </div>
-            </div>
+            </PcSetiingLayout>
         </SettingLayout>
     )
 

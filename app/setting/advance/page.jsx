@@ -1,10 +1,15 @@
-import SettingLayout from '@/components/layout/SettingLayout'
+import PcSettingLayout from '@/layout/PcSettingLayout';
+import SettingLayout from '@/layout/SettingLayout';
 
 export default function Advancesetting() {
 
     return (
         <SettingLayout>
-            cập nhật sau(in progress)
+            <PcSettingLayout>
+                <div> 
+                    cập nhật sau(in progress) 
+                </div>
+            </PcSettingLayout>
         </SettingLayout>
-    )
-}
+    ) 
+} 

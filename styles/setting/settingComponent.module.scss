@@ -1,26 +1,18 @@
-//account setting
-.box .main-tab{
+.box{
     display: flex;
-    gap: 40px;
+    flex-direction: column;
+    gap: 5px;
     div{
-        div{
-            display: flex;
-            gap: 20px;
-            img{
-                border-radius: 2rem;
-            }
-        }
+        display: flex;
+        gap: 20px;
+    }
 
-        a{
-            text-decoration: none;
-            p{
-                color: black;
-                margin: 5px;
-            }
-            p:hover{
-                background-color: rgba(150, 150, 150, 0.548);
-            }
-        }
+    .redirect-box{
+        padding: 10px 6px;
+    }
+
+    .redirect-box:hover{
+        background-color: #f2f2f2;
+        border-radius: 9px;
     }
 }
-

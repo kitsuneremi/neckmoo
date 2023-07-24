@@ -1,4 +1,5 @@
-import SettingLayout from '@/components/layout/SettingLayout'
+import SettingLayout from '@/layout/SettingLayout'
+import PcSettingLayout from '@/layout/PcSettingLayout';
 export default function Playbacksetting() {
     return (
         <SettingLayout>
