@@ -1,17 +1,24 @@
-This is a [Next.js] project bootstrapped with [`create-next-app`]
+I'm going to learn unity because I can't get any job with react/node/java 
+so this project will be archived for a time
+
+### side server project
+```bash
+
+run this 2 server to fully using the web
+(to run the first server your pc need to install ffmpeg)
+
+-- nodejs mpeg-ts server
+(require to watch and upload video)
+https://github.com/kitsuneremi/neckmoo-video-server
+
+-- nodejs socket server
+(require to chat component)
+https://github.com/kitsuneremi/neckmoo-socket-server
+```
 
 ## Getting Started
-first run npm install or yarn add
+
 ```bash
-after install deps run this command to run project
-npm run dev
-or yarn
-yarn dev
-```
-### about me
-```bash
-my name is Nguyen Huu Binh, year 2nd year information tecnology(now is software development) student
-my major in college is java but i'm quite interested with javascript so i learn reactjs and nodejs
 
 ```
 
@@ -23,16 +30,7 @@ this is my first personal project using reactjs(nextjs) clone from youtube
 -build live chat for live stream component
 -build spring-kafka server for message queue server
 
-### side server project
-```bash
--- nodejs mpeg-ts server
-(require to watch and upload video)
-https://github.com/kitsuneremi/neckmoo-video-server
 
--- nodejs socket server
-(require to chat component)
-https://github.com/kitsuneremi/neckmoo-socket-server
-```
 ### contact
 ```bash
 if you have any question pls send through
